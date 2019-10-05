@@ -1,0 +1,728 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		130CDEE32346D1EC007E2028 /* ColorUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130CDEE22346D1EC007E2028 /* ColorUtils.swift */; };
+		132FEEAE23481BAD008A47FF /* ColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132FEEAD23481BAD008A47FF /* ColorPickerView.swift */; };
+		133EEAB92345AC6D006D9AFF /* CustomSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13A8DEB32345380400709D9F /* CustomSplitViewController.swift */; };
+		133EEABB2345B19A006D9AFF /* CustomSplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133EEABA2345B19A006D9AFF /* CustomSplitView.swift */; };
+		133EEABD2345BC1F006D9AFF /* KeyboardKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133EEABC2345BC1F006D9AFF /* KeyboardKeys.swift */; };
+		133EEAC12345C617006D9AFF /* ColorWheelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133EEAC02345C617006D9AFF /* ColorWheelView.swift */; };
+		1360D37123440034005054F8 /* WindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1360D37023440034005054F8 /* WindowController.swift */; };
+		1370FF3C2346327F005D325E /* ColorPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1370FF3B2346327F005D325E /* ColorPickerController.swift */; };
+		139B107A2343B0CE00E3787D /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139B10782343B0CE00E3787D /* KeyboardViewController.swift */; };
+		13A8DEB42345380400709D9F /* CustomSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13A8DEB32345380400709D9F /* CustomSplitViewController.swift */; };
+		13AF5940234555220091D6C4 /* SideBarViewControllerr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AF593F234555210091D6C4 /* SideBarViewControllerr.swift */; };
+		13E0AFAD2342D095009A5B41 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13E0AFAC2342D095009A5B41 /* AppDelegate.swift */; };
+		13E0AFB12342D096009A5B41 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13E0AFB02342D096009A5B41 /* Assets.xcassets */; };
+		13E0AFB42342D096009A5B41 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 13E0AFB22342D096009A5B41 /* Main.storyboard */; };
+		13E0AFC02342D096009A5B41 /* SSKeyboardHueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13E0AFBF2342D096009A5B41 /* SSKeyboardHueTests.swift */; };
+		13E0AFCB2342D096009A5B41 /* SSKeyboardHueUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13E0AFCA2342D096009A5B41 /* SSKeyboardHueUITests.swift */; };
+		13FE55CD234806420061ACFF /* GradientSliderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13FE55CC234806420061ACFF /* GradientSliderCell.swift */; };
+		13FE55D02348132A0061ACFF /* ColorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13FE55CF2348132A0061ACFF /* ColorController.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		13E0AFBC2342D096009A5B41 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 13E0AFA12342D095009A5B41 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 13E0AFA82342D095009A5B41;
+			remoteInfo = SSKeyboardHue;
+		};
+		13E0AFC72342D096009A5B41 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 13E0AFA12342D095009A5B41 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 13E0AFA82342D095009A5B41;
+			remoteInfo = SSKeyboardHue;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		130CDEE22346D1EC007E2028 /* ColorUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorUtils.swift; sourceTree = "<group>"; };
+		132FEEAD23481BAD008A47FF /* ColorPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerView.swift; sourceTree = "<group>"; };
+		133EEABA2345B19A006D9AFF /* CustomSplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSplitView.swift; sourceTree = "<group>"; };
+		133EEABC2345BC1F006D9AFF /* KeyboardKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardKeys.swift; sourceTree = "<group>"; };
+		133EEAC02345C617006D9AFF /* ColorWheelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorWheelView.swift; sourceTree = "<group>"; };
+		1360D37023440034005054F8 /* WindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WindowController.swift; path = SSKeyboardHue/Window/WindowController.swift; sourceTree = SOURCE_ROOT; };
+		1370FF3B2346327F005D325E /* ColorPickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerController.swift; sourceTree = "<group>"; };
+		139B10782343B0CE00E3787D /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
+		13A8DEB32345380400709D9F /* CustomSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSplitViewController.swift; sourceTree = "<group>"; };
+		13AF593F234555210091D6C4 /* SideBarViewControllerr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideBarViewControllerr.swift; sourceTree = "<group>"; };
+		13E0AFA92342D095009A5B41 /* SSKeyboardHue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SSKeyboardHue.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13E0AFAC2342D095009A5B41 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		13E0AFB02342D096009A5B41 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		13E0AFB32342D096009A5B41 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		13E0AFB52342D096009A5B41 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		13E0AFB62342D096009A5B41 /* SSKeyboardHue.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SSKeyboardHue.entitlements; sourceTree = "<group>"; };
+		13E0AFBB2342D096009A5B41 /* SSKeyboardHueTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SSKeyboardHueTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		13E0AFBF2342D096009A5B41 /* SSKeyboardHueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSKeyboardHueTests.swift; sourceTree = "<group>"; };
+		13E0AFC12342D096009A5B41 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		13E0AFC62342D096009A5B41 /* SSKeyboardHueUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SSKeyboardHueUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		13E0AFCA2342D096009A5B41 /* SSKeyboardHueUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSKeyboardHueUITests.swift; sourceTree = "<group>"; };
+		13E0AFCC2342D096009A5B41 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		13FE55CC234806420061ACFF /* GradientSliderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientSliderCell.swift; sourceTree = "<group>"; };
+		13FE55CF2348132A0061ACFF /* ColorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorController.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		13E0AFA62342D095009A5B41 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		13E0AFB82342D096009A5B41 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		13E0AFC32342D096009A5B41 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		130CDEE12346D1D9007E2028 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				130CDEE22346D1EC007E2028 /* ColorUtils.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		1329FBFE2343C29900FA5861 /* Keys */ = {
+			isa = PBXGroup;
+			children = (
+				133EEABC2345BC1F006D9AFF /* KeyboardKeys.swift */,
+			);
+			path = Keys;
+			sourceTree = "<group>";
+		};
+		135B47F82342D3B3003605BB /* Window */ = {
+			isa = PBXGroup;
+			children = (
+				1360D37023440034005054F8 /* WindowController.swift */,
+			);
+			name = Window;
+			path = ../Window;
+			sourceTree = "<group>";
+		};
+		139B10772343B0A400E3787D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				1329FBFE2343C29900FA5861 /* Keys */,
+				133EEABA2345B19A006D9AFF /* CustomSplitView.swift */,
+				133EEAC02345C617006D9AFF /* ColorWheelView.swift */,
+				13FE55CC234806420061ACFF /* GradientSliderCell.swift */,
+				132FEEAD23481BAD008A47FF /* ColorPickerView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		13A8DEAC234535C300709D9F /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				139B10782343B0CE00E3787D /* KeyboardViewController.swift */,
+				13A8DEB32345380400709D9F /* CustomSplitViewController.swift */,
+				13AF593F234555210091D6C4 /* SideBarViewControllerr.swift */,
+				1370FF3B2346327F005D325E /* ColorPickerController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		13E0AFA02342D095009A5B41 = {
+			isa = PBXGroup;
+			children = (
+				13E0AFAB2342D095009A5B41 /* SSKeyboardHue */,
+				13E0AFBE2342D096009A5B41 /* SSKeyboardHueTests */,
+				13E0AFC92342D096009A5B41 /* SSKeyboardHueUITests */,
+				13E0AFAA2342D095009A5B41 /* Products */,
+				792DABF72DBA37767F993C5C /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		13E0AFAA2342D095009A5B41 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				13E0AFA92342D095009A5B41 /* SSKeyboardHue.app */,
+				13E0AFBB2342D096009A5B41 /* SSKeyboardHueTests.xctest */,
+				13E0AFC62342D096009A5B41 /* SSKeyboardHueUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		13E0AFAB2342D095009A5B41 /* SSKeyboardHue */ = {
+			isa = PBXGroup;
+			children = (
+				13FE55CE234813190061ACFF /* Classes */,
+				130CDEE12346D1D9007E2028 /* Utils */,
+				13A8DEAC234535C300709D9F /* Controllers */,
+				139B10772343B0A400E3787D /* Views */,
+				135B47F82342D3B3003605BB /* Window */,
+				13E0AFAC2342D095009A5B41 /* AppDelegate.swift */,
+				13E0AFB02342D096009A5B41 /* Assets.xcassets */,
+				13E0AFB22342D096009A5B41 /* Main.storyboard */,
+				13E0AFB52342D096009A5B41 /* Info.plist */,
+				13E0AFB62342D096009A5B41 /* SSKeyboardHue.entitlements */,
+			);
+			path = SSKeyboardHue;
+			sourceTree = "<group>";
+		};
+		13E0AFBE2342D096009A5B41 /* SSKeyboardHueTests */ = {
+			isa = PBXGroup;
+			children = (
+				13E0AFBF2342D096009A5B41 /* SSKeyboardHueTests.swift */,
+				13E0AFC12342D096009A5B41 /* Info.plist */,
+			);
+			path = SSKeyboardHueTests;
+			sourceTree = "<group>";
+		};
+		13E0AFC92342D096009A5B41 /* SSKeyboardHueUITests */ = {
+			isa = PBXGroup;
+			children = (
+				13E0AFCA2342D096009A5B41 /* SSKeyboardHueUITests.swift */,
+				13E0AFCC2342D096009A5B41 /* Info.plist */,
+			);
+			path = SSKeyboardHueUITests;
+			sourceTree = "<group>";
+		};
+		13FE55CE234813190061ACFF /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				13FE55CF2348132A0061ACFF /* ColorController.swift */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		792DABF72DBA37767F993C5C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		13E0AFA82342D095009A5B41 /* SSKeyboardHue */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 13E0AFCF2342D096009A5B41 /* Build configuration list for PBXNativeTarget "SSKeyboardHue" */;
+			buildPhases = (
+				13E0AFA52342D095009A5B41 /* Sources */,
+				13E0AFA62342D095009A5B41 /* Frameworks */,
+				13E0AFA72342D095009A5B41 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SSKeyboardHue;
+			productName = SSKeyboardHue;
+			productReference = 13E0AFA92342D095009A5B41 /* SSKeyboardHue.app */;
+			productType = "com.apple.product-type.application";
+		};
+		13E0AFBA2342D096009A5B41 /* SSKeyboardHueTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 13E0AFD22342D096009A5B41 /* Build configuration list for PBXNativeTarget "SSKeyboardHueTests" */;
+			buildPhases = (
+				B3B4E515819CB82690C0BC71 /* [CP] Check Pods Manifest.lock */,
+				13E0AFB72342D096009A5B41 /* Sources */,
+				13E0AFB82342D096009A5B41 /* Frameworks */,
+				13E0AFB92342D096009A5B41 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				13E0AFBD2342D096009A5B41 /* PBXTargetDependency */,
+			);
+			name = SSKeyboardHueTests;
+			productName = SSKeyboardHueTests;
+			productReference = 13E0AFBB2342D096009A5B41 /* SSKeyboardHueTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		13E0AFC52342D096009A5B41 /* SSKeyboardHueUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 13E0AFD52342D096009A5B41 /* Build configuration list for PBXNativeTarget "SSKeyboardHueUITests" */;
+			buildPhases = (
+				8A52220B2CC2B28F5CDC7F59 /* [CP] Check Pods Manifest.lock */,
+				13E0AFC22342D096009A5B41 /* Sources */,
+				13E0AFC32342D096009A5B41 /* Frameworks */,
+				13E0AFC42342D096009A5B41 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				13E0AFC82342D096009A5B41 /* PBXTargetDependency */,
+			);
+			name = SSKeyboardHueUITests;
+			productName = SSKeyboardHueUITests;
+			productReference = 13E0AFC62342D096009A5B41 /* SSKeyboardHueUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		13E0AFA12342D095009A5B41 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1030;
+				LastUpgradeCheck = 1030;
+				ORGANIZATIONNAME = ErrorErrorError;
+				TargetAttributes = {
+					13E0AFA82342D095009A5B41 = {
+						CreatedOnToolsVersion = 10.3;
+					};
+					13E0AFBA2342D096009A5B41 = {
+						CreatedOnToolsVersion = 10.3;
+						TestTargetID = 13E0AFA82342D095009A5B41;
+					};
+					13E0AFC52342D096009A5B41 = {
+						CreatedOnToolsVersion = 10.3;
+						TestTargetID = 13E0AFA82342D095009A5B41;
+					};
+				};
+			};
+			buildConfigurationList = 13E0AFA42342D095009A5B41 /* Build configuration list for PBXProject "SSKeyboardHue" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 13E0AFA02342D095009A5B41;
+			productRefGroup = 13E0AFAA2342D095009A5B41 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				13E0AFA82342D095009A5B41 /* SSKeyboardHue */,
+				13E0AFBA2342D096009A5B41 /* SSKeyboardHueTests */,
+				13E0AFC52342D096009A5B41 /* SSKeyboardHueUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		13E0AFA72342D095009A5B41 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				13E0AFB12342D096009A5B41 /* Assets.xcassets in Resources */,
+				13E0AFB42342D096009A5B41 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		13E0AFB92342D096009A5B41 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		13E0AFC42342D096009A5B41 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8A52220B2CC2B28F5CDC7F59 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SSKeyboardHueUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B3B4E515819CB82690C0BC71 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SSKeyboardHueTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		13E0AFA52342D095009A5B41 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				133EEAC12345C617006D9AFF /* ColorWheelView.swift in Sources */,
+				130CDEE32346D1EC007E2028 /* ColorUtils.swift in Sources */,
+				133EEABD2345BC1F006D9AFF /* KeyboardKeys.swift in Sources */,
+				13FE55CD234806420061ACFF /* GradientSliderCell.swift in Sources */,
+				13E0AFAD2342D095009A5B41 /* AppDelegate.swift in Sources */,
+				1360D37123440034005054F8 /* WindowController.swift in Sources */,
+				1370FF3C2346327F005D325E /* ColorPickerController.swift in Sources */,
+				13FE55D02348132A0061ACFF /* ColorController.swift in Sources */,
+				13AF5940234555220091D6C4 /* SideBarViewControllerr.swift in Sources */,
+				133EEABB2345B19A006D9AFF /* CustomSplitView.swift in Sources */,
+				13A8DEB42345380400709D9F /* CustomSplitViewController.swift in Sources */,
+				132FEEAE23481BAD008A47FF /* ColorPickerView.swift in Sources */,
+				139B107A2343B0CE00E3787D /* KeyboardViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		13E0AFB72342D096009A5B41 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				13E0AFC02342D096009A5B41 /* SSKeyboardHueTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		13E0AFC22342D096009A5B41 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				133EEAB92345AC6D006D9AFF /* CustomSplitViewController.swift in Sources */,
+				13E0AFCB2342D096009A5B41 /* SSKeyboardHueUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		13E0AFBD2342D096009A5B41 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 13E0AFA82342D095009A5B41 /* SSKeyboardHue */;
+			targetProxy = 13E0AFBC2342D096009A5B41 /* PBXContainerItemProxy */;
+		};
+		13E0AFC82342D096009A5B41 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 13E0AFA82342D095009A5B41 /* SSKeyboardHue */;
+			targetProxy = 13E0AFC72342D096009A5B41 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		13E0AFB22342D096009A5B41 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				13E0AFB32342D096009A5B41 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		13E0AFCD2342D096009A5B41 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		13E0AFCE2342D096009A5B41 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		13E0AFD02342D096009A5B41 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = SSKeyboardHue/SSKeyboardHue.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = SSKeyboardHue/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.errorerrorerror.SSKeyboardHue;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		13E0AFD12342D096009A5B41 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = SSKeyboardHue/SSKeyboardHue.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = SSKeyboardHue/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.errorerrorerror.SSKeyboardHue;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		13E0AFD32342D096009A5B41 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = SSKeyboardHueTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.errorerrorerror.SSKeyboardHueTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SSKeyboardHue.app/Contents/MacOS/SSKeyboardHue";
+			};
+			name = Debug;
+		};
+		13E0AFD42342D096009A5B41 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = SSKeyboardHueTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.errorerrorerror.SSKeyboardHueTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SSKeyboardHue.app/Contents/MacOS/SSKeyboardHue";
+			};
+			name = Release;
+		};
+		13E0AFD62342D096009A5B41 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = SSKeyboardHueUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.errorerrorerror.SSKeyboardHueUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = SSKeyboardHue;
+			};
+			name = Debug;
+		};
+		13E0AFD72342D096009A5B41 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = SSKeyboardHueUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.errorerrorerror.SSKeyboardHueUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = SSKeyboardHue;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		13E0AFA42342D095009A5B41 /* Build configuration list for PBXProject "SSKeyboardHue" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				13E0AFCD2342D096009A5B41 /* Debug */,
+				13E0AFCE2342D096009A5B41 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		13E0AFCF2342D096009A5B41 /* Build configuration list for PBXNativeTarget "SSKeyboardHue" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				13E0AFD02342D096009A5B41 /* Debug */,
+				13E0AFD12342D096009A5B41 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		13E0AFD22342D096009A5B41 /* Build configuration list for PBXNativeTarget "SSKeyboardHueTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				13E0AFD32342D096009A5B41 /* Debug */,
+				13E0AFD42342D096009A5B41 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		13E0AFD52342D096009A5B41 /* Build configuration list for PBXNativeTarget "SSKeyboardHueUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				13E0AFD62342D096009A5B41 /* Debug */,
+				13E0AFD72342D096009A5B41 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 13E0AFA12342D095009A5B41 /* Project object */;
+}
