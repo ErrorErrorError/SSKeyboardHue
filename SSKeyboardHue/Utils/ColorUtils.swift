@@ -49,7 +49,7 @@ public struct RGB {
     public var b: uint8
     
     public var nsColor: NSColor {
-        mutating get {
+        get {
             return NSColor(red: CGFloat(Double(self.r)/255.0), green: CGFloat(Double(self.g)/255.0), blue: CGFloat(Double(self.b)/255.0), alpha: 1.0)
         }
         set(newColor) {
@@ -150,6 +150,38 @@ extension NSColor {
         let hue        = max(min(angle / (CGFloat.pi * 2), 1), 0)
         let saturation = max(min(distance / CGFloat(center.x), 1), 0)
         self.init(hue: hue, saturation: saturation, brightness: brightness, alpha: 1.0)
+    }
+    
+    // from https://gist.github.com/mbigatti/c6be210a6bbc0ff25972
+    func lighterColor(percent : Double) -> NSColor {
+        return colorWithBrightnessFactor(factor: CGFloat(1 + percent));
+    }
+    
+    /**
+     Returns a darker color by the provided percentage
+     
+     :param: darking percent percentage
+     :returns: darker UIColor
+     */
+    func darkerColor(percent : Double) -> NSColor {
+        return colorWithBrightnessFactor(factor: CGFloat(1 - percent));
+    }
+    
+    /**
+     Return a modified color using the brightness factor provided
+     
+     :param: factor brightness factor
+     :returns: modified color
+     */
+    func colorWithBrightnessFactor(factor: CGFloat) -> NSColor {
+        var hue : CGFloat = 0
+        var saturation : CGFloat = 0
+        var brightness : CGFloat = 0
+        var alpha : CGFloat = 0
+        
+        getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
+        return NSColor(hue: hue, saturation: saturation, brightness: brightness * factor, alpha: alpha)
+        
     }
 }
 

@@ -31,8 +31,7 @@ class ColorController {
     var selectedColor = NSColor(calibratedRed: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
     // Injected by ColorPickerViewController
     weak var colorPicker: ColorPickerController!
-    
-    /// - postcondition: Mutates `colorPicker`
+    var currentKeys: NSMutableArray? = NSMutableArray()    /// - postcondition: Mutates `colorPicker`
     func setColor(_ color: NSColor) {
         selectedColor = color
         brightness = color.scaledBrightness
@@ -43,4 +42,6 @@ class ColorController {
         colorPicker.updateColorWheel()
         colorPicker.updateSlider()
         colorPicker.updateLabel()
-    }}
+        colorPicker.updateKeys()
+    }
+}

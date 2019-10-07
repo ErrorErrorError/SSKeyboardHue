@@ -23,7 +23,7 @@ class ColorPickerController: NSViewController {
         ColorController.shared.colorPicker = self
         colorWheelView.delegate = self
     }
- 
+    
     override func viewWillAppear() {
         view.layer?.backgroundColor = colorBackground.nsColor.cgColor
         view.roundCorners(cornerRadius: 10.0)
@@ -33,6 +33,7 @@ class ColorPickerController: NSViewController {
         ColorController.shared.brightness = CGFloat((sender.maxValue-sender.doubleValue) / sender.maxValue)
         updateColorWheel(redrawCrosshair: false)
         updateLabel()
+        updateKeys()
     }
     
     @IBAction func setColor(_ sender: NSTextField) {
@@ -40,7 +41,7 @@ class ColorPickerController: NSViewController {
         ColorController.shared.setColor(color)
         view.window?.makeFirstResponder(view)
     }
-
+    
     func updateColorWheel(redrawCrosshair: Bool = true) {
         colorWheelView.setColor(ColorController.shared.selectedColor, redrawCrosshair)
     }
@@ -62,6 +63,14 @@ class ColorPickerController: NSViewController {
         brightnessSlider.doubleValue = brightnessSlider.maxValue - (Double(ColorController.shared.brightness) *
             brightnessSlider.maxValue)
     }
+    func updateKeys() {
+        if (ColorController.shared.currentKeys != nil) {
+            
+            for i in ColorController.shared.currentKeys! {
+                (i as! KeyboardKeys).setColor(newColor: ColorController.shared.selectedColor)
+            }
+        }
+    }
 }
 
 extension NSView {
@@ -77,6 +86,7 @@ extension ColorPickerController: ColorWheelViewDelegate {
         ColorController.shared.masterColor = newColor
         updateLabel()
         updateSlider()
+        updateKeys()
     }
 }
 

@@ -759,7 +759,16 @@
                     <view key="view" id="SPQ-pJ-vTN">
                         <rect key="frame" x="0.0" y="0.0" width="1005" height="720"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dBU-1I-gO8" customClass="KeyboardView" customModule="SSKeyboardHue" customModuleProvider="target">
+                                <rect key="frame" x="77" y="147" width="850" height="425"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            </customView>
+                        </subviews>
                     </view>
+                    <connections>
+                        <outlet property="keyboardView" destination="dBU-1I-gO8" id="Zzo-uf-SEB"/>
+                    </connections>
                 </viewController>
                 <customObject id="6w8-fY-Fjw" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
