@@ -14,7 +14,7 @@ class KeyboardViewController: NSViewController {
     var colorBackground = RGB(r: 14, g: 14, b: 15) // Dark Mode
     var keyboardBackground = RGB(r: 30, g: 30, b: 30) // Dark Mode
     
-    @IBOutlet weak var keyboardView: NSView!
+    @IBOutlet weak var keyboardView: KeyboardView!
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.wantsLayer = true
@@ -51,6 +51,11 @@ class KeyboardViewController: NSViewController {
     private func createKeys(text:String, x: Int, row: Int, width: Int, height: Int) -> NSColorWell {
         let key = KeyboardKeys(frame: NSRect(x:  55 + 50*x, y: 320 - (row * 50), width: width, height: height),keyLetter: text,newColor: RGB(r: 0xff, g: 0, b: 0))
         return key
+    }
+    
+    override func mouseDown(with event: NSEvent) {
+        super.mouseDown(with: event)
+        keyboardView.resetKeysSelected()
     }
     
     override func viewWillAppear() {

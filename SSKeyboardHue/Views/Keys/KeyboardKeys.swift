@@ -33,6 +33,7 @@ class KeyboardKeys: NSColorWell {
     required init?(coder: NSCoder,keyLetter: String, newColor: RGB) {
         super.init(coder: coder)
         self.colorKey = newColor.nsColor.usingColorSpace(NSColorSpace.genericRGB)!
+        self.colorKey = newColor.nsColor.usingColorSpace(NSColorSpace.genericRGB)!
         self.keyText = keyLetter as NSString
         setup()
     }
@@ -40,6 +41,7 @@ class KeyboardKeys: NSColorWell {
     required init(frame frameRect: NSRect, keyLetter: String, newColor: RGB) {
         super.init(frame: frameRect)
         self.colorKey = newColor.nsColor.usingColorSpace(NSColorSpace.genericRGB)!
+        self.color = newColor.nsColor.usingColorSpace(NSColorSpace.genericRGB)!
         self.keyText = keyLetter as NSString
         setup()
     }
@@ -57,17 +59,18 @@ class KeyboardKeys: NSColorWell {
     
     override func mouseDown(with event: NSEvent) {
         if (!isSelected && isBeingDragged) {
-            isSelected = false
+            setSelected(selected: false, fromGroupSelection: false)
             // ColorController.shared.currentKeys!.remove(self)
         } else if (!isSelected || !isSelected && !isBeingDragged) {
-            isSelected = true
+            setSelected(selected: true, fromGroupSelection: false)
             ColorController.shared.currentKeys!.add(self)
             // ColorController.shared.setColor(color.usingColorSpace(NSColorSpace.genericRGB)!)
             
         } else if (isSelected && isBeingDragged)  {
-            isSelected = true
+            setSelected(selected: true, fromGroupSelection: false)
+            
         }  else {
-            isSelected = false
+            setSelected(selected: false, fromGroupSelection: false)
             ColorController.shared.currentKeys!.remove(self)
         }
         
@@ -120,6 +123,7 @@ class KeyboardKeys: NSColorWell {
     }
     func setColor(newColor: NSColor) {
         colorKey = newColor
+        color = newColor
         setNeedsDisplay()
     }
     
@@ -127,11 +131,13 @@ class KeyboardKeys: NSColorWell {
         return colorKey
     }
 
-    func setSelected(selected: Bool) {
+    func setSelected(selected: Bool, fromGroupSelection: Bool) {
         isSelected = selected
-        if (selected) {
+        if (selected && fromGroupSelection) {
             ColorController.shared.currentKeys!.add(self)
-            //ColorController.shared.setColor(colorKey.usingColorSpace(NSColorSpace.genericRGB)!)
+        } else if (selected && !fromGroupSelection) {
+            ColorController.shared.currentKeys!.add(self)
+            ColorController.shared.setColor(colorKey.usingColorSpace(NSColorSpace.genericRGB)!)
         } else {
             ColorController.shared.currentKeys!.remove(self)
             // ColorController.shared.setColor(color.usingColorSpace(NSColorSpace.genericRGB)!)

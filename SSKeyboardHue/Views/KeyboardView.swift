@@ -51,17 +51,17 @@ class KeyboardView: NSView {
                                      y: key.frame.origin.y + key.frame.size.height/2)
             if (path.contains(keyCenter)) {
                 if ((key as! KeyboardKeys).isSelected != true) {
-                    (key as! KeyboardKeys).setSelected(selected: true)
+                    (key as! KeyboardKeys).setSelected(selected: true, fromGroupSelection: true)
                 }
             } else {
-                (key as! KeyboardKeys).setSelected(selected: false)
+                (key as! KeyboardKeys).setSelected(selected: false, fromGroupSelection: true)
             }
         }
     }
     
     func resetKeysSelected() {
         for i in subviews {
-            (i as! KeyboardKeys).setSelected(selected: false)
+            (i as! KeyboardKeys).setSelected(selected: false, fromGroupSelection: true)
         }
     }
     
@@ -72,10 +72,10 @@ class KeyboardView: NSView {
         }
     }
     
-    var changedAlphanumKeys: NSArray
-    var changedModifiersKeys: NSArray
-    var changedEnterKeys: NSArray
-    var changedSymbolKeys: NSArray
+    var changedAlphanumKeys: NSArray!
+    var changedModifiersKeys: NSArray!
+    var changedEnterKeys: NSArray!
+    var changedSymbolKeys: NSArray!
     
     func changedAlphanums() {
         print("Alphanums")

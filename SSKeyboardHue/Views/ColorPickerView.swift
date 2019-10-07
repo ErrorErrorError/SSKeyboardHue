@@ -35,8 +35,8 @@ class ColorPickerView: NSView {
             colors.count > 0
             else { return false }
         // Cancel if dragged color is the same as the current color
-        let allowed = ColorController.shared.selectedColor != colors[0]
-        return allowed
+        //let allowed = ColorController.shared.selectedColor != colors[0]
+        return true
     }
     
     override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
