@@ -4,7 +4,7 @@
 //
 //  Created by Erik Bautista on 10/4/19.
 //  Copyright © 2019 ErrorErrorError. All rights reserved.
-//
+// 
 
 import Cocoa
 
@@ -31,7 +31,8 @@ class ColorController {
     var selectedColor = NSColor(calibratedRed: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
     // Injected by ColorPickerViewController
     weak var colorPicker: ColorPickerController!
-    var currentKeys: NSMutableArray? = NSMutableArray()    /// - postcondition: Mutates `colorPicker`
+    var currentKeys: NSMutableArray? = NSMutableArray()
+    /// - postcondition: Mutates `colorPicker`
     func setColor(_ color: NSColor) {
         selectedColor = color
         brightness = color.scaledBrightness

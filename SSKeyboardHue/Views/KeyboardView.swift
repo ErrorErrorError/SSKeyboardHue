@@ -14,16 +14,17 @@ class KeyboardView: NSView {
     var shapeLayer: CAShapeLayer!
     required init?(coder decoder: NSCoder) {
         super.init(coder: decoder)
-        //setup()
+        setup()
     }
     
     required override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
-        //setup()
+        setup()
     }
     
     func setup() {
         //shapeLayer = CAShapeLayer()
+        
     }
 
     override func mouseDown(with event: NSEvent) {

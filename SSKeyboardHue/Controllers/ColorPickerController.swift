@@ -17,16 +17,18 @@ class ColorPickerController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.wantsLayer = true
+        colorWheelView.delegate = self
+        ColorController.shared.colorPicker = self
         colorLabel.roundCorners(cornerRadius: 10.0)
         colorLabel.layer?.backgroundColor = textViewBackground.nsColor.cgColor
-        colorLabel.alignment = .center
-        ColorController.shared.colorPicker = self
-        colorWheelView.delegate = self
+        colorLabel.isBezeled = false
+        colorLabel.bezelStyle = .roundedBezel
     }
     
     override func viewWillAppear() {
         view.layer?.backgroundColor = colorBackground.nsColor.cgColor
         view.roundCorners(cornerRadius: 10.0)
+        ColorController.shared.setColor(NSColor.white.usingColorSpace(.genericRGB)!)
     }
     
     @IBAction func setBrightness(_ sender: NSSlider) {
@@ -49,11 +51,7 @@ class ColorPickerController: NSViewController {
     func updateLabel() {
         colorLabel.backgroundColor = ColorController.shared.selectedColor
         colorLabel.stringValue = "#"+ColorController.shared.selectedColor.rgbHexString
-        if ColorController.shared.selectedColor.scaledBrightness < 0.5 {
-            colorLabel.textColor = NSColor.white
-        } else {
-            colorLabel.textColor = NSColor.black
-        }
+            colorLabel.textColor = RGB(r: 17, g: 17, b: 18).nsColor
     }
     
     func updateSlider() {

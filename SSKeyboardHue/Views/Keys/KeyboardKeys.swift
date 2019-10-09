@@ -58,35 +58,26 @@ class KeyboardKeys: NSColorWell {
     }
     
     override func mouseDown(with event: NSEvent) {
-        if (!isSelected && isBeingDragged) {
-            setSelected(selected: false, fromGroupSelection: false)
-            // ColorController.shared.currentKeys!.remove(self)
-        } else if (!isSelected || !isSelected && !isBeingDragged) {
-            setSelected(selected: true, fromGroupSelection: false)
-            ColorController.shared.currentKeys!.add(self)
-            // ColorController.shared.setColor(color.usingColorSpace(NSColorSpace.genericRGB)!)
-            
-        } else if (isSelected && isBeingDragged)  {
-            setSelected(selected: true, fromGroupSelection: false)
-            
-        }  else {
-            setSelected(selected: false, fromGroupSelection: false)
-            ColorController.shared.currentKeys!.remove(self)
-        }
-        
-        setNeedsDisplay()
+        // Leave empty to detect drag and click
     }
     
     override func mouseDragged(with event: NSEvent) {
         // super.mouseDown causes the icon drag to show and I only want it to show
         // when it's actually being dragged
+        // super.mouseDown(with: event)
         super.mouseDown(with: event)
         isBeingDragged = true
     }
     
     override func mouseUp(with event: NSEvent) {
         super.mouseUp(with: event)
-        isBeingDragged = false
+        if (!isBeingDragged && !isSelected) {
+             setSelected(selected: true, fromGroupSelection: false)
+        } else if (!isBeingDragged && isSelected) {
+            setSelected(selected: false, fromGroupSelection: false)
+        } else {
+            isBeingDragged = false
+        }
     }
 
     override func draw(_ rect: NSRect) {
@@ -109,7 +100,7 @@ class KeyboardKeys: NSColorWell {
         
         let attributes: [NSAttributedString.Key : Any] = [
             .paragraphStyle: paragraphStyle,
-            .foregroundColor: NSColor.white,
+            .foregroundColor: (colorKey.scaledBrightness > 0.5) ? NSColor.black : NSColor.white,
             .font: NSFont.systemFont(ofSize: 12.0)
         ]
         let newRect = NSRect(x: 0, y: (bounds.size.height - 15) / 2, width: bounds.size.width, height: 15)
@@ -118,13 +109,13 @@ class KeyboardKeys: NSColorWell {
     }
 
     override func drawWell(inside insideRect: NSRect) {
-        // colorKey.set()
-        // insideRect.fill()
+         colorKey.set()
+         insideRect.fill()
     }
     func setColor(newColor: NSColor) {
         colorKey = newColor
         color = newColor
-        setNeedsDisplay()
+        setNeedsDisplay(bounds)
     }
     
     func getColor() -> NSColor {
@@ -134,15 +125,23 @@ class KeyboardKeys: NSColorWell {
     func setSelected(selected: Bool, fromGroupSelection: Bool) {
         isSelected = selected
         if (selected && fromGroupSelection) {
-            ColorController.shared.currentKeys!.add(self)
+            if (!ColorController.shared.currentKeys!.contains(self)) {
+                ColorController.shared.currentKeys!.add(self)
+            }
         } else if (selected && !fromGroupSelection) {
-            ColorController.shared.currentKeys!.add(self)
-            ColorController.shared.setColor(colorKey.usingColorSpace(NSColorSpace.genericRGB)!)
+            if (ColorController.shared.currentKeys!.count < 1) {
+                ColorController.shared.setColor(colorKey.usingColorSpace(NSColorSpace.genericRGB)!)
+            }
+            
+            if (!ColorController.shared.currentKeys!.contains(self)) {
+                ColorController.shared.currentKeys!.add(self)
+            }
+
         } else {
             ColorController.shared.currentKeys!.remove(self)
-            // ColorController.shared.setColor(color.usingColorSpace(NSColorSpace.genericRGB)!)
         }
-        setNeedsDisplay()
+        
+        setNeedsDisplay(bounds)
     }
 
 }

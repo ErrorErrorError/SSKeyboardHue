@@ -13,7 +13,6 @@ class CustomSplitViewController: NSSplitViewController {
     @IBOutlet weak var leftItem: NSSplitViewItem!
     @IBOutlet weak var rightItem: NSSplitViewItem!
     override func viewDidLoad() {
-
         super.viewDidLoad()
     }
     

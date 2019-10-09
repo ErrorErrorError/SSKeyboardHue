@@ -8,45 +8,11 @@
 
 import Cocoa
 
-/*
 public struct RGB {
     
-    public var r: uint8
-    
-    public var g: uint8
-    
-    public var b: uint8
-    
-    public var a: uint8
-    
-    public var nsColor: NSColor {
-        mutating get {
-            return NSColor(red: CGFloat(Double(self.r)/255.0), green: CGFloat(Double(self.g)/255.0), blue: CGFloat(Double(self.b)/255.0), alpha: CGFloat(Double(self.a)/255.0))
-        }
-        set(newColor) {
-            self.r = UInt8(newColor.redComponent * 255)
-            self.g = UInt8(newColor.greenComponent * 255)
-            self.b = UInt8(newColor.blueComponent * 255)
-            self.a = UInt8(newColor.alphaComponent * 255)
-        }
-    }
-    
-    public init(r: UInt8, g: UInt8, b: UInt8, a: UInt8) {
-        self.r = r
-        self.g = g
-        self.b = b
-        self.a = a
-    }
-}
- */
-
-public struct RGB {
-    
-    public var r: uint8
-    
-    public var g: uint8
-    
-    public var b: uint8
+    public var r: UInt8
+    public var g: UInt8
+    public var b: UInt8
     
     public var nsColor: NSColor {
         get {
@@ -65,14 +31,12 @@ public struct RGB {
         self.b = b
     }
 }
+
 public struct HSV {
     
     public var h: UInt16
-    
     public var s: UInt8
-    
     public var b: UInt8
-    
     public var a: UInt8
     
     public var nsColor: NSColor {
@@ -95,15 +59,15 @@ public struct HSV {
     }
 }
 
-
+// Extension is from https://github.com/Gofake1/Color-Picker/blob/master/Color%20Picker/NSColor%2B.swift
 extension NSColor {
     
     var rgbHexString: String {
         guard let rgbColor = usingColorSpace(NSColorSpace.genericRGB) else { return "FFFFFF" }
         
-        let r = Int(round(rgbColor.redComponent * 0xFF))
-        let g = Int(round(rgbColor.greenComponent * 0xFF))
-        let b = Int(round(rgbColor.blueComponent * 0xFF))
+        let r = UInt8(round(rgbColor.redComponent * 0xFF))
+        let g = UInt8(round(rgbColor.greenComponent * 0xFF))
+        let b = UInt8(round(rgbColor.blueComponent * 0xFF))
         return String(format: "%02X%02X%02X", r, g, b)
     }
     
