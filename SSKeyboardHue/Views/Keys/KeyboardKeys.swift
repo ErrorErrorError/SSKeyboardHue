@@ -13,7 +13,7 @@ class KeyboardKeys: NSColorWell {
     var isBeingDragged = false
     var key: UInt8!
     var keyText: NSString!
-
+    var bezel: NSBezierPath!
     var colorKey: NSColor = NSColor.white {
         didSet {
             
@@ -82,18 +82,21 @@ class KeyboardKeys: NSColorWell {
 
     override func draw(_ rect: NSRect) {
         super.draw(rect)
+        bezel = NSBezierPath(rect:bounds)
+        bezel.lineWidth = 5.0
         if isSelected {
-            colorKey.darkerColor(percent: 0.5).set()
-            let path = NSBezierPath(rect:bounds)
-            path.lineWidth = 5.0
-            path.stroke()
-            
+            if (colorKey.scaledBrightness < 0.5) {
+                // colorKey.lighterColor(percent: 0.8).set()
+                NSColor.white.set()
+            } else {
+                //NSColor.black.set()
+                colorKey.darkerColor(percent: 0.4).set()
+                bezel.lineWidth = 6.0
+            }
         } else {
             colorKey.set()
-            let path = NSBezierPath(rect:bounds)
-            path.lineWidth = 5.0
-            path.stroke()
         }
+        bezel.stroke()
         
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .center

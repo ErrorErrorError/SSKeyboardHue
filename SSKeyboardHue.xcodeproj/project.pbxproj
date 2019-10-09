@@ -52,6 +52,8 @@
 		133EEABA2345B19A006D9AFF /* CustomSplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSplitView.swift; sourceTree = "<group>"; };
 		133EEABC2345BC1F006D9AFF /* KeyboardKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardKeys.swift; sourceTree = "<group>"; };
 		133EEAC02345C617006D9AFF /* ColorWheelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorWheelView.swift; sourceTree = "<group>"; };
+		133FCB7B234E42CA0093E636 /* SSKeyboard.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SSKeyboard.xcodeproj; path = SSKeyboardHue/Classes/SSKeyboard/SSKeyboard.xcodeproj; sourceTree = "<group>"; };
+		133FCB7F234E42E30093E636 /* SSKeyboard.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SSKeyboard.xcodeproj; path = SSKeyboardHue/Classes/SSKeyboard/SSKeyboard.xcodeproj; sourceTree = "<group>"; };
 		1360D37023440034005054F8 /* WindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WindowController.swift; path = SSKeyboardHue/Window/WindowController.swift; sourceTree = SOURCE_ROOT; };
 		1370FF3B2346327F005D325E /* ColorPickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerController.swift; sourceTree = "<group>"; };
 		1376FDBA234A404400FE4B1A /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -115,6 +117,20 @@
 				133EEABC2345BC1F006D9AFF /* KeyboardKeys.swift */,
 			);
 			path = Keys;
+			sourceTree = "<group>";
+		};
+		133FCB7C234E42CA0093E636 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		133FCB80234E42E30093E636 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		135B47F82342D3B3003605BB /* Window */ = {
@@ -217,6 +233,8 @@
 		792DABF72DBA37767F993C5C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				133FCB7F234E42E30093E636 /* SSKeyboard.xcodeproj */,
+				133FCB7B234E42CA0093E636 /* SSKeyboard.xcodeproj */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -313,6 +331,16 @@
 			mainGroup = 13E0AFA02342D095009A5B41;
 			productRefGroup = 13E0AFAA2342D095009A5B41 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 133FCB80234E42E30093E636 /* Products */;
+					ProjectRef = 133FCB7F234E42E30093E636 /* SSKeyboard.xcodeproj */;
+				},
+				{
+					ProductGroup = 133FCB7C234E42CA0093E636 /* Products */;
+					ProjectRef = 133FCB7B234E42CA0093E636 /* SSKeyboard.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				13E0AFA82342D095009A5B41 /* SSKeyboardHue */,
