@@ -1,6 +1,0 @@
-[submodule "SSKeyboardHue/Classes"]
-	path = SSKeyboardHue/Classes
-	url = https://github.com/ErrorErrorError/SSKeyboard.git
-[submodule "SSKeyboardHue/SSKeyboardHue/Classes"]
-	path = SSKeyboardHue/SSKeyboardHue/Classes
-	url = https://github.com/ErrorErrorError/SSKeyboard.git
