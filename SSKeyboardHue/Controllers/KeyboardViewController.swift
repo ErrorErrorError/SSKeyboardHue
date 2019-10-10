@@ -60,12 +60,16 @@ class KeyboardViewController: NSViewController {
         var hasSetFNKeys = false
         for keys in KeyboardLayoutGS65.keys {
             if (!hasSetFNKeys) {
-                keyboardView.addSubview(createKeys(text: keys.value, x: key, row: row, width: 40, height: 25))
+                keyboardView.addSubview(createKeys(keys: keys, x: key, row: row, width: 40, height: 25))
                 if (keys.value == "DEL") {
                     hasSetFNKeys = true
                 }
+            
             } else {
-                keyboardView.addSubview(createKeys(text: keys.value, x: key, row: row, width: 40, height: 40))
+                if (key == 0xe4) {
+                    continue
+                }
+                keyboardView.addSubview(createKeys(keys: keys, x: key, row: row, width: 40, height: 40))
             }
 
             if (keys.value == "DEL" || keys.value == "HOME" || keys.value == "PGUP" || keys.value == "PGDN" || keys.value == "END") {
@@ -78,8 +82,9 @@ class KeyboardViewController: NSViewController {
     }
     
     // Make GS65 keyboard
-    private func createKeys(text:String, x: Int, row: Int, width: Int, height: Int) -> NSColorWell {
-        let key = KeyboardKeys(frame: NSRect(x:  55 + 50*x, y: 320 - (row * 50), width: width, height: height),keyLetter: text,newColor: RGB(r: 0xff, g: 0, b: 0))
+    private func createKeys(keys: (key:UInt8, value:String), x: Int, row: Int, width: Int, height: Int) -> NSColorWell {
+        let rect =  NSRect(x:  55 + 50*x, y: 320 - (row * 50), width: width, height: height)
+        let key = KeyboardKeys(frame: rect,keyLetter: keys.value, key: keys.key, newColor: RGB(r: 0xff, g: 0, b: 0))
         return key
     }
     

@@ -20,7 +20,7 @@ class KeyboardKeys: NSColorWell {
             findKeyAndSend()
         }
     }
-
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setup()
@@ -39,23 +39,30 @@ class KeyboardKeys: NSColorWell {
         setup()
     }
     
-    required init(frame frameRect: NSRect, keyLetter: String, newColor: RGB) {
+    required init(frame frameRect: NSRect, keyLetter: String, key: UInt8, newColor: RGB) {
         super.init(frame: frameRect)
         self.colorKey = newColor.nsColor.usingColorSpace(NSColorSpace.genericRGB)!
         self.color = newColor.nsColor.usingColorSpace(NSColorSpace.genericRGB)!
         self.keyText = keyLetter as NSString
+        self.key = key
         setup()
     }
     
     private func setup() {
         isBordered = false
         roundCorners(cornerRadius: 5.0)
+        
+        /*
         for keys in KeyboardLayoutGS65.keys {
             if (keys.value == String(keyText)){
                 key = keys.key
+                if (keyText == "SHIFT") {
+                    continue
+                }
                 break
             }
         }
+ */
     }
     
     override func mouseDown(with event: NSEvent) {
@@ -73,14 +80,14 @@ class KeyboardKeys: NSColorWell {
     override func mouseUp(with event: NSEvent) {
         super.mouseUp(with: event)
         if (!isBeingDragged && !isSelected) {
-             setSelected(selected: true, fromGroupSelection: false)
+            setSelected(selected: true, fromGroupSelection: false)
         } else if (!isBeingDragged && isSelected) {
             setSelected(selected: false, fromGroupSelection: false)
         } else {
             isBeingDragged = false
         }
     }
-
+    
     override func draw(_ rect: NSRect) {
         super.draw(rect)
         bezel = NSBezierPath(rect:bounds)
@@ -111,10 +118,10 @@ class KeyboardKeys: NSColorWell {
         keyText.draw(in: newRect, withAttributes: attributes)
         
     }
-
+    
     override func drawWell(inside insideRect: NSRect) {
-         colorKey.set()
-         insideRect.fill()
+        colorKey.set()
+        insideRect.fill()
     }
     func setColor(newColor: NSColor) {
         colorKey = newColor
@@ -125,7 +132,7 @@ class KeyboardKeys: NSColorWell {
     func getColor() -> NSColor {
         return colorKey
     }
-
+    
     func setSelected(selected: Bool, fromGroupSelection: Bool) {
         isSelected = selected
         if (selected && fromGroupSelection) {
@@ -140,25 +147,53 @@ class KeyboardKeys: NSColorWell {
             if (!ColorController.shared.currentKeys!.contains(self)) {
                 ColorController.shared.currentKeys!.add(self)
             }
-
+            
         } else {
             ColorController.shared.currentKeys!.remove(self)
         }
         
         setNeedsDisplay(bounds)
     }
-
+    
     private func findKeyAndSend() {
         let regionKey = findKeyInRegion(key)
-        
-        if (keyText == "ESC" || regionKey == regions.0) {
-            print("RegionKey: ESC", regionKey)
-        } else if (keyText == "A" || regionKey == regions.1) {
-            print("RegionKey: A", regionKey)
-        } else if (keyText == "ENTER" || regionKey == regions.2) {
-            print("RegionKey: ENTER", regionKey)
-        } else {
-            print("RegionKey: F7", regionKey)
+        let mainKeyboardView = (superview as! KeyboardView)
+        if (KeyboardManager.shared.keyboardManager.getKeyboardModel() == PerKeyGS65) {
+            if (keyText == "ESC") {
+                mainKeyboardView.colorToKeyboard(region: regions.0)
+                
+            } else if (keyText == "A") {
+                mainKeyboardView.colorToKeyboard(region: regions.1)
+                
+            } else if (keyText == "ENTER") {
+                mainKeyboardView.colorToKeyboard(region: regions.2)
+
+            } else if (keyText == "F7") {
+                mainKeyboardView.colorToKeyboard(region: regions.3)
+            
+            } else if (regionKey == regions.0) {
+                mainKeyboardView.colorToKeyboard(region: regions.0)
+
+            } else if (regionKey == regions.1) {
+                mainKeyboardView.colorToKeyboard(region: regions.1)
+                
+            } else if (regionKey == regions.2) {
+                mainKeyboardView.colorToKeyboard(region: regions.2)
+                
+            } else {
+                mainKeyboardView.colorToKeyboard(region: regions.3)
+                
+            }
         }
+        
     }
+    func arrayFromTuple<T,R>(tuple:T) -> [R] {
+        let reflection = Mirror(reflecting: tuple)
+        var arr : [R] = []
+        for i in reflection.children {
+            arr.append(i.value as! R)
+        }
+        return arr
+    }
+    
 }
