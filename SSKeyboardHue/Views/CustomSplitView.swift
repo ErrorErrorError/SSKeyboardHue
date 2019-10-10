@@ -8,6 +8,7 @@
 
 import Cocoa
 
+@IBDesignable
 class CustomSplitView: NSSplitView {
 
     override func draw(_ dirtyRect: NSRect) {

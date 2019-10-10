@@ -7,13 +7,8 @@
 //
 
 import Cocoa
-
-public struct RGB {
-    
-    public var r: UInt8
-    public var g: UInt8
-    public var b: UInt8
-    
+// From SSKeyboard.h
+extension RGB {
     public var nsColor: NSColor {
         get {
             return NSColor(red: CGFloat(Double(self.r)/255.0), green: CGFloat(Double(self.g)/255.0), blue: CGFloat(Double(self.b)/255.0), alpha: 1.0)
@@ -23,12 +18,6 @@ public struct RGB {
             self.g = UInt8(newColor.greenComponent * 255)
             self.b = UInt8(newColor.blueComponent * 255)
         }
-    }
-    
-    public init(r: UInt8, g: UInt8, b: UInt8) {
-        self.r = r
-        self.g = g
-        self.b = b
     }
 }
 
@@ -61,7 +50,13 @@ public struct HSV {
 
 // Extension is from https://github.com/Gofake1/Color-Picker/blob/master/Color%20Picker/NSColor%2B.swift
 extension NSColor {
-    
+    var getRGB: RGB {
+        var color: RGB = RGB()
+        color.r = UInt8(round(self.redComponent * 0xFF))
+        color.g = UInt8(round(self.greenComponent * 0xFF))
+        color.b = UInt8(round(self.blueComponent * 255))
+        return color
+    }
     var rgbHexString: String {
         guard let rgbColor = usingColorSpace(NSColorSpace.genericRGB) else { return "FFFFFF" }
         

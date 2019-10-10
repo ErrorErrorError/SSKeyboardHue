@@ -18,9 +18,39 @@ class KeyboardViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.wantsLayer = true
-        keyboardView.wantsLayer = true
         keyboardView.roundCorners(cornerRadius: 15.0)
-        createGS65Keyboard()
+        KeyboardManager.shared.keyboardManager = SSKeyboardWrapper()
+        detectKeyboard()
+        
+        /*
+         let color = RGB.init(r: 0x00, g: 0xff, b: 0x00)
+         var colorArray = [color]
+         for i in 0...kAlphanumsSize - 1{
+         colorArray.append(color)
+         }
+         
+         let pointer = UnsafeMutablePointer<RGB>.allocate(capacity: Int(kAlphanumsSize))
+         pointer.initialize(from: &colorArray, count: Int(kAlphanumsSize))
+         t.setSteadyMode(0, color, pointer)
+         pointer.deallocate()
+         t.closeKeyboardPort()
+         */
+    }
+    
+    private func detectKeyboard() {
+        
+        switch KeyboardManager.shared.keyboardManager.getKeyboardModel() {
+        case PerKeyGS65:
+            createGS65Keyboard()
+        case PerKey:
+            print("PerKey")
+        case ThreeRegion:
+            print("ThreeRegion")
+        case UnknownModel:
+            print("UnknownModel")
+        default:
+            print("default")
+        }
     }
     
     

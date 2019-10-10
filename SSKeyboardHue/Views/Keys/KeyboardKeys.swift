@@ -8,6 +8,7 @@
 
 import Cocoa
 
+@IBDesignable
 class KeyboardKeys: NSColorWell {
     var isSelected = false
     var isBeingDragged = false
@@ -16,7 +17,7 @@ class KeyboardKeys: NSColorWell {
     var bezel: NSBezierPath!
     var colorKey: NSColor = NSColor.white {
         didSet {
-            
+            findKeyAndSend()
         }
     }
 
@@ -147,4 +148,17 @@ class KeyboardKeys: NSColorWell {
         setNeedsDisplay(bounds)
     }
 
+    private func findKeyAndSend() {
+        let regionKey = findKeyInRegion(key)
+        
+        if (keyText == "ESC" || regionKey == regions.0) {
+            print("RegionKey: ESC", regionKey)
+        } else if (keyText == "A" || regionKey == regions.1) {
+            print("RegionKey: A", regionKey)
+        } else if (keyText == "ENTER" || regionKey == regions.2) {
+            print("RegionKey: ENTER", regionKey)
+        } else {
+            print("RegionKey: F7", regionKey)
+        }
+    }
 }

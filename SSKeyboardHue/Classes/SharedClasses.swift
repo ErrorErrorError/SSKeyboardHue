@@ -8,6 +8,18 @@
 
 import Cocoa
 
+class KeyboardManager {
+    static var shared = KeyboardManager()
+    var keyboardManager: SSKeyboardWrapper!
+    
+    // changed keys
+    //var changedAlphanumKeys: NSMutableDictionary = NSMutableDictionary()
+    //var changedModifiersKeys: NSMutableDictionary = NSMutableDictionary()
+    //var changedEnterKeys: NSMutableDictionary = NSMutableDictionary()
+    //var changedSpecialKeys: NSMutableDictionary = NSMutableDictionary()
+    
+}
+
 class ColorController {
     static var shared = ColorController()
     // Should only be set by `colorPicker`'s `NSSlider`. Affects `selectedColor`.

@@ -13,6 +13,7 @@ protocol ColorWheelViewDelegate: class {
     func colorDidChange(_ newColor: NSColor)
 }
 
+@IBDesignable
 class ColorWheelView: NSView {
     weak var delegate: ColorWheelViewDelegate?
     private var colorWheelImage: CGImage!

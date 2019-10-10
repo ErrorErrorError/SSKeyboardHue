@@ -8,6 +8,7 @@
 
 import Cocoa
 
+@IBDesignable
 class GradientSliderCell: NSSliderCell {
     
     var colorA = NSColor.white

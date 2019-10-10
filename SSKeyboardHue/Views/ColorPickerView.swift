@@ -9,6 +9,7 @@
 import Cocoa
 
 /// `ColorPickerViewController` content view. Allows colors to be dragged in.
+@IBDesignable
 class ColorPickerView: NSView {
     
     required init?(coder decoder: NSCoder) {

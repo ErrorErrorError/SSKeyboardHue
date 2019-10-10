@@ -8,10 +8,12 @@
 
 import Cocoa
 
+@IBDesignable
 class KeyboardView: NSView {
     var isMouseBeingDragged = false
     var startPoint: NSPoint!
     var shapeLayer: CAShapeLayer!
+    
     required init?(coder decoder: NSCoder) {
         super.init(coder: decoder)
         setup()
@@ -23,7 +25,6 @@ class KeyboardView: NSView {
     }
     
     func setup() {
-        //shapeLayer = CAShapeLayer()
         
     }
 
@@ -71,26 +72,5 @@ class KeyboardView: NSView {
             shapeLayer.removeFromSuperlayer()
             shapeLayer = nil
         }
-    }
-    
-    var changedAlphanumKeys: NSArray!
-    var changedModifiersKeys: NSArray!
-    var changedEnterKeys: NSArray!
-    var changedSymbolKeys: NSArray!
-    
-    func changedAlphanums() {
-        print("Alphanums")
-    }
-    
-    func changedModifiers() {
-        print("Modifiers")
-    }
-    
-    func changedEnter() {
-        print("Enter")
-    }
-    
-    func changedSymbol() {
-        print("Symbol")
     }
 }
