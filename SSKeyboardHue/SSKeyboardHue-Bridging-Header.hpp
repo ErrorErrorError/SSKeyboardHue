@@ -10,7 +10,7 @@
 #import <SSKeyboard/sskeyboard.h>
 @interface SSKeyboardWrapper : NSObject
 
--(IOReturn) setSteadyMode:(uint8_t) region : (struct RGB) regionColor : (struct RGB *) colorArray;
+-(IOReturn) setSteadyMode:(uint8_t) region : (struct RGB) regionColor : (struct RGB *) colorArray : (bool) createOutputPackage;
 -(IOReturn) closeKeyboardPort;
 -(enum KeyboardModels) getKeyboardModel;
 // -(uint8_t) findKeyInRegion:(uint8_t) findThisKey;

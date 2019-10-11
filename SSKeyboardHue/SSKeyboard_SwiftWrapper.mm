@@ -13,9 +13,9 @@
 {
     SSKeyboard keyboard;
 }
--(IOReturn) setSteadyMode:(uint8_t) region : (RGB) regionColor : (RGB *) colorArray
+-(IOReturn) setSteadyMode:(uint8_t) region : (RGB) regionColor : (RGB *) colorArray : (bool) createOutputPackage
 {
-    return keyboard.setSteadyMode(region, regionColor, colorArray);
+    return keyboard.setSteadyMode(region, regionColor, colorArray, createOutputPackage);
 }
 
 -(IOReturn) closeKeyboardPort {

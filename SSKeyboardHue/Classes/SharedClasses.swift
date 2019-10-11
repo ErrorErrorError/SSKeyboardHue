@@ -11,13 +11,6 @@ import Cocoa
 class KeyboardManager {
     static var shared = KeyboardManager()
     var keyboardManager: SSKeyboardWrapper!
-    
-    // changed keys
-    //var changedAlphanumKeys: NSMutableDictionary = NSMutableDictionary()
-    //var changedModifiersKeys: NSMutableDictionary = NSMutableDictionary()
-    //var changedEnterKeys: NSMutableDictionary = NSMutableDictionary()
-    //var changedSpecialKeys: NSMutableDictionary = NSMutableDictionary()
-    
 }
 
 class ColorController {
@@ -40,10 +33,12 @@ class ColorController {
                                     alpha: 1.0)
         }
     }
+    
     var selectedColor = NSColor(calibratedRed: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
     // Injected by ColorPickerViewController
     weak var colorPicker: ColorPickerController!
     var currentKeys: NSMutableArray? = NSMutableArray()
+    weak var keyboardView: KeyboardView!
     /// - postcondition: Mutates `colorPicker`
     func setColor(_ color: NSColor) {
         selectedColor = color
@@ -55,6 +50,6 @@ class ColorController {
         colorPicker.updateColorWheel()
         colorPicker.updateSlider()
         colorPicker.updateLabel()
-        colorPicker.updateKeys()
+        colorPicker.updateKeys(shouldUpdateKeys: true)
     }
 }

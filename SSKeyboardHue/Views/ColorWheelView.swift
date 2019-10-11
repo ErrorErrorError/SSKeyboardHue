@@ -10,7 +10,7 @@
 import Cocoa
 
 protocol ColorWheelViewDelegate: class {
-    func colorDidChange(_ newColor: NSColor)
+    func colorDidChange(_ newColor: NSColor, shouldUpdateKeyboard: Bool)
 }
 
 @IBDesignable
@@ -21,7 +21,7 @@ class ColorWheelView: NSView {
     private var brightness: CGFloat = 1.0
     private var pickerLocation: CGPoint!
     private(set) var selectedColor = NSColor(red: 0x0, green: 0x0, blue: 0x0, alpha: 1.0)
-
+    var mouseUp = false
     
     required override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -137,13 +137,16 @@ class ColorWheelView: NSView {
         selectedColor = NSColor(coord: (Int(point.x), Int(point.y)),
                                 center: (Int(frame.width/2), Int(frame.height/2)),
                                 brightness: 1.0)
-        delegate?.colorDidChange(selectedColor)
+        delegate?.colorDidChange(selectedColor, shouldUpdateKeyboard: mouseUp)
     }
     
     // MARK: - Mouse
     /// - postcondition: May call `NSWindow.makeFirstResponder`
     override func mouseDown(with event: NSEvent) {
+        mouseUp = false
+
         let (clampedPoint, wasClamped) = clamped(convert(event.locationInWindow, from: nil))
+        
         if wasClamped {
             window?.makeFirstResponder(window?.contentView)
         } else {
@@ -154,10 +157,19 @@ class ColorWheelView: NSView {
     }
     
     override func mouseDragged(with event: NSEvent) {
+        mouseUp = false
         let (clampedPoint, _) = clamped(convert(event.locationInWindow, from: nil))
         setColor(at: clampedPoint)
         pickerLocation = clampedPoint
         needsDisplay = true
     }
+    
+    override func mouseUp(with event: NSEvent) {
+        super.mouseUp(with: event)
+        mouseUp = true
+        let (clampedPoint, _) = clamped(convert(event.locationInWindow, from: nil))
+        setColor(at: clampedPoint)
 
+    }
+    
 }

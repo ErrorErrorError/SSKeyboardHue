@@ -35,7 +35,15 @@ class ColorPickerController: NSViewController {
         ColorController.shared.brightness = CGFloat((sender.maxValue-sender.doubleValue) / sender.maxValue)
         updateColorWheel(redrawCrosshair: false)
         updateLabel()
-        updateKeys()
+        
+        let event = NSApplication.shared.currentEvent
+        
+        if event?.type == NSEvent.EventType.leftMouseUp {
+            updateKeys(shouldUpdateKeys: true)
+        } else {
+            updateKeys(shouldUpdateKeys: false)
+        }
+
     }
     
     @IBAction func setColor(_ sender: NSTextField) {
@@ -61,11 +69,21 @@ class ColorPickerController: NSViewController {
         brightnessSlider.doubleValue = brightnessSlider.maxValue - (Double(ColorController.shared.brightness) *
             brightnessSlider.maxValue)
     }
-    func updateKeys() {
+    func updateKeys(shouldUpdateKeys: Bool) {
         if (ColorController.shared.currentKeys != nil) {
             
-            for i in ColorController.shared.currentKeys! {
-                (i as! KeyboardKeys).setColor(newColor: ColorController.shared.selectedColor)
+            for key in ColorController.shared.currentKeys! {
+                (key as! KeyboardKeys).setColor(newColor: ColorController.shared.selectedColor)
+            }
+            
+            if (ColorController.shared.currentKeys!.count > 0) {
+                // Will only set color if the mouse is up
+                if (shouldUpdateKeys) {
+                    ColorController.shared.keyboardView.colorToKeyboard(region: regions.0, createOutput: false)
+                    ColorController.shared.keyboardView.colorToKeyboard(region: regions.1, createOutput: false)
+                    ColorController.shared.keyboardView.colorToKeyboard(region: regions.2, createOutput: false)
+                    ColorController.shared.keyboardView.colorToKeyboard(region: regions.3, createOutput: true)
+                }
             }
         }
     }
@@ -80,11 +98,11 @@ extension NSView {
 }
 extension ColorPickerController: ColorWheelViewDelegate {
     /// - postcondition: Mutates `ColorController.masterColor`
-    func colorDidChange(_ newColor: NSColor) {
+    func colorDidChange(_ newColor: NSColor, shouldUpdateKeyboard: Bool) {
         ColorController.shared.masterColor = newColor
         updateLabel()
         updateSlider()
-        updateKeys()
+        updateKeys(shouldUpdateKeys: shouldUpdateKeyboard)
     }
 }
 

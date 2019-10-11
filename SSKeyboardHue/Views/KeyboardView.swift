@@ -13,13 +13,16 @@ class KeyboardView: NSView {
     var isMouseBeingDragged = false
     var startPoint: NSPoint!
     var shapeLayer: CAShapeLayer!
-    
+    let serialQueue = DispatchQueue(label: "queuename")
+
     required init?(coder decoder: NSCoder) {
         super.init(coder: decoder)
+        ColorController.shared.keyboardView = self
     }
     
     required override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
+        ColorController.shared.keyboardView = self
     }
 
     override func mouseDown(with event: NSEvent) {
@@ -68,10 +71,10 @@ class KeyboardView: NSView {
         }
     }
     
-    public func colorToKeyboard(region: UInt8) {
+    public func colorToKeyboard(region: UInt8, createOutput: Bool) {
 
         var colorArray: [RGB] = []
-        
+        let regionColor: RGB
         if (region == regions.0) {
             colorArray.reserveCapacity(Int(kModifiersSize))
             let modifierKeys = UnsafeRawBufferPointer(start: &modifiers, count: Int(kModifiersSize))
@@ -79,10 +82,8 @@ class KeyboardView: NSView {
                 colorArray.append(findColorOfKey(isRegionKey: false, keyToFind: i))
             }
             
-            let regionColor = findColorOfKey(isRegionKey: true, keyToFind: region)
+            regionColor = findColorOfKey(isRegionKey: true, keyToFind: region)
             
-            KeyboardManager.shared.keyboardManager.setSteadyMode(0, regionColor, &colorArray)
-
         } else if (regions.1 == region) {
             
             colorArray.reserveCapacity(Int(kAlphanumsSize))
@@ -91,10 +92,8 @@ class KeyboardView: NSView {
                 colorArray.append(findColorOfKey(isRegionKey: false, keyToFind: i))
             }
             
-            let regionColor = findColorOfKey(isRegionKey: true, keyToFind: region)
-        
-            KeyboardManager.shared.keyboardManager.setSteadyMode(1, regionColor, &colorArray)
-        
+            regionColor = findColorOfKey(isRegionKey: true, keyToFind: region)
+            
         } else if (regions.2 == region) {
             colorArray.reserveCapacity(Int(kEnterSize))
             let enterKeys = UnsafeRawBufferPointer(start: &enter, count: Int(kEnterSize))
@@ -102,40 +101,43 @@ class KeyboardView: NSView {
                 colorArray.append(findColorOfKey(isRegionKey: false, keyToFind: i))
             }
             
-            let regionColor = findColorOfKey(isRegionKey: true, keyToFind: region)
+            regionColor = findColorOfKey(isRegionKey: true, keyToFind: region)
             
-            KeyboardManager.shared.keyboardManager.setSteadyMode(2, regionColor, &colorArray)
-
-        } else if (regions.3 == region) {
+        } else {
             colorArray.reserveCapacity(Int(kSpecialSize))
             let specialKeys = UnsafeRawBufferPointer(start: &special, count: Int(kSpecialSize))
             for i in specialKeys {
                 colorArray.append(findColorOfKey(isRegionKey: false, keyToFind: i))
             }
             
-            let regionColor = findColorOfKey(isRegionKey: true, keyToFind: region)
+            regionColor = findColorOfKey(isRegionKey: true, keyToFind: region)
             
-            KeyboardManager.shared.keyboardManager.setSteadyMode(3, regionColor, &colorArray)
+        }
+        
+        serialQueue.async {
+            KeyboardManager.shared.keyboardManager.setSteadyMode(region, regionColor, &colorArray, createOutput)
 
         }
+
     }
     
     private func findColorOfKey(isRegionKey: Bool, keyToFind: UInt8) -> RGB {
         for keysSubView in subviews {
             let keyView = keysSubView as! KeyboardKeys
+            let isKeyEqual = keyView.keyModel.key == keyToFind
+            let isKeyRegionKey = keyView.keyModel.keyLetter == "A" || keyView.keyModel.keyLetter == "ESC" || keyView.keyModel.keyLetter == "ENTER" || keyView.keyModel.keyLetter == "F7"
             if (isRegionKey) {
-                if (keyView.key == keyToFind && keyView.keyText == "A" || keyView.key == keyToFind && keyView.keyText == "ESC" || keyView.key == keyToFind && keyView.keyText == "ENTER" || keyView.key == keyToFind && keyView.keyText == "F7") {
+                if (isKeyEqual && isKeyRegionKey) {
                     return keyView.getColor().getRGB
                 }
             } else {
-                if (keyToFind == 50) {
-                    print("t")
-                }
-                if (keyView.key == keyToFind && keyView.keyText != "A" && keyView.key == keyToFind && keyView.keyText != "ESC" && keyView.key == keyToFind && keyView.keyText != "ENTER" && keyView.key == keyToFind && keyView.keyText != "F7") {
+                if (isKeyEqual && !isKeyRegionKey) {
                     return keyView.getColor().getRGB
                 }
             }
         }
         return RGB(r: 0, g: 0, b: 0)
     }
+    
+    
 }

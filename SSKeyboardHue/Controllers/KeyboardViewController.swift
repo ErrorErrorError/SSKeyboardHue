@@ -21,20 +21,6 @@ class KeyboardViewController: NSViewController {
         keyboardView.roundCorners(cornerRadius: 15.0)
         KeyboardManager.shared.keyboardManager = SSKeyboardWrapper()
         detectKeyboard()
-        
-        /*
-         let color = RGB.init(r: 0x00, g: 0xff, b: 0x00)
-         var colorArray = [color]
-         for i in 0...kAlphanumsSize - 1{
-         colorArray.append(color)
-         }
-         
-         let pointer = UnsafeMutablePointer<RGB>.allocate(capacity: Int(kAlphanumsSize))
-         pointer.initialize(from: &colorArray, count: Int(kAlphanumsSize))
-         t.setSteadyMode(0, color, pointer)
-         pointer.deallocate()
-         t.closeKeyboardPort()
-         */
     }
     
     private func detectKeyboard() {
@@ -66,9 +52,6 @@ class KeyboardViewController: NSViewController {
                 }
             
             } else {
-                if (key == 0xe4) {
-                    continue
-                }
                 keyboardView.addSubview(createKeys(keys: keys, x: key, row: row, width: 40, height: 40))
             }
 
@@ -81,10 +64,12 @@ class KeyboardViewController: NSViewController {
         }
     }
     
-    // Make GS65 keyboard
+    // Make keys
     private func createKeys(keys: (key:UInt8, value:String), x: Int, row: Int, width: Int, height: Int) -> NSColorWell {
         let rect =  NSRect(x:  55 + 50*x, y: 320 - (row * 50), width: width, height: height)
-        let key = KeyboardKeys(frame: rect,keyLetter: keys.value, key: keys.key, newColor: RGB(r: 0xff, g: 0, b: 0))
+        let region = getRegionKey(key: keys.key, keyText: keys.value)
+        let keyModel = Keys(key: keys.key, keyLetter: keys.value, region: region, color: RGB(r: 0xff, g: 0, b: 0))
+        let key = KeyboardKeys(frame: rect, key: keyModel)
         return key
     }
     
@@ -96,5 +81,32 @@ class KeyboardViewController: NSViewController {
     override func viewWillAppear() {
         view.layer?.backgroundColor = colorBackground.nsColor.cgColor
         keyboardView.layer?.backgroundColor = keyboardBackground.nsColor.cgColor
+    }
+    
+
+    private func getRegionKey(key: UInt8, keyText: String) -> UInt8 {
+        if (KeyboardManager.shared.keyboardManager.getKeyboardModel() == PerKeyGS65) {
+            //Checks if key is a region key
+            if (keyText == "ESC") {
+                return regions.0
+            } else if (keyText == "A") {
+                return regions.1
+
+            } else if (keyText == "ENTER") {
+                return regions.2
+                
+            } else if (keyText == "F7") {
+                return regions.3
+                
+            }
+            
+            let regionKey = findKeyInRegion(key)
+
+            return regionKey
+        } else if (KeyboardManager.shared.keyboardManager.getKeyboardModel() == PerKey) {
+            // TODO - Implement PerKey for other models
+        }
+
+        return 0
     }
 }
