@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:SSKeyboard/SSKeyboard.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:../SSKeyboardHue/SSKeyboardHue.xcodeproj">
    </FileRef>
 </Workspace>
