@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		130CDEE32346D1EC007E2028 /* ColorUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130CDEE22346D1EC007E2028 /* ColorUtils.swift */; };
 		132FEEAE23481BAD008A47FF /* ColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132FEEAD23481BAD008A47FF /* ColorPickerView.swift */; };
-		133952B3234E65A800D93C71 /* libSSKeyboard.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 133952A9234E658700D93C71 /* libSSKeyboard.a */; };
 		133EEAB92345AC6D006D9AFF /* CustomSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13A8DEB32345380400709D9F /* CustomSplitViewController.swift */; };
 		133EEABB2345B19A006D9AFF /* CustomSplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133EEABA2345B19A006D9AFF /* CustomSplitView.swift */; };
 		133EEABD2345BC1F006D9AFF /* KeyboardKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133EEABC2345BC1F006D9AFF /* KeyboardKeys.swift */; };
@@ -115,7 +114,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				133952B3234E65A800D93C71 /* libSSKeyboard.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
