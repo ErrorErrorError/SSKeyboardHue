@@ -21,7 +21,8 @@ class ColorWheelView: NSView {
     private var brightness: CGFloat = 1.0
     private var pickerLocation: CGPoint!
     private(set) var selectedColor = NSColor(red: 0x0, green: 0x0, blue: 0x0, alpha: 1.0)
-    var mouseUp = false
+    private var mouseUp = false
+    private var isClampedOutside = false
     
     required override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -149,7 +150,9 @@ class ColorWheelView: NSView {
         
         if wasClamped {
             window?.makeFirstResponder(window?.contentView)
+            isClampedOutside = wasClamped
         } else {
+            isClampedOutside = false
             setColor(at: clampedPoint)
             pickerLocation = clampedPoint
             needsDisplay = true
@@ -158,18 +161,20 @@ class ColorWheelView: NSView {
     
     override func mouseDragged(with event: NSEvent) {
         mouseUp = false
-        let (clampedPoint, _) = clamped(convert(event.locationInWindow, from: nil))
-        setColor(at: clampedPoint)
-        pickerLocation = clampedPoint
-        needsDisplay = true
+        if (!isClampedOutside) {
+            let (clampedPoint, _) = clamped(convert(event.locationInWindow, from: nil))
+            setColor(at: clampedPoint)
+            pickerLocation = clampedPoint
+            needsDisplay = true
+        }
     }
     
     override func mouseUp(with event: NSEvent) {
         super.mouseUp(with: event)
         mouseUp = true
-        let (clampedPoint, _) = clamped(convert(event.locationInWindow, from: nil))
-        setColor(at: clampedPoint)
-
+        if (!isClampedOutside) {
+            let (clampedPoint, _) = clamped(convert(event.locationInWindow, from: nil))
+            setColor(at: clampedPoint)
+        }
     }
-    
 }

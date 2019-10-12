@@ -25,6 +25,9 @@
 -(enum KeyboardModels) getKeyboardModel {
     return keyboard.getKeyboardModel();
 }
+-(void) setSleepInMillis:(uint16_t) millis {
+    keyboard.setSleepInMillis(millis);
+}
 
 /*
 -(uint8_t) findKeyInRegion:(uint8_t) findThisKey {

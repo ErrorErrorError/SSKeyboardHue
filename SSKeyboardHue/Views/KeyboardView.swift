@@ -13,16 +13,16 @@ class KeyboardView: NSView {
     var isMouseBeingDragged = false
     var startPoint: NSPoint!
     var shapeLayer: CAShapeLayer!
-    let serialQueue = DispatchQueue(label: "queuename")
+    let serialQueue = DispatchQueue(label: "send_keyboard_command")
 
     required init?(coder decoder: NSCoder) {
         super.init(coder: decoder)
-        ColorController.shared.keyboardView = self
+        KeyboardManager.shared.keyboardView = self
     }
     
     required override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
-        ColorController.shared.keyboardView = self
+        KeyboardManager.shared.keyboardView = self
     }
 
     override func mouseDown(with event: NSEvent) {
@@ -71,7 +71,7 @@ class KeyboardView: NSView {
         }
     }
     
-    public func colorToKeyboard(region: UInt8, createOutput: Bool) {
+    public func sendColorToKeyboard(region: UInt8, createOutput: Bool) {
 
         var colorArray: [RGB] = []
         let regionColor: RGB
@@ -119,6 +119,93 @@ class KeyboardView: NSView {
 
         }
 
+    }
+    
+    public func updateGS65Keys() {
+        let refreshModifiers =  regionNeedsRefresh(regionToSearch: regions.0)
+        let refreshAlphanums =  regionNeedsRefresh(regionToSearch: regions.1)
+        let refreshEnter =      regionNeedsRefresh(regionToSearch: regions.2)
+        let refreshSpecial =    regionNeedsRefresh(regionToSearch: regions.3)
+        
+        //This allows to have consistent times between single and multiple keys
+        let millis: UInt16 = 120
+        KeyboardManager.shared.keyboardManager.setSleepInMillis(millis)
+        
+        if (refreshModifiers && !refreshAlphanums && !refreshEnter && !refreshSpecial) {
+            sendColorToKeyboard(region: regions.0, createOutput: true)
+        } else if (!refreshModifiers && refreshAlphanums && !refreshEnter && !refreshSpecial) {
+            sendColorToKeyboard(region: regions.1, createOutput: true)
+        } else if (!refreshModifiers && !refreshAlphanums && refreshEnter && !refreshSpecial) {
+            sendColorToKeyboard(region: regions.2, createOutput: true)
+        } else if (!refreshModifiers && !refreshAlphanums && !refreshEnter && refreshSpecial){
+            sendColorToKeyboard(region: regions.3, createOutput: true)
+        } else if (refreshModifiers && refreshAlphanums && !refreshEnter && !refreshSpecial) {
+            KeyboardManager.shared.keyboardManager.setSleepInMillis(UInt16(millis/2))
+            sendColorToKeyboard(region: regions.0, createOutput: false)
+            sendColorToKeyboard(region: regions.1, createOutput: true)
+        } else if (refreshModifiers && !refreshAlphanums && refreshEnter && !refreshSpecial) {
+            KeyboardManager.shared.keyboardManager.setSleepInMillis(UInt16(millis/2))
+            sendColorToKeyboard(region: regions.0, createOutput: false)
+            sendColorToKeyboard(region: regions.2, createOutput: true)
+        } else if (refreshModifiers && !refreshAlphanums && !refreshEnter && refreshSpecial) {
+            KeyboardManager.shared.keyboardManager.setSleepInMillis(UInt16(millis/2))
+            sendColorToKeyboard(region: regions.0, createOutput: false)
+            sendColorToKeyboard(region: regions.3, createOutput: true)
+        } else if (!refreshModifiers && refreshAlphanums && refreshEnter && !refreshSpecial) {
+            KeyboardManager.shared.keyboardManager.setSleepInMillis(UInt16(millis/2))
+            sendColorToKeyboard(region: regions.1, createOutput: false)
+            sendColorToKeyboard(region: regions.2, createOutput: true)
+        } else if (!refreshModifiers && refreshAlphanums && !refreshEnter && refreshSpecial) {
+            KeyboardManager.shared.keyboardManager.setSleepInMillis(UInt16(millis/2))
+            sendColorToKeyboard(region: regions.1, createOutput: false)
+            sendColorToKeyboard(region: regions.3, createOutput: true)
+        } else if (!refreshModifiers && !refreshAlphanums && refreshEnter && refreshSpecial) {
+            KeyboardManager.shared.keyboardManager.setSleepInMillis(UInt16(millis/2))
+            sendColorToKeyboard(region: regions.2, createOutput: false)
+            sendColorToKeyboard(region: regions.3, createOutput: true)
+        } else if (refreshModifiers && refreshAlphanums && refreshEnter && !refreshSpecial) {
+            KeyboardManager.shared.keyboardManager.setSleepInMillis(UInt16(millis/3))
+            sendColorToKeyboard(region: regions.0, createOutput: false)
+            sendColorToKeyboard(region: regions.1, createOutput: false)
+            sendColorToKeyboard(region: regions.2, createOutput: true)
+        } else if (refreshModifiers && refreshAlphanums && !refreshEnter && refreshSpecial) {
+            KeyboardManager.shared.keyboardManager.setSleepInMillis(UInt16(millis/3))
+            sendColorToKeyboard(region: regions.0, createOutput: false)
+            sendColorToKeyboard(region: regions.1, createOutput: false)
+            sendColorToKeyboard(region: regions.3, createOutput: true)
+        } else if (refreshModifiers && !refreshAlphanums && refreshEnter && refreshSpecial) {
+            KeyboardManager.shared.keyboardManager.setSleepInMillis(UInt16(millis/3))
+            sendColorToKeyboard(region: regions.0, createOutput: false)
+            sendColorToKeyboard(region: regions.2, createOutput: false)
+            sendColorToKeyboard(region: regions.3, createOutput: true)
+        } else if (!refreshModifiers && refreshAlphanums && refreshEnter && refreshSpecial) {
+            KeyboardManager.shared.keyboardManager.setSleepInMillis(UInt16(millis/3))
+            sendColorToKeyboard(region: regions.1, createOutput: false)
+            sendColorToKeyboard(region: regions.2, createOutput: false)
+            sendColorToKeyboard(region: regions.3, createOutput: true)
+        } else if (refreshModifiers && refreshAlphanums && refreshEnter && refreshSpecial) {
+            KeyboardManager.shared.keyboardManager.setSleepInMillis(UInt16(millis/4))
+            sendColorToKeyboard(region: regions.0, createOutput: false)
+            sendColorToKeyboard(region: regions.1, createOutput: false)
+            sendColorToKeyboard(region: regions.2, createOutput: false)
+            sendColorToKeyboard(region: regions.3, createOutput: true)
+        } else {
+            print("This is not supposed to happen")
+        }
+        
+    }
+    
+    private func regionNeedsRefresh(regionToSearch: UInt8) -> Bool {
+        var needRefresh = false
+        for i in KeyboardManager.shared.keysSelected! {
+            let keys = i as! KeyboardKeys
+            if (keys.keyModel.region == regionToSearch) {
+                needRefresh = true
+                break
+            }
+        }
+        
+        return needRefresh
     }
     
     private func findColorOfKey(isRegionKey: Bool, keyToFind: UInt8) -> RGB {

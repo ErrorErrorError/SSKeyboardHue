@@ -13,7 +13,6 @@
 -(IOReturn) setSteadyMode:(uint8_t) region : (struct RGB) regionColor : (struct RGB *) colorArray : (bool) createOutputPackage;
 -(IOReturn) closeKeyboardPort;
 -(enum KeyboardModels) getKeyboardModel;
-// -(uint8_t) findKeyInRegion:(uint8_t) findThisKey;
-
+-(void) setSleepInMillis:(uint16_t) millis;
 @end
 

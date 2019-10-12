@@ -69,20 +69,21 @@ class ColorPickerController: NSViewController {
         brightnessSlider.doubleValue = brightnessSlider.maxValue - (Double(ColorController.shared.brightness) *
             brightnessSlider.maxValue)
     }
+    
     func updateKeys(shouldUpdateKeys: Bool) {
-        if (ColorController.shared.currentKeys != nil) {
+        if (KeyboardManager.shared.keysSelected != nil) {
             
-            for key in ColorController.shared.currentKeys! {
+            for key in KeyboardManager.shared.keysSelected! {
                 (key as! KeyboardKeys).setColor(newColor: ColorController.shared.selectedColor)
             }
             
-            if (ColorController.shared.currentKeys!.count > 0) {
-                // Will only set color if the mouse is up
+            if (KeyboardManager.shared.keysSelected!.count > 0) {
+                
+                // Will only set color when the mouse is up
                 if (shouldUpdateKeys) {
-                    ColorController.shared.keyboardView.colorToKeyboard(region: regions.0, createOutput: false)
-                    ColorController.shared.keyboardView.colorToKeyboard(region: regions.1, createOutput: false)
-                    ColorController.shared.keyboardView.colorToKeyboard(region: regions.2, createOutput: false)
-                    ColorController.shared.keyboardView.colorToKeyboard(region: regions.3, createOutput: true)
+                    if (KeyboardManager.shared.keyboardManager.getKeyboardModel() == PerKeyGS65) {
+                        KeyboardManager.shared.keyboardView.updateGS65Keys()
+                    }
                 }
             }
         }

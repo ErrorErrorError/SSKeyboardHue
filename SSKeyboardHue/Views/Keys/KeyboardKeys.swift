@@ -19,11 +19,9 @@ struct Keys {
 class KeyboardKeys: NSColorWell {
     var isSelected = false
     var isBeingDragged = false
-    // var key: UInt8!
-    // var keyText: NSString!
     var bezel: NSBezierPath!
-    // var colorKey: NSColor = NSColor.white
     var keyModel: Keys!
+    var textSize: CGFloat!
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -35,12 +33,8 @@ class KeyboardKeys: NSColorWell {
         setup()
     }
     
-    required init?(coder: NSCoder,key: Keys
-        ) {
+    required init?(coder: NSCoder,key: Keys) {
         super.init(coder: coder)
-        //self.colorKey = newColor.nsColor.usingColorSpace(NSColorSpace.genericRGB)!
-        //self.colorKey = newColor.nsColor.usingColorSpace(NSColorSpace.genericRGB)!
-        //self.keyText = keyLetter as NSString
         self.color = key.color.nsColor.usingColorSpace(NSColorSpace.genericRGB)!
         self.keyModel = key
 
@@ -49,18 +43,19 @@ class KeyboardKeys: NSColorWell {
     
     required init(frame frameRect: NSRect, key: Keys) {
         super.init(frame: frameRect)
-        //self.colorKey = key.color.nsColor.usingColorSpace(NSColorSpace.deviceRGB)!
         self.color = key.color.nsColor.usingColorSpace(NSColorSpace.genericRGB)!
         self.keyModel = key
-        // self.keyText = keyLetter as NSString
-        // self.key = key
-        
         setup()
     }
     
     private func setup() {
         isBordered = false
         roundCorners(cornerRadius: 5.0)
+        if (keyModel.keyLetter == "BACKSPACE") {
+            textSize = 10.0
+        } else {
+            textSize = 12.0
+        }
     }
     
     override func mouseDown(with event: NSEvent) {
@@ -93,14 +88,17 @@ class KeyboardKeys: NSColorWell {
         if isSelected {
             if (keyModel.color.nsColor.scaledBrightness < 0.5) {
                 // colorKey.lighterColor(percent: 0.8).set()
-                NSColor.white.set()
+                let bright = map(x: Float(keyModel.color.nsColor.scaledBrightness), in_min: 0, in_max: 0.5, out_min: 0, out_max: 0.8)
+                NSColor.white.usingColorSpace(.genericRGB)?.darkerColor(percent: bright).set()
+                print(bright)
+
             } else {
                 //NSColor.black.set()
-                keyModel.color.nsColor.darkerColor(percent: 0.4).set()
+                keyModel.color.nsColor.darkerColor(percent: 0.5).set()
                 bezel.lineWidth = 6.0
             }
         } else {
-            keyModel.color.nsColor.set()
+            color.set()
         }
         bezel.stroke()
         
@@ -110,11 +108,19 @@ class KeyboardKeys: NSColorWell {
         let attributes: [NSAttributedString.Key : Any] = [
             .paragraphStyle: paragraphStyle,
             .foregroundColor: (keyModel.color.nsColor.scaledBrightness > 0.5) ? NSColor.black : NSColor.white,
-            .font: NSFont.systemFont(ofSize: 12.0)
+            .font: NSFont.systemFont(ofSize: textSize)
         ]
-        let newRect = NSRect(x: 0, y: (bounds.size.height - 15) / 2, width: bounds.size.width, height: 15)
+        let heightT: CGFloat = (textSize == 10.0) ? 12 : 15
+        let newRect = NSRect(x: 0, y: (bounds.size.height - heightT) / 2, width: bounds.size.width, height: heightT)
         keyModel.keyLetter.draw(in: newRect, withAttributes: attributes)
         
+    }
+    
+    func map(x: Float, in_min: Float, in_max: Float, out_min: Float, out_max: Float) -> Double {
+        let t = x - in_min
+        let v = out_max - out_min
+        let n = (in_max - in_min) + out_min
+        return Double((t * v) / n)
     }
     
     override func drawWell(inside insideRect: NSRect) {
@@ -123,7 +129,7 @@ class KeyboardKeys: NSColorWell {
     func setColor(newColor: NSColor) {
         keyModel.color = newColor.getRGB
         color = newColor
-        setNeedsDisplay(bounds)
+        needsDisplay = true
     }
     
     func getColor() -> NSColor {
@@ -133,22 +139,22 @@ class KeyboardKeys: NSColorWell {
     func setSelected(selected: Bool, fromGroupSelection: Bool) {
         isSelected = selected
         if (selected && fromGroupSelection) {
-            if (!ColorController.shared.currentKeys!.contains(self)) {
-                ColorController.shared.currentKeys!.add(self)
+            if (!KeyboardManager.shared.keysSelected!.contains(self)) {
+                KeyboardManager.shared.keysSelected!.add(self)
             }
         } else if (selected && !fromGroupSelection) {
-            if (ColorController.shared.currentKeys!.count < 1) {
+            if (KeyboardManager.shared.keysSelected!.count < 1) {
                 ColorController.shared.setColor(keyModel.color.nsColor.usingColorSpace(NSColorSpace.genericRGB)!)
             }
             
-            if (!ColorController.shared.currentKeys!.contains(self)) {
-                ColorController.shared.currentKeys!.add(self)
+            if (!KeyboardManager.shared.keysSelected!.contains(self)) {
+                KeyboardManager.shared.keysSelected!.add(self)
             }
             
         } else {
-            ColorController.shared.currentKeys!.remove(self)
+            KeyboardManager.shared.keysSelected!.remove(self)
         }
         
-        setNeedsDisplay(bounds)
+        needsDisplay = true
     }
 }
