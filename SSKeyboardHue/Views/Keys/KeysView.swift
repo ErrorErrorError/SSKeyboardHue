@@ -8,15 +8,8 @@
 
 import Cocoa
 
-struct Keys {
-    var key: UInt8
-    var keyLetter: String
-    var region: UInt8
-    var color: RGB
-};
-
 @IBDesignable
-class KeyboardKeys: NSColorWell {
+class KeysView: NSView {
     var isSelected = false
     var isBeingDragged = false
     var bezel: NSBezierPath!
@@ -35,7 +28,6 @@ class KeyboardKeys: NSColorWell {
     
     required init?(coder: NSCoder,key: Keys) {
         super.init(coder: coder)
-        self.color = key.color.nsColor.usingColorSpace(NSColorSpace.genericRGB)!
         self.keyModel = key
 
         setup()
@@ -43,15 +35,14 @@ class KeyboardKeys: NSColorWell {
     
     required init(frame frameRect: NSRect, key: Keys) {
         super.init(frame: frameRect)
-        self.color = key.color.nsColor.usingColorSpace(NSColorSpace.genericRGB)!
         self.keyModel = key
         setup()
     }
     
     private func setup() {
-        isBordered = false
         roundCorners(cornerRadius: 5.0)
-        if (keyModel.keyLetter == "BACKSPACE") {
+        let text = NSString(utf8String: keyModel.keyLetter)
+        if (text == "BACKSPACE") {
             textSize = 10.0
         } else {
             textSize = 12.0
@@ -63,11 +54,20 @@ class KeyboardKeys: NSColorWell {
     }
     
     override func mouseDragged(with event: NSEvent) {
-        // super.mouseDown causes the icon drag to show and I only want it to show
-        // when it's actually being dragged
-        // super.mouseDown(with: event)
-        super.mouseDown(with: event)
+        let pasteboardItem = NSPasteboardItem()
+        pasteboardItem.setDataProvider(self, forTypes: [.color])
+        let draggingImage = NSImage(size: NSSize(width: 18, height: 18))
+        draggingImage.lockFocus()
+        keyModel.color.nsColor.drawSwatch(in: NSRect(x: 0, y: 0, width: 18, height: 18))
+        draggingImage.unlockFocus()
+        let dragPoint = convert(event.locationInWindow, from: nil)
+        let draggingItem = NSDraggingItem(pasteboardWriter: pasteboardItem)
+        draggingItem.setDraggingFrame(NSRect(x: dragPoint.x-11, y: dragPoint.y-6, width: 18, height: 18),
+                                      contents: draggingImage)
+        beginDraggingSession(with: [draggingItem], event: event, source: self)
+        
         isBeingDragged = true
+
     }
     
     override func mouseUp(with event: NSEvent) {
@@ -82,26 +82,31 @@ class KeyboardKeys: NSColorWell {
     }
     
     override func draw(_ rect: NSRect) {
-        super.draw(rect)
+        // super.draw(rect)
+        
+        // fill center
+        let well = NSRect(x: 0, y: 0, width: frame.width, height: frame.height)
+        keyModel.color.nsColor.set()
+        well.fill()
+        
+        // create border if selected
         bezel = NSBezierPath(rect:bounds)
         bezel.lineWidth = 5.0
         if isSelected {
             if (keyModel.color.nsColor.scaledBrightness < 0.5) {
-                // colorKey.lighterColor(percent: 0.8).set()
                 let bright = map(x: Float(keyModel.color.nsColor.scaledBrightness), in_min: 0, in_max: 0.5, out_min: 0, out_max: 0.8)
                 NSColor.white.usingColorSpace(.genericRGB)?.darkerColor(percent: bright).set()
-                print(bright)
 
             } else {
-                //NSColor.black.set()
                 keyModel.color.nsColor.darkerColor(percent: 0.5).set()
                 bezel.lineWidth = 6.0
             }
         } else {
-            color.set()
+            keyModel.color.nsColor.set()
         }
         bezel.stroke()
         
+        // Add letter text
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .center
         
@@ -112,23 +117,20 @@ class KeyboardKeys: NSColorWell {
         ]
         let heightT: CGFloat = (textSize == 10.0) ? 12 : 15
         let newRect = NSRect(x: 0, y: (bounds.size.height - heightT) / 2, width: bounds.size.width, height: heightT)
-        keyModel.keyLetter.draw(in: newRect, withAttributes: attributes)
         
+        let text = NSString(utf8String: keyModel.keyLetter)
+        text!.draw(in: newRect, withAttributes: attributes)
     }
     
-    func map(x: Float, in_min: Float, in_max: Float, out_min: Float, out_max: Float) -> Double {
+    private func map(x: Float, in_min: Float, in_max: Float, out_min: Float, out_max: Float) -> Double {
         let t = x - in_min
         let v = out_max - out_min
         let n = (in_max - in_min) + out_min
         return Double((t * v) / n)
     }
-    
-    override func drawWell(inside insideRect: NSRect) {
-        super.drawWell(inside: insideRect)
-    }
+
     func setColor(newColor: NSColor) {
         keyModel.color = newColor.getRGB
-        color = newColor
         needsDisplay = true
     }
     
@@ -144,7 +146,7 @@ class KeyboardKeys: NSColorWell {
             }
         } else if (selected && !fromGroupSelection) {
             if (KeyboardManager.shared.keysSelected!.count < 1) {
-                ColorController.shared.setColor(keyModel.color.nsColor.usingColorSpace(NSColorSpace.genericRGB)!)
+                ColorController.shared.setColor(keyModel.color.nsColor)
             }
             
             if (!KeyboardManager.shared.keysSelected!.contains(self)) {
@@ -156,5 +158,25 @@ class KeyboardKeys: NSColorWell {
         }
         
         needsDisplay = true
+    }
+}
+
+extension KeysView: NSDraggingSource {
+    func draggingSession(_ session: NSDraggingSession,
+                         sourceOperationMaskFor context: NSDraggingContext)
+        -> NSDragOperation {
+            return .generic
+    }
+    
+}
+
+extension KeysView: NSPasteboardItemDataProvider {
+    func pasteboard(_ pasteboard: NSPasteboard?,
+                    item: NSPasteboardItem,
+                    provideDataForType type: NSPasteboard.PasteboardType) {
+        guard let pasteboard = pasteboard else {
+            return
+        }
+        keyModel.color.nsColor.write(to: pasteboard)
     }
 }

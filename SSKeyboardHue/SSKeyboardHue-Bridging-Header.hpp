@@ -14,5 +14,7 @@
 -(IOReturn) closeKeyboardPort;
 -(enum KeyboardModels) getKeyboardModel;
 -(void) setSleepInMillis:(uint16_t) millis;
+-(uint8_t) findKeyInRegion:(uint8_t) findThisKey;
+
 @end
 

@@ -29,9 +29,8 @@
     keyboard.setSleepInMillis(millis);
 }
 
-/*
+
 -(uint8_t) findKeyInRegion:(uint8_t) findThisKey {
-    return findKeyInRegion(findThisKey);
+    return keyboard.findKeyInRegion(findThisKey);
 }
-*/
 @end

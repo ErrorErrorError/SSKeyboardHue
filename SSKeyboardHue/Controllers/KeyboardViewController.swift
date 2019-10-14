@@ -29,7 +29,8 @@ class KeyboardViewController: NSViewController {
         case PerKeyGS65:
             createGS65Keyboard()
         case PerKey:
-            print("PerKey")
+            keyboardView.frame = NSRect(x: keyboardView.frame.origin.x - 50, y: keyboardView.frame.origin.y, width: keyboardView.frame.width + 100, height: keyboardView.frame.height - 40)
+            createPerKeyKeyboard()
         case ThreeRegion:
             print("ThreeRegion")
         case UnknownModel:
@@ -43,26 +44,139 @@ class KeyboardViewController: NSViewController {
         KeyboardManager.shared.keyboardView.sendColorToKeyboard(region: regions.1, createOutput: false)
         KeyboardManager.shared.keyboardView.sendColorToKeyboard(region: regions.2, createOutput: false)
         KeyboardManager.shared.keyboardView.sendColorToKeyboard(region: regions.3, createOutput: true)
-
+        
     }
     
+    private func createPerKeyKeyboard() {
+        var row = 0
+        var key = 0
+        var hPosition: Int
+        var shiftedPosition: Int
+        var width: Int
+        var height: Int
+        for keys in KeyboardLayout.keysPerKey {
+            shiftedPosition = 0
+            hPosition = 30 + (key * 46)
+            width = 40
+            height = 40
+            // Shifts hPosition of keys
+            if (row == 0) {
+                height = 28
+                width = 38
+                if (key > 15) {
+                    shiftedPosition = -24
+                } else {
+                    hPosition = 30 + (key * 44)
+                }
+            } else if (row == 1) {
+                shiftedPosition = 20
+                if (keys.value == "~") {
+                    width += shiftedPosition
+                    shiftedPosition = 0
+                } else if (keys.value == "BACKSPACE") {
+                    width += 40
+                } else if (key > 13) {
+                    shiftedPosition += 48
+                    //width = 32
+                }
+            } else if (row == 2) {
+                shiftedPosition = 30
+                if (keys.value == "TAB") {
+                    width += shiftedPosition
+                    shiftedPosition = 0
+                }
+                
+                if (keys.value == "\\") {
+                    width += 30
+                } else if (key > 13) {
+                    shiftedPosition += 38
+                }
+                
+            } else if (row == 3) {
+                shiftedPosition = 40
+                if (keys.value == "CAPS LOCK") {
+                    width += shiftedPosition
+                    shiftedPosition = 0
+                }
+                
+                if (keys.value == "ENTER") {
+                    width += 66
+                } else if (key > 12) {
+                    shiftedPosition += 74
+                }
+                
+                if (keys.value == "+") {
+                    height += 46
+                }
+            } else if (row == 4) {
+                shiftedPosition = 66
+                if (keys.key == 0xe0) {
+                    width += shiftedPosition
+                    shiftedPosition = 0
+                }
+                
+                if (keys.key == 0xe4) {
+                    width += 40
+                }
+                
+                if (keys.value == "UP") {
+                    shiftedPosition += 40
+                } else if (key > 12) {
+                    shiftedPosition += 48
+                }
+            } else {
+                shiftedPosition = 42
+                if (keys.key == 0x65) {
+                    width += shiftedPosition
+                    shiftedPosition = 0
+                }
+                
+                if (keys.value == "SPACEBAR") {
+                    width += 202
+                } else if (key > 3) {
+                    shiftedPosition += 202
+                }
+                
+                if (key > 10) {
+                    shiftedPosition += 8
+                }
+                
+                if (keys.value == "ENTER") {
+                    height += 46
+                }
+
+            }
+            
+            hPosition += shiftedPosition
+            let vertical = 290 - (row * 46)
+            let keyView = createKeys(keys: keys, x: hPosition,y: vertical, row: row, width: width, height: height)
+            keyView.textSize = 10.0
+            keyboardView.addSubview(keyView)
+            if (keys.value == "PGDN" || keys.key == 0x55 || keys.key == 0x60 || keys.key == 0x56 || keys.key == 0x57 || keys.key == 0x5a) {
+                row += 1
+                key = 0
+            } else {
+                key += 1
+            }
+        }
+    }
     
     private func createGS65Keyboard() {
         var row = 0
         var key = 0
-        var position: Int
+        var hPosition: Int
         var shiftedPosition: Int
         var width: Int
         var height: Int
-        for keys in KeyboardLayoutGS65.keys {
+        for keys in KeyboardLayout.keysGS65 {
             shiftedPosition = 0
-            position = key * 50
+            hPosition = 45 + (key * 50)
             width = 40
             height = 40
-            // Shifts position of keys
+            // Shifts hPosition of keys
             if (row == 0) {
                 height = 25
-                position = key * 51
+                hPosition = 45 + key * 51
                 width = 42
                 
             } else if (row==1) {
@@ -106,6 +220,7 @@ class KeyboardViewController: NSViewController {
                 }
             } else if (row == 5) {
                 shiftedPosition = 25
+                // Left Control
                 if (keys.key == 0x65) {
                     width += 25
                     shiftedPosition = 0
@@ -116,8 +231,10 @@ class KeyboardViewController: NSViewController {
                 }
             }
             
-            position += shiftedPosition
-            keyboardView.addSubview(createKeys(keys: keys, x: position, row: row, width: width, height: height))
+            hPosition += shiftedPosition
+            let vertical = 320 - (row * 50)
+            let keyView = createKeys(keys: keys, x: hPosition,y: vertical, row: row, width: width, height: height)
+            keyboardView.addSubview(keyView)
             if (keys.value == "DEL" || keys.value == "HOME" || keys.value == "PGUP" || keys.value == "PGDN" || keys.value == "END") {
                 row += 1
                 key = 0
@@ -128,11 +245,12 @@ class KeyboardViewController: NSViewController {
     }
     
     // Make keys
-    private func createKeys(keys: (key:UInt8, value:String), x: Int, row: Int, width: Int, height: Int) -> NSColorWell {
-        let rect =  NSRect(x:  50 + x, y: 320 - (row * 50), width: width, height: height)
+    private func createKeys(keys: (key:UInt8, value:String), x: Int,y: Int, row: Int, width: Int, height: Int) -> KeysView {
+        let rect =  NSRect(x:  x, y: y, width: width, height: height)
         let region = getRegionKey(key: keys.key, keyText: keys.value)
-        let keyModel = Keys(key: keys.key, keyLetter: keys.value, region: region, color: RGB(r: 0xff, g: 0, b: 0))
-        let key = KeyboardKeys(frame: rect, key: keyModel)
+
+        let keyModel = Keys(key: keys.key, keyLetter: keys.value.getUnsafeMutablePointer(), region: region, color: RGB(r: 0xff, g: 0, b: 0), mode: 0)
+        let key = KeysView(frame: rect, key: keyModel)
         return key
     }
     
@@ -148,8 +266,9 @@ class KeyboardViewController: NSViewController {
     
 
     private func getRegionKey(key: UInt8, keyText: String) -> UInt8 {
-        if (KeyboardManager.shared.keyboardManager.getKeyboardModel() == PerKeyGS65) {
-            //Checks if key is a region key
+        let keyboardManager = KeyboardManager.shared.keyboardManager!
+        if (keyboardManager.getKeyboardModel() != ThreeRegion) {
+
             if (keyText == "ESC") {
                 return regions.0
             } else if (keyText == "A") {
@@ -162,13 +281,33 @@ class KeyboardViewController: NSViewController {
                 return regions.3
             }
             
-            let regionKey = findKeyInRegion(key)
+            let regionKey = keyboardManager.findKey(inRegion: key)
 
             return regionKey
-        } else if (KeyboardManager.shared.keyboardManager.getKeyboardModel() == PerKey) {
-            // TODO - Implement PerKey for other models
         }
 
         return 0
+    }
+    
+    // From https://gist.github.com/yossan/51019a1af9514831f50bb196b7180107
+    private func makeCString(from str: String) -> UnsafeMutablePointer<Int8> {
+        let count = str.utf8.count + 1
+        let result = UnsafeMutablePointer<Int8>.allocate(capacity: count)
+        str.withCString { (baseAddress) in
+            // func initialize(from: UnsafePointer<Pointee>, count: Int)
+            result.initialize(from: baseAddress, count: count)
+        }
+        return result
+    }
+}
+extension String {
+    func getUnsafeMutablePointer() -> UnsafeMutablePointer<Int8> {
+        let count = self.utf8.count + 1
+        let result = UnsafeMutablePointer<Int8>.allocate(capacity: count)
+        self.withCString { (baseAddress) in
+            // func initialize(from: UnsafePointer<Pointee>, count: Int)
+            result.initialize(from: baseAddress, count: count)
+        }
+        return result
     }
 }

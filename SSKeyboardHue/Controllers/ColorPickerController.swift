@@ -22,7 +22,6 @@ class ColorPickerController: NSViewController {
         colorLabel.roundCorners(cornerRadius: 10.0)
         colorLabel.layer?.backgroundColor = textViewBackground.nsColor.cgColor
         colorLabel.isBezeled = false
-        colorLabel.bezelStyle = .roundedBezel
     }
     
     override func viewWillAppear() {
@@ -59,7 +58,7 @@ class ColorPickerController: NSViewController {
     func updateLabel() {
         colorLabel.backgroundColor = ColorController.shared.selectedColor
         colorLabel.stringValue = "#"+ColorController.shared.selectedColor.rgbHexString
-            colorLabel.textColor = RGB(r: 17, g: 17, b: 18).nsColor
+        //colorLabel.textColor = RGB(r: 17, g: 17, b: 18).nsColor
     }
     
     func updateSlider() {
@@ -74,16 +73,16 @@ class ColorPickerController: NSViewController {
         if (KeyboardManager.shared.keysSelected != nil) {
             
             for key in KeyboardManager.shared.keysSelected! {
-                (key as! KeyboardKeys).setColor(newColor: ColorController.shared.selectedColor)
+                (key as! KeysView).setColor(newColor: ColorController.shared.selectedColor)
             }
             
             if (KeyboardManager.shared.keysSelected!.count > 0) {
                 
                 // Will only set color when the mouse is up
                 if (shouldUpdateKeys) {
-                    if (KeyboardManager.shared.keyboardManager.getKeyboardModel() == PerKeyGS65) {
-                        KeyboardManager.shared.keyboardView.updateGS65Keys()
-                    }
+                    // Will notify for keyboard GS65 and other PerKey to update the keys once mouse is up
+                    KeyboardManager.shared.keyboardView.updateKeys()
+                    
                 }
             }
         }
@@ -97,13 +96,16 @@ extension NSView {
         self.layer?.masksToBounds = true
     }
 }
+
 extension ColorPickerController: ColorWheelViewDelegate {
     /// - postcondition: Mutates `ColorController.masterColor`
     func colorDidChange(_ newColor: NSColor, shouldUpdateKeyboard: Bool) {
         ColorController.shared.masterColor = newColor
         updateLabel()
         updateSlider()
-        updateKeys(shouldUpdateKeys: shouldUpdateKeyboard)
+        if (KeyboardManager.shared.keyboardManager.getKeyboardModel() != ThreeRegion) {
+            updateKeys(shouldUpdateKeys: shouldUpdateKeyboard)
+        }
     }
 }
 

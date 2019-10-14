@@ -45,7 +45,7 @@ class ColorPickerView: NSView {
         guard let colors = pasteboard.readObjects(forClasses: [NSColor.self], options: nil) as? [NSColor],
             colors.count > 0
             else { return false }
-        ColorController.shared.setColor(colors[0].usingColorSpace(NSColorSpace.genericRGB)!)
+        ColorController.shared.setColor(colors[0])
         return true
     }
     
