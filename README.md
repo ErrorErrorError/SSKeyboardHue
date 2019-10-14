@@ -22,5 +22,5 @@ Make sure you use ```.xcworkspace``` file if you're planning to run the app from
 
 # Thanks to:
 [@skyline75489](https://github.com/skyline75489) for providing his debug files for GS76 models (and other PerKey models). <br>
-[@Askannz](https://github.com/Askannz/) for his documentation of keycodes - [msi-perkeyrgb]((https://github.com/Askannz/msi-perkeyrgb)). <br>
+[@Askannz](https://github.com/Askannz/) for his documentation of keycodes - [msi-perkeyrgb](https://github.com/Askannz/msi-perkeyrgb). <br>
 [@stevelacy](https://github.com/stevelacy) for his inspiration to design a gui to control color keyboard - [msi-keyboard-gui](https://github.com/Askannz/msi-perkeyrgb).
