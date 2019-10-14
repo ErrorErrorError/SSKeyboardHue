@@ -14,6 +14,7 @@ class ColorPickerController: NSViewController {
     @IBOutlet weak var colorWheelView: ColorWheelView!
     @IBOutlet weak var colorLabel: NSTextField!
     @IBOutlet weak var brightnessSlider: NSSlider!
+    @IBOutlet weak var currentKeyMode: NSPopUpButtonCell!
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.wantsLayer = true
@@ -22,6 +23,12 @@ class ColorPickerController: NSViewController {
         colorLabel.roundCorners(cornerRadius: 10.0)
         colorLabel.layer?.backgroundColor = textViewBackground.nsColor.cgColor
         colorLabel.isBezeled = false
+        
+        currentKeyMode.addItem(withTitle: "Steady")
+        currentKeyMode.addItem(withTitle: "ColorShift")
+        currentKeyMode.addItem(withTitle: "Breathing")
+        currentKeyMode.addItem(withTitle: "Reactive")
+        currentKeyMode.addItem(withTitle: "Disabled")
     }
     
     override func viewWillAppear() {
@@ -150,4 +157,3 @@ extension String {
         }
     }
 }
-
