@@ -1,4 +1,9 @@
-# Welcome
+![alt text][logo] 
+
+[logo]: images/keyboard-hue-dark-128.png "SSKeyboardHue Logo"
+
+# SSKeyboardHue
+
 The purpose of this repository is to control Per-Key RGB Keyboard on an MSI Laptop running macOS using a native app. This is the wrapper of [SSKeyboard](https://github.com/ErrorErrorError/SSKeyboard), which is the brains of communicating with the keyboard.
 <br>
 <br> 
@@ -12,8 +17,13 @@ The goal is to support all MSI Laptop keyboards that have RGB.
 
 ### Supported Modes: PerKey
 *   Steady
+*   Reactive
 *   More coming soon...
-# Build
+*   
+# Download/Build
+### Download:
+Download the latest pre-release [here](https://github.com/ErrorErrorError/SSKeyboardHue/releases).
+### Build: 
 Run on terminal:
 ```
 git clone --recursive https://github.com/ErrorErrorError/SSKeyboardHue.git
