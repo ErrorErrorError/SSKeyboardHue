@@ -736,7 +736,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <containerView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fRN-N3-tJV">
-                                <rect key="frame" x="25" y="365" width="225" height="335"/>
+                                <rect key="frame" x="25" y="400" width="225" height="300"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <connections>
                                     <segue destination="6ZD-9K-ovb" kind="embed" id="OaR-IJ-yTz"/>
@@ -779,35 +779,18 @@
             <objects>
                 <viewController id="6ZD-9K-ovb" customClass="ColorPickerController" customModule="SSKeyboardHue" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="q7k-Uc-Ufd" customClass="ColorPickerView" customModule="SSKeyboardHue" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="0.0" width="225" height="335"/>
+                        <rect key="frame" x="0.0" y="0.0" width="225" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="9RK-Vm-QKk" customClass="ColorWheelView" customModule="SSKeyboardHue" customModuleProvider="target">
-                                <rect key="frame" x="25" y="98" width="175" height="175"/>
+                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9RK-Vm-QKk" customClass="ColorWheelView" customModule="SSKeyboardHue" customModuleProvider="target">
+                                <rect key="frame" x="25" y="75" width="175" height="175"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             </customView>
-                            <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XEu-6z-blp">
-                                <rect key="frame" x="23" y="59" width="179" height="19"/>
-                                <sliderCell key="cell" continuous="YES" alignment="left" maxValue="100" tickMarkPosition="above" sliderType="linear" id="g06-C0-dXf" customClass="GradientSliderCell" customModule="SSKeyboardHue" customModuleProvider="target"/>
-                                <connections>
-                                    <action selector="setBrightness:" target="6ZD-9K-ovb" id="rv8-yg-uag"/>
-                                </connections>
-                            </slider>
-                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="P9a-gY-twH">
-                                <rect key="frame" x="23" y="17" width="180" height="25"/>
-                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="1Pd-I8-mdU">
-                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="menu"/>
-                                    <menu key="menu" id="g90-aV-2ih"/>
-                                </popUpButtonCell>
-                            </popUpButton>
-                            <textField focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a4p-2Y-eiy">
-                                <rect key="frame" x="25" y="293" width="82" height="22"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="82" id="ETP-by-WnK"/>
-                                    <constraint firstAttribute="height" constant="22" id="Y7i-3Y-9Yc"/>
-                                </constraints>
+                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a4p-2Y-eiy">
+                                <rect key="frame" x="25" y="265" width="82" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" refusesFirstResponder="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" borderStyle="bezel" focusRingType="none" alignment="center" bezelStyle="round" id="QjB-dp-FkI" customClass="CenterTextFieldCell" customModule="SSKeyboardHue" customModuleProvider="target">
-                                    <font key="font" metaFont="smallSystem"/>
+                                    <font key="font" metaFont="controlContent" size="11"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" red="0.20392156862745098" green="0.20392156862745098" blue="0.20392156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </textFieldCell>
@@ -815,21 +798,27 @@
                                     <action selector="setColor:" target="6ZD-9K-ovb" id="m1p-Dw-XGS"/>
                                 </connections>
                             </textField>
+                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="P9a-gY-twH">
+                                <rect key="frame" x="23" y="15" width="180" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="1Pd-I8-mdU">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <menu key="menu" id="g90-aV-2ih"/>
+                                    <connections>
+                                        <action selector="setKeyMode:" target="6ZD-9K-ovb" id="6hF-Yw-4ba"/>
+                                    </connections>
+                                </popUpButtonCell>
+                            </popUpButton>
+                            <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XEu-6z-blp">
+                                <rect key="frame" x="23" y="48" width="179" height="19"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <sliderCell key="cell" continuous="YES" alignment="left" maxValue="100" doubleValue="50.038561818326578" tickMarkPosition="above" sliderType="linear" id="g06-C0-dXf" customClass="GradientSliderCell" customModule="SSKeyboardHue" customModuleProvider="target"/>
+                                <connections>
+                                    <action selector="setBrightness:" target="6ZD-9K-ovb" id="rv8-yg-uag"/>
+                                </connections>
+                            </slider>
                         </subviews>
-                        <constraints>
-                            <constraint firstItem="9RK-Vm-QKk" firstAttribute="leading" secondItem="XEu-6z-blp" secondAttribute="leading" id="3lx-cA-nek"/>
-                            <constraint firstItem="a4p-2Y-eiy" firstAttribute="top" secondItem="q7k-Uc-Ufd" secondAttribute="top" constant="20" symbolic="YES" id="9ld-Rw-Oly"/>
-                            <constraint firstItem="9RK-Vm-QKk" firstAttribute="top" secondItem="a4p-2Y-eiy" secondAttribute="bottom" constant="20" id="Hft-4s-ZDs"/>
-                            <constraint firstItem="P9a-gY-twH" firstAttribute="top" secondItem="XEu-6z-blp" secondAttribute="bottom" constant="20" id="HrM-2y-8V2"/>
-                            <constraint firstItem="9RK-Vm-QKk" firstAttribute="centerX" secondItem="q7k-Uc-Ufd" secondAttribute="centerX" id="VZT-pe-cy9"/>
-                            <constraint firstAttribute="bottom" secondItem="P9a-gY-twH" secondAttribute="bottom" constant="20" symbolic="YES" id="Xuz-BT-mLx"/>
-                            <constraint firstItem="9RK-Vm-QKk" firstAttribute="trailing" secondItem="XEu-6z-blp" secondAttribute="trailing" id="eUy-3M-1nY"/>
-                            <constraint firstItem="XEu-6z-blp" firstAttribute="top" secondItem="9RK-Vm-QKk" secondAttribute="bottom" constant="22" id="gja-gq-DDv"/>
-                            <constraint firstItem="XEu-6z-blp" firstAttribute="trailing" secondItem="P9a-gY-twH" secondAttribute="trailing" id="jfb-e2-Z7m"/>
-                            <constraint firstItem="a4p-2Y-eiy" firstAttribute="leading" secondItem="9RK-Vm-QKk" secondAttribute="leading" id="nmb-0C-cNm"/>
-                            <constraint firstItem="XEu-6z-blp" firstAttribute="leading" secondItem="P9a-gY-twH" secondAttribute="leading" id="r2z-h6-VQ3"/>
-                            <constraint firstItem="a4p-2Y-eiy" firstAttribute="leading" secondItem="q7k-Uc-Ufd" secondAttribute="leading" constant="25" id="t4Z-Vm-zBl"/>
-                        </constraints>
                     </view>
                     <connections>
                         <outlet property="brightnessSlider" destination="XEu-6z-blp" id="uuj-hB-Ij4"/>

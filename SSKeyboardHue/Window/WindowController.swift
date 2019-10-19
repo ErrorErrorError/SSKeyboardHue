@@ -18,4 +18,8 @@ class WindowController: NSWindowController {
         window?.toolbar = customToolbar
         window?.styleMask.insert(.fullSizeContentView)
     }
+    
+    override func keyDown(with event: NSEvent) {
+        return;
+    }
 }
