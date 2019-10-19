@@ -73,62 +73,59 @@ class KeyboardView: NSView {
     
     public func sendColorToKeyboard(region: UInt8, createOutput: Bool) {
 
-        var colorArray: [RGB] = []
-        let regionColor: RGB
+        var keyboardArray: [UnsafeMutableRawPointer] = []
+        var regionKey: UnsafeMutableRawPointer
         
+        regionKey = findAndGetKey(isRegionKey: true, keyToFind: region)
         if (region == regions.0) {
-            colorArray.reserveCapacity(Int(kModifiersSize))
+            keyboardArray.reserveCapacity(Int(kModifiersSize + 1))
+            keyboardArray.append(regionKey)
             let modifierKeys = UnsafeRawBufferPointer(start: &modifiers, count: Int(kModifiersSize))
             for i in modifierKeys {
-                colorArray.append(findColorOfKey(isRegionKey: false, keyToFind: i))
+                let foundKey = findAndGetKey(isRegionKey: false, keyToFind: i)
+                keyboardArray.append(foundKey)
             }
-            
-            regionColor = findColorOfKey(isRegionKey: true, keyToFind: region)
             
         } else if (regions.1 == region) {
             
-            colorArray.reserveCapacity(Int(kAlphanumsSize))
+            keyboardArray.reserveCapacity(Int(kAlphanumsSize + 1))
+            keyboardArray.append(regionKey)
             let alphaKeys = UnsafeRawBufferPointer(start: &alphanums, count: Int(kAlphanumsSize))
             for i in alphaKeys {
-                colorArray.append(findColorOfKey(isRegionKey: false, keyToFind: i))
+                keyboardArray.append(findAndGetKey(isRegionKey: false, keyToFind: i))
             }
-            
-            regionColor = findColorOfKey(isRegionKey: true, keyToFind: region)
             
         } else if (regions.2 == region) {
-            colorArray.reserveCapacity(Int(kEnterSize))
+            keyboardArray.reserveCapacity(Int(kEnterSize + 1))
+            keyboardArray.append(regionKey)
             let enterKeys = UnsafeRawBufferPointer(start: &enter, count: Int(kEnterSize))
             for i in enterKeys {
-                colorArray.append(findColorOfKey(isRegionKey: false, keyToFind: i))
+                keyboardArray.append(findAndGetKey(isRegionKey: false, keyToFind: i))
             }
-            
-            regionColor = findColorOfKey(isRegionKey: true, keyToFind: region)
             
         } else {
             let specialKeys: UnsafeRawBufferPointer
             if (KeyboardManager.shared.keyboardManager.getKeyboardModel() == PerKeyGS65) {
-                colorArray.reserveCapacity(Int(kSpecialSize))
+                keyboardArray.reserveCapacity(Int(kSpecialSize + 1))
                 specialKeys = UnsafeRawBufferPointer(start: &special, count: Int(kSpecialSize))
             } else  {
-                colorArray.reserveCapacity(Int(kSpecialPerKeySize))
+                keyboardArray.reserveCapacity(Int(kSpecialPerKeySize + 1))
                 specialKeys = UnsafeRawBufferPointer(start: &specialPerKey, count: Int(kSpecialPerKeySize))
             }
             
+            keyboardArray.append(regionKey)
             for i in specialKeys {
-                colorArray.append(findColorOfKey(isRegionKey: false, keyToFind: i))
+                keyboardArray.append(findAndGetKey(isRegionKey: false, keyToFind: i))
             }
-
-            regionColor = findColorOfKey(isRegionKey: true, keyToFind: region)
         }
         
         serialQueue.async {
-            KeyboardManager.shared.keyboardManager.setSteadyMode(region, regionColor, &colorArray, createOutput)
-
+            KeyboardManager.shared.keyboardManager.sendColorKeys(&keyboardArray, createOutput)
         }
     }
     
     /**
-     This method allows to refresh PerKey and GS65 keyboard if therewas any color change
+     This method allows to refresh PerKey and GS65 keyboard if therewas any changes
     **/
     public func updateKeys() {
         let modifiersKeys = regions.0
@@ -213,7 +210,7 @@ class KeyboardView: NSView {
         var needRefresh = false
         for i in KeyboardManager.shared.keysSelected! {
             let keys = i as! KeysView
-            if (keys.keyModel.region == regionToSearch) {
+            if ((keys.keyModel.getRegion()) == regionToSearch) {
                 needRefresh = true
                 break
             }
@@ -222,24 +219,24 @@ class KeyboardView: NSView {
         return needRefresh
     }
     
-    private func findColorOfKey(isRegionKey: Bool, keyToFind: UInt8) -> RGB {
+    private func findAndGetKey(isRegionKey: Bool, keyToFind: UInt8) -> UnsafeMutableRawPointer {
         for keysSubView in subviews {
             let keyView = keysSubView as! KeysView
-            let isKeyEqual = keyView.keyModel.key == keyToFind
-            let keyText = NSString(utf8String: keyView.keyModel.keyLetter)
+            let isKeyEqual = (keyView.keyModel.getKeyCode()) == keyToFind
+            let keyText = NSString(utf8String: (keyView.keyModel.getKeyLetter()))
             let isKeyRegionKey = keyText == "A" || keyText == "ESC" || keyText == "ENTER" || keyText == "F7"
             if (isRegionKey) {
                 if (isKeyEqual && isKeyRegionKey) {
-                    return keyView.getColor().getRGB
+                    return keyView.keyModel.key()
                 }
             } else {
                 if (isKeyEqual && !isKeyRegionKey) {
-                    return keyView.getColor().getRGB
+                    return keyView.keyModel.key()
                 }
             }
         }
-        return RGB(r: 0, g: 0, b: 0)
+        // it will never reach this point
+        let nullKey = KeysWrapper(steady: keyToFind, "".getUnsafeMutablePointer(), 0, RGB(r: 0x0,g: 0x0,b: 0x0))
+        return nullKey!.key()
     }
-    
-    
 }

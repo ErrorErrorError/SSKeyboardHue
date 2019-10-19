@@ -13,16 +13,18 @@
 		133EEABB2345B19A006D9AFF /* CustomSplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133EEABA2345B19A006D9AFF /* CustomSplitView.swift */; };
 		133EEABD2345BC1F006D9AFF /* KeysView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133EEABC2345BC1F006D9AFF /* KeysView.swift */; };
 		133EEAC12345C617006D9AFF /* ColorWheelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133EEAC02345C617006D9AFF /* ColorWheelView.swift */; };
+		1353ED92235605E100AF863C /* SSKeyboardHue-Bridging-Header.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 1353ED91235605E100AF863C /* SSKeyboardHue-Bridging-Header.hpp */; };
+		135650442358D37600A833FF /* CustomColorWell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 135650432358D37600A833FF /* CustomColorWell.swift */; };
 		13566D7B2351575600A3C1BA /* libSSKeyboard.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 13566D7A2351575600A3C1BA /* libSSKeyboard.a */; };
 		1360D37123440034005054F8 /* WindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1360D37023440034005054F8 /* WindowController.swift */; };
 		1370F653234E7CE900290D69 /* SSKeyboard_SwiftWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1370F652234E7CE900290D69 /* SSKeyboard_SwiftWrapper.mm */; };
 		1370FF3C2346327F005D325E /* ColorPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1370FF3B2346327F005D325E /* ColorPickerController.swift */; };
 		1376FDBB234A404400FE4B1A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1376FDBA234A404400FE4B1A /* Constants.swift */; };
+		13796F16235676C8006B716D /* Keys-Wrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13796F15235676C8006B716D /* Keys-Wrapper.mm */; };
 		139B107A2343B0CE00E3787D /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139B10782343B0CE00E3787D /* KeyboardViewController.swift */; };
 		13A8DEB42345380400709D9F /* CustomSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13A8DEB32345380400709D9F /* CustomSplitViewController.swift */; };
 		13AEB39A234927B2008B1026 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AEB399234927B2008B1026 /* KeyboardView.swift */; };
 		13AF5940234555220091D6C4 /* SideBarViewControllerr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AF593F234555210091D6C4 /* SideBarViewControllerr.swift */; };
-		13BD176F234E834000F475AE /* SSKeyboardHue-Bridging-Header.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 1322E7B2234E6CF400559610 /* SSKeyboardHue-Bridging-Header.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		13E0AFAD2342D095009A5B41 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13E0AFAC2342D095009A5B41 /* AppDelegate.swift */; };
 		13E0AFB12342D096009A5B41 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13E0AFB02342D096009A5B41 /* Assets.xcassets */; };
 		13E0AFB42342D096009A5B41 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 13E0AFB22342D096009A5B41 /* Main.storyboard */; };
@@ -80,18 +82,20 @@
 
 /* Begin PBXFileReference section */
 		130CDEE22346D1EC007E2028 /* ColorUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorUtils.swift; sourceTree = "<group>"; };
-		1322E7B2234E6CF400559610 /* SSKeyboardHue-Bridging-Header.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "SSKeyboardHue-Bridging-Header.hpp"; sourceTree = "<group>"; };
 		132FEEAD23481BAD008A47FF /* ColorPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerView.swift; sourceTree = "<group>"; };
 		133EEABA2345B19A006D9AFF /* CustomSplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSplitView.swift; sourceTree = "<group>"; };
 		133EEABC2345BC1F006D9AFF /* KeysView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeysView.swift; sourceTree = "<group>"; };
 		133EEAC02345C617006D9AFF /* ColorWheelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorWheelView.swift; sourceTree = "<group>"; };
 		133FCB7B234E42CA0093E636 /* SSKeyboard.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SSKeyboard.xcodeproj; path = SSKeyboardHue/Classes/SSKeyboard/SSKeyboard.xcodeproj; sourceTree = "<group>"; };
 		133FCB7F234E42E30093E636 /* SSKeyboard.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SSKeyboard.xcodeproj; path = SSKeyboardHue/Classes/SSKeyboard/SSKeyboard.xcodeproj; sourceTree = "<group>"; };
+		1353ED91235605E100AF863C /* SSKeyboardHue-Bridging-Header.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = "SSKeyboardHue-Bridging-Header.hpp"; sourceTree = "<group>"; };
+		135650432358D37600A833FF /* CustomColorWell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColorWell.swift; sourceTree = "<group>"; };
 		13566D7A2351575600A3C1BA /* libSSKeyboard.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libSSKeyboard.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		1360D37023440034005054F8 /* WindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WindowController.swift; path = SSKeyboardHue/Window/WindowController.swift; sourceTree = SOURCE_ROOT; };
 		1370F652234E7CE900290D69 /* SSKeyboard_SwiftWrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SSKeyboard_SwiftWrapper.mm; sourceTree = "<group>"; };
 		1370FF3B2346327F005D325E /* ColorPickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerController.swift; sourceTree = "<group>"; };
 		1376FDBA234A404400FE4B1A /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		13796F15235676C8006B716D /* Keys-Wrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "Keys-Wrapper.mm"; sourceTree = "<group>"; };
 		139B10782343B0CE00E3787D /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
 		13A8DEB32345380400709D9F /* CustomSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSplitViewController.swift; sourceTree = "<group>"; };
 		13AEB399234927B2008B1026 /* KeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardView.swift; sourceTree = "<group>"; };
@@ -187,10 +191,11 @@
 		1370F646234E707600290D69 /* Supporting FIles */ = {
 			isa = PBXGroup;
 			children = (
+				1353ED91235605E100AF863C /* SSKeyboardHue-Bridging-Header.hpp */,
+				1370F652234E7CE900290D69 /* SSKeyboard_SwiftWrapper.mm */,
 				13E0AFB52342D096009A5B41 /* Info.plist */,
 				13E0AFB02342D096009A5B41 /* Assets.xcassets */,
-				1322E7B2234E6CF400559610 /* SSKeyboardHue-Bridging-Header.hpp */,
-				1370F652234E7CE900290D69 /* SSKeyboard_SwiftWrapper.mm */,
+				13796F15235676C8006B716D /* Keys-Wrapper.mm */,
 			);
 			name = "Supporting FIles";
 			sourceTree = "<group>";
@@ -205,6 +210,7 @@
 				132FEEAD23481BAD008A47FF /* ColorPickerView.swift */,
 				13AEB399234927B2008B1026 /* KeyboardView.swift */,
 				13FC9F0F235289F400630F99 /* CenterTextFieldCell.swift */,
+				135650432358D37600A833FF /* CustomColorWell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -301,7 +307,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				13BD176F234E834000F475AE /* SSKeyboardHue-Bridging-Header.hpp in Headers */,
+				1353ED92235605E100AF863C /* SSKeyboardHue-Bridging-Header.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -537,6 +543,7 @@
 				13FE55CD234806420061ACFF /* GradientSliderCell.swift in Sources */,
 				13E0AFAD2342D095009A5B41 /* AppDelegate.swift in Sources */,
 				1376FDBB234A404400FE4B1A /* Constants.swift in Sources */,
+				135650442358D37600A833FF /* CustomColorWell.swift in Sources */,
 				1360D37123440034005054F8 /* WindowController.swift in Sources */,
 				1370FF3C2346327F005D325E /* ColorPickerController.swift in Sources */,
 				1370F653234E7CE900290D69 /* SSKeyboard_SwiftWrapper.mm in Sources */,
@@ -546,6 +553,7 @@
 				133EEABB2345B19A006D9AFF /* CustomSplitView.swift in Sources */,
 				13FC9F10235289F400630F99 /* CenterTextFieldCell.swift in Sources */,
 				13A8DEB42345380400709D9F /* CustomSplitViewController.swift in Sources */,
+				13796F16235676C8006B716D /* Keys-Wrapper.mm in Sources */,
 				132FEEAE23481BAD008A47FF /* ColorPickerView.swift in Sources */,
 				139B107A2343B0CE00E3787D /* KeyboardViewController.swift in Sources */,
 			);

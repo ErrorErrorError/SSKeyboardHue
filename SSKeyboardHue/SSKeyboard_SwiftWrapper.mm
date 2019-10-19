@@ -7,15 +7,16 @@
 //
 
 #import "SSKeyboardHue-Bridging-Header.hpp"
-// #import "SSKeyboard/sskeyboard.h"
 
 @implementation SSKeyboardWrapper
 {
     SSKeyboard keyboard;
 }
--(IOReturn) setSteadyMode:(uint8_t) region : (RGB) regionColor : (RGB *) colorArray : (bool) createOutputPackage
+-(IOReturn) sendColorKeys: (void *) keyArray : (bool) createOutputPackage
 {
-    return keyboard.setSteadyMode(region, regionColor, colorArray, createOutputPackage);
+    //Keys *regionKey = static_cast<Keys *>(region);
+    Keys **keyArrayPointer = static_cast<Keys **>(keyArray);
+    return keyboard.sendColorKeys(keyArrayPointer, createOutputPackage);
 }
 
 -(IOReturn) closeKeyboardPort {
@@ -34,3 +35,5 @@
     return keyboard.findKeyInRegion(findThisKey);
 }
 @end
+
+

@@ -28,9 +28,11 @@ class KeyboardViewController: NSViewController {
         switch KeyboardManager.shared.keyboardManager.getKeyboardModel() {
         case PerKeyGS65:
             createGS65Keyboard()
+            createNullKeysGS65(isGS65: true)
         case PerKey:
             keyboardView.frame = NSRect(x: keyboardView.frame.origin.x - 50, y: keyboardView.frame.origin.y, width: keyboardView.frame.width + 100, height: keyboardView.frame.height - 40)
             createPerKeyKeyboard()
+            createNullKeysGS65(isGS65: false)
         case ThreeRegion:
             print("ThreeRegion")
         case UnknownModel:
@@ -44,8 +46,24 @@ class KeyboardViewController: NSViewController {
         KeyboardManager.shared.keyboardView.sendColorToKeyboard(region: regions.1, createOutput: false)
         KeyboardManager.shared.keyboardView.sendColorToKeyboard(region: regions.2, createOutput: false)
         KeyboardManager.shared.keyboardView.sendColorToKeyboard(region: regions.3, createOutput: true)
-        
     }
+    
+    private func createNullKeysGS65(isGS65: Bool) {
+        let nullKeys: KeyValuePairs<UInt8, String>!
+        if (isGS65) {
+            nullKeys = KeyboardLayout.nullGS65Keys
+        } else {
+            nullKeys = KeyboardLayout.nullPerKey
+        }
+        for keys in nullKeys {
+            let region = getRegionKey(key: keys)
+            let keyModel = KeysWrapper(steady: keys.key, keys.value.getUnsafeMutablePointer(), region, RGB(r: 0x00, g: 0x00, b: 0x00))!
+            let key = KeysView(frame: NSRect(x: 0, y: 0, width: 0, height: 0), key: keyModel)
+            key.isHidden = true;
+            keyboardView.addSubview(key)
+        }
+    }
+    
     
     private func createPerKeyKeyboard() {
         var row = 0
@@ -246,10 +264,9 @@ class KeyboardViewController: NSViewController {
     
     // Make keys
     private func createKeys(keys: (key:UInt8, value:String), x: Int,y: Int, row: Int, width: Int, height: Int) -> KeysView {
+        let region = getRegionKey(key: keys)
         let rect =  NSRect(x:  x, y: y, width: width, height: height)
-        let region = getRegionKey(key: keys.key, keyText: keys.value)
-
-        let keyModel = Keys(key: keys.key, keyLetter: keys.value.getUnsafeMutablePointer(), region: region, color: RGB(r: 0xff, g: 0, b: 0), mode: 0)
+        let keyModel = KeysWrapper(steady: keys.key, keys.value.getUnsafeMutablePointer(), region, RGB(r: 0xff, g: 0x00, b: 0x00))!
         let key = KeysView(frame: rect, key: keyModel)
         return key
     }
@@ -265,24 +282,22 @@ class KeyboardViewController: NSViewController {
     }
     
 
-    private func getRegionKey(key: UInt8, keyText: String) -> UInt8 {
+    private func getRegionKey(key: (key:UInt8, value:String)) -> UInt8 {
         let keyboardManager = KeyboardManager.shared.keyboardManager!
         if (keyboardManager.getKeyboardModel() != ThreeRegion) {
 
-            if (keyText == "ESC") {
+            if (key.value == "ESC") {
                 return regions.0
-            } else if (keyText == "A") {
+            } else if (key.value == "A") {
                 return regions.1
 
-            } else if (keyText == "ENTER") {
+            } else if (key.value == "ENTER") {
                 return regions.2
                 
-            } else if (keyText == "F7") {
+            } else if (key.value == "F7") {
                 return regions.3
             }
-            
-            let regionKey = keyboardManager.findKey(inRegion: key)
-
+            let regionKey = keyboardManager.findKey(inRegion: key.key)
             return regionKey
         }
 

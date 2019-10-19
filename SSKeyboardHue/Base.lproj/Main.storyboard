@@ -750,7 +750,7 @@
                 </viewController>
                 <customObject id="hD5-iJ-0ec" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-69" y="1810"/>
+            <point key="canvasLocation" x="-69.5" y="1810"/>
         </scene>
         <!--Keyboard View Controller-->
         <scene sceneID="dTw-If-mpn">
@@ -783,22 +783,14 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9RK-Vm-QKk" customClass="ColorWheelView" customModule="SSKeyboardHue" customModuleProvider="target">
-                                <rect key="frame" x="25" y="63" width="175" height="175"/>
+                                <rect key="frame" x="25" y="75" width="175" height="175"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             </customView>
-                            <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XEu-6z-blp">
-                                <rect key="frame" x="23" y="24" width="179" height="19"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <sliderCell key="cell" continuous="YES" alignment="left" maxValue="100" tickMarkPosition="above" sliderType="linear" id="g06-C0-dXf" customClass="GradientSliderCell" customModule="SSKeyboardHue" customModuleProvider="target"/>
-                                <connections>
-                                    <action selector="setBrightness:" target="6ZD-9K-ovb" id="rv8-yg-uag"/>
-                                </connections>
-                            </slider>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a4p-2Y-eiy">
-                                <rect key="frame" x="25" y="258" width="82" height="22"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <rect key="frame" x="25" y="265" width="82" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" refusesFirstResponder="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" borderStyle="bezel" focusRingType="none" alignment="center" bezelStyle="round" id="QjB-dp-FkI" customClass="CenterTextFieldCell" customModule="SSKeyboardHue" customModuleProvider="target">
-                                    <font key="font" metaFont="smallSystem"/>
+                                    <font key="font" metaFont="controlContent" size="11"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" red="0.20392156862745098" green="0.20392156862745098" blue="0.20392156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </textFieldCell>
@@ -806,17 +798,38 @@
                                     <action selector="setColor:" target="6ZD-9K-ovb" id="m1p-Dw-XGS"/>
                                 </connections>
                             </textField>
+                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="P9a-gY-twH">
+                                <rect key="frame" x="23" y="15" width="180" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="1Pd-I8-mdU">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <menu key="menu" id="g90-aV-2ih"/>
+                                    <connections>
+                                        <action selector="setKeyMode:" target="6ZD-9K-ovb" id="6hF-Yw-4ba"/>
+                                    </connections>
+                                </popUpButtonCell>
+                            </popUpButton>
+                            <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XEu-6z-blp">
+                                <rect key="frame" x="23" y="48" width="179" height="19"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <sliderCell key="cell" continuous="YES" alignment="left" maxValue="100" doubleValue="50.038561818326578" tickMarkPosition="above" sliderType="linear" id="g06-C0-dXf" customClass="GradientSliderCell" customModule="SSKeyboardHue" customModuleProvider="target"/>
+                                <connections>
+                                    <action selector="setBrightness:" target="6ZD-9K-ovb" id="rv8-yg-uag"/>
+                                </connections>
+                            </slider>
                         </subviews>
                     </view>
                     <connections>
                         <outlet property="brightnessSlider" destination="XEu-6z-blp" id="uuj-hB-Ij4"/>
                         <outlet property="colorLabel" destination="a4p-2Y-eiy" id="nTg-sK-qac"/>
                         <outlet property="colorWheelView" destination="9RK-Vm-QKk" id="nlv-Xe-PbY"/>
+                        <outlet property="currentKeyMode" destination="1Pd-I8-mdU" id="Qtr-id-rMz"/>
                     </connections>
                 </viewController>
                 <customObject id="1Mf-F5-cie" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-354.5" y="1631"/>
+            <point key="canvasLocation" x="-354.5" y="1648.5"/>
         </scene>
     </scenes>
 </document>
