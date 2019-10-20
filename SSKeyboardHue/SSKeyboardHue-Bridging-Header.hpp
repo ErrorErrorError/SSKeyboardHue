@@ -27,7 +27,7 @@
 @end
 
 @interface SSKeyboardWrapper : NSObject
-
+-(instancetype)init;
 -(IOReturn) sendColorKeys: (void *) keyArray : (bool) createOutputPackage;
 -(IOReturn) closeKeyboardPort;
 -(enum KeyboardModels) getKeyboardModel;

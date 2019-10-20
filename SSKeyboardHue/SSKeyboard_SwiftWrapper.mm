@@ -7,32 +7,41 @@
 //
 
 #import "SSKeyboardHue-Bridging-Header.hpp"
+@interface SSKeyboardWrapper()
+@property (nonatomic, readonly) SSKeyboard keyboard;
+@end
 
 @implementation SSKeyboardWrapper
-{
-    SSKeyboard keyboard;
+
+-(instancetype)init {
+    self = [super init];
+    if (self) {
+        _keyboard = SSKeyboard();
+    }
+    return self;
 }
+
 -(IOReturn) sendColorKeys: (void *) keyArray : (bool) createOutputPackage
 {
     //Keys *regionKey = static_cast<Keys *>(region);
     Keys **keyArrayPointer = static_cast<Keys **>(keyArray);
-    return keyboard.sendColorKeys(keyArrayPointer, createOutputPackage);
+    return _keyboard.sendColorKeys(keyArrayPointer, createOutputPackage);
 }
 
 -(IOReturn) closeKeyboardPort {
-    return keyboard.closeKeyboardPort();
+    return _keyboard.closeKeyboardPort();
 }
 
 -(enum KeyboardModels) getKeyboardModel {
-    return keyboard.getKeyboardModel();
+    return _keyboard.getKeyboardModel();
 }
 -(void) setSleepInMillis:(uint16_t) millis {
-    keyboard.setSleepInMillis(millis);
+    _keyboard.setSleepInMillis(millis);
 }
 
 
 -(uint8_t) findKeyInRegion:(uint8_t) findThisKey {
-    return keyboard.findKeyInRegion(findThisKey);
+    return _keyboard.findKeyInRegion(findThisKey);
 }
 @end
 

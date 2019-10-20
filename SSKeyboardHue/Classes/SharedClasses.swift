@@ -61,7 +61,7 @@ class ColorController {
         }
     }
     // If reactionMode is selected
-    var reactionModeSelected: NSMutableArray? = NSMutableArray()
+    var reactionModeSelected: NSMutableArray? = NSMutableArray(capacity: 2)
 
     func setColor(_ color: NSColor) {
         selectedColor = color
