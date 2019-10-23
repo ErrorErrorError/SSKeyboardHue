@@ -15,10 +15,20 @@
 
 @implementation KeysWrapper
 
--(instancetype)initWithSteady:(uint8_t) keyCode : (char *) letter : (uint8_t) location :(struct RGB) steadyColor {
+-(instancetype)initWithSteady:(uint8_t) keyCode : (char *) letter : (uint8_t) location : (struct RGB) steadyColor {
     self = [super init];
     if (self) {
-        _keys = Keys(keyCode, letter, location, steadyColor);
+        _keys = Keys(keyCode, location, steadyColor);
+        _keys.keyLetter = letter;
+    }
+    return self;
+}
+
+-(instancetype)initWithReactive:(uint8_t) keyCode : (char *) letter : (uint8_t) location : (struct RGB) active : (struct RGB) rest : (uint16_t) duration {
+    self = [super init];
+    if (self) {
+        _keys = Keys(keyCode, location, active, rest, duration);
+        _keys.keyLetter = letter;
     }
     return self;
 }
@@ -51,7 +61,7 @@
     return _keys.getMode();
 }
 -(uint16_t)getSpeed{
-    return _keys.getDuration();
+    return _keys.duration;
 }
 
 -(void)setDisabled{

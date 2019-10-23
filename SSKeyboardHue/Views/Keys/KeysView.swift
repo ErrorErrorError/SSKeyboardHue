@@ -101,7 +101,7 @@ class KeysView: NSView {
         bezel.lineWidth = 5.0
         if isSelected {
             if (currentColor.scaledBrightness < 0.5) {
-                let bright = map(x: Float(currentColor.scaledBrightness), in_min: 0, in_max: 0.5, out_min: 0, out_max: 0.8)
+                let bright = KeysView.map(x: Float(currentColor.scaledBrightness), in_min: 0, in_max: 0.5, out_min: 0, out_max: 0.8)
                 NSColor.white.usingColorSpace(.genericRGB)?.darkerColor(percent: bright).set()
 
             } else {
@@ -129,7 +129,7 @@ class KeysView: NSView {
         text!.draw(in: newRect, withAttributes: attributes)
     }
     
-    private func map(x: Float, in_min: Float, in_max: Float, out_min: Float, out_max: Float) -> Double {
+    public static func map(x: Float, in_min: Float, in_max: Float, out_min: Float, out_max: Float) -> Double {
         let t = x - in_min
         let v = out_max - out_min
         let n = (in_max - in_min) + out_min

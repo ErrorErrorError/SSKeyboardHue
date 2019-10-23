@@ -118,8 +118,8 @@ class ColorPickerController: NSViewController {
                 
                 showReactive(show: true)
             } else {
-                if (ColorController.shared.reactionModeSelected!.count > 0) {
-                    for i in ColorController.shared.reactionModeSelected! {
+                if (ColorController.shared.reactionBoxColors!.count > 0) {
+                    for i in ColorController.shared.reactionBoxColors! {
                         (i as! CustomColorWell).removeSelected()
                     }
                 }
@@ -127,19 +127,14 @@ class ColorPickerController: NSViewController {
                 showReactive(show: false)
                 hasSetExtended = false;
             }
-            
-            updateKeys(shouldUpdateKeys: true)
         }
-        
+    
+        updateKeys(shouldUpdateKeys: true)
     }
 
     @IBAction  func setSpeed(_ sender: NSSlider) {
-        let event = NSApplication.shared.currentEvent
-        if (event?.type == NSEvent.EventType.leftMouseUp) {
-            if (currentKeyMode.titleOfSelectedItem == "Reactive") {
-                    updateReactiveColors(shouldUpdateKeys: true)
-            }
-        }
+        let shouldSendKeyCommand = (NSApplication.shared.currentEvent?.type == NSEvent.EventType.leftMouseUp) ? true : false
+        updateKeys(shouldUpdateKeys: shouldSendKeyCommand)
         var trimmed = speedSlider.intValue.description
         trimmed.removeLast(2)
         speedBox.string = trimmed + "s"
@@ -151,46 +146,18 @@ class ColorPickerController: NSViewController {
         ColorController.shared.setColor(NSColor.white.usingColorSpace(.genericRGB)!)
     }
     
-    /*
-    private func speedAsString(speed: Int) {
-        
-    }
- */
-    
     @IBAction func setBrightness(_ sender: NSSlider) {
         ColorController.shared.brightness = CGFloat((sender.maxValue-sender.doubleValue) / sender.maxValue)
         updateColorWheel(redrawCrosshair: false)
         updateLabel()
-        
-        let event = NSApplication.shared.currentEvent
-        
-        if event?.type == NSEvent.EventType.leftMouseUp {
-            if (currentKeyMode.titleOfSelectedItem == "Steady") {
-                updateKeys(shouldUpdateKeys: true)
-            } else if (currentKeyMode.titleOfSelectedItem == "Reactive") {
-                updateReactiveColors(shouldUpdateKeys: true)
-            }
-        } else {
-            if (currentKeyMode.titleOfSelectedItem == "Steady") {
-                updateKeys(shouldUpdateKeys: false)
-            } else if (currentKeyMode.titleOfSelectedItem == "Reactive") {
-                updateReactiveColors(shouldUpdateKeys: false)
-            }
-        }
+        let shouldSendKeyCommand = (NSApplication.shared.currentEvent?.type == NSEvent.EventType.leftMouseUp) ? true : false
+        updateKeys(shouldUpdateKeys: shouldSendKeyCommand)
     }
     
     @IBAction func setColor(_ sender: NSTextField) {
         let color = NSColor(hexString: sender.stringValue)
         ColorController.shared.setColor(color)
         view.window?.makeFirstResponder(view)
-        
-        if (currentKeyMode.titleOfSelectedItem == "Steady") {
-            updateKeys(shouldUpdateKeys: true)
-        } else if (currentKeyMode.titleOfSelectedItem == "Reactive") {
-            updateReactiveColors(shouldUpdateKeys: true)
-        }
-
-        
     }
     
     func updateColorWheel(redrawCrosshair: Bool = true) {
@@ -200,18 +167,8 @@ class ColorPickerController: NSViewController {
     func updateLabel() {
         colorLabel.backgroundColor = ColorController.shared.selectedColor
         colorLabel.stringValue = "#"+ColorController.shared.selectedColor.rgbHexString
-        //colorLabel.textColor = RGB(r: 17, g: 17, b: 18).nsColor
     }
-    
-    private func updateReactiveColors(shouldUpdateKeys: Bool) {
-        if (ColorController.shared.reactionModeSelected != nil) {
-            for selected in ColorController.shared.reactionModeSelected! {
-                (selected as! CustomColorWell).color = ColorController.shared.selectedColor
-            }
-        }
-        updateKeys(shouldUpdateKeys: shouldUpdateKeys)
-    }
-    
+
     func updateSlider() {
         guard let sliderCell = brightnessSlider.cell as? GradientSliderCell else { fatalError() }
         sliderCell.colorA = ColorController.shared.masterColor
@@ -221,44 +178,36 @@ class ColorPickerController: NSViewController {
     }
     
     func updateKeys(shouldUpdateKeys: Bool) {
-        if (KeyboardManager.shared.keysSelected != nil) {
-            if (KeyboardManager.shared.keyboardManager.getKeyboardModel() != ThreeRegion && KeyboardManager.shared.keysSelected!.count > 0) {
-                if (currentKeyMode.titleOfSelectedItem == "Steady") {
-                    for key in KeyboardManager.shared.keysSelected! {
-                        (key as! KeysView).setSteady(newColor: ColorController.shared.selectedColor)
-                    }
-                    // Will only set color when the mouse is up
-                    if (shouldUpdateKeys) {
-                        // Will notify for keyboard GS65 and other PerKey to update the keys once mouse is up
-                        KeyboardManager.shared.keyboardView.updateKeys()
-                    }
-                
-                } else if (currentKeyMode.titleOfSelectedItem == "Reactive") {
-                    for key in KeyboardManager.shared.keysSelected! {
-                        (key as! KeysView).setReactive(active: activeColor.color, rest: restColor.color, speed: UInt16(speedSlider.intValue))
-                    }
-                    
-                    // Will only set color when the mouse is up
-                    if (shouldUpdateKeys) {
-                        // Will notify for keyboard GS65 and other PerKey to update the keys once mouse is up
-                        KeyboardManager.shared.keyboardView.updateKeys()
-                    }
-                } else if (currentKeyMode.titleOfSelectedItem == "Disabled") {
-                    for key in KeyboardManager.shared.keysSelected! {
-                        (key as! KeysView).setDisabled()
-                    }
-    
-                    // Will only set color when the mouse is up
-                    if (shouldUpdateKeys) {
-                        // Will notify for keyboard GS65 and other PerKey to update the keys once mouse is up
-                        KeyboardManager.shared.keyboardView.updateKeys()
-                    }
+        if (KeyboardManager.shared.keyboardManager.getKeyboardModel() != ThreeRegion) {
+            if (currentKeyMode.titleOfSelectedItem == "Steady") {
+                for key in KeyboardManager.shared.keysSelected! {
+                    (key as! KeysView).setSteady(newColor: ColorController.shared.selectedColor)
                 }
-            } else {
-                // Three Region Keyboard
+            } else if (currentKeyMode.titleOfSelectedItem == "Reactive") {
+                //Updates the reactiveBoxColor
+                for selected in ColorController.shared.reactionBoxColors! {
+                    (selected as! CustomColorWell).color = ColorController.shared.selectedColor
+                }
+                
+                for key in KeyboardManager.shared.keysSelected! {
+                    (key as! KeysView).setReactive(active: activeColor.color, rest: restColor.color, speed: UInt16(speedSlider.intValue))
+                }
+            } else if (currentKeyMode.titleOfSelectedItem == "Disabled") {
+                for key in KeyboardManager.shared.keysSelected! {
+                    (key as! KeysView).setDisabled()
+                }
             }
+        } else {
+            // TODO - Three Region Keyboard
+        }
+        
+        // Will only set color when the mouse is up
+        if (shouldUpdateKeys) {
+            // Will notify for keyboard GS65 and other PerKey to update the keys once mouse is up
+            KeyboardManager.shared.keyboardView.updateKeys()
         }
     }
+    
 }
 
 extension NSView {
@@ -269,19 +218,14 @@ extension NSView {
     }
 }
 
+//This get's called if the colorWheelView's picker is moved.
 extension ColorPickerController: ColorWheelViewDelegate {
     /// - postcondition: Mutates `ColorController.masterColor`
     func colorDidChange(_ newColor: NSColor, shouldUpdateKeyboard: Bool) {
         ColorController.shared.masterColor = newColor
         updateLabel()
         updateSlider()
-        if (KeyboardManager.shared.keyboardManager.getKeyboardModel() != ThreeRegion) {
-            if (currentKeyMode.titleOfSelectedItem == "Steady") {
-                updateKeys(shouldUpdateKeys: shouldUpdateKeyboard)
-            } else if (currentKeyMode.titleOfSelectedItem == "Reactive") {
-                updateReactiveColors(shouldUpdateKeys: shouldUpdateKeyboard)
-            }
-        }
+        updateKeys(shouldUpdateKeys: shouldUpdateKeyboard)
     }
 }
 

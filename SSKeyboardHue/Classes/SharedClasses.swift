@@ -61,8 +61,9 @@ class ColorController {
         }
     }
     // If reactionMode is selected
-    var reactionModeSelected: NSMutableArray? = NSMutableArray(capacity: 2)
+    var reactionBoxColors: NSMutableArray? = NSMutableArray(capacity: 2)
 
+    // This is called only if user wants to change the color of the color picker controller
     func setColor(_ color: NSColor) {
         selectedColor = color
         brightness = color.scaledBrightness
@@ -73,6 +74,7 @@ class ColorController {
         colorPicker.updateColorWheel()
         colorPicker.updateSlider()
         colorPicker.updateLabel()
-        colorPicker.updateKeys(shouldUpdateKeys: true)
+        colorPicker.updateKeys(shouldUpdateKeys: false)
     }
+    
 }

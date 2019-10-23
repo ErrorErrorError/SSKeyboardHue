@@ -21,15 +21,10 @@
     return self;
 }
 
--(IOReturn) sendColorKeys: (void *) keyArray : (bool) createOutputPackage
+-(IOReturn) sendColorKeys: (void *) keyArray : (bool) updateKeys
 {
-    //Keys *regionKey = static_cast<Keys *>(region);
     Keys **keyArrayPointer = static_cast<Keys **>(keyArray);
-    return _keyboard.sendColorKeys(keyArrayPointer, createOutputPackage);
-}
-
--(IOReturn) closeKeyboardPort {
-    return _keyboard.closeKeyboardPort();
+    return _keyboard.sendColorKeys(keyArrayPointer, updateKeys);
 }
 
 -(enum KeyboardModels) getKeyboardModel {
@@ -40,8 +35,8 @@
 }
 
 
--(uint8_t) findKeyInRegion:(uint8_t) findThisKey {
-    return _keyboard.findKeyInRegion(findThisKey);
+-(uint8_t) findRegionOfKey:(uint8_t) findThisKey {
+    return _keyboard.findRegionOfKey(findThisKey);
 }
 @end
 

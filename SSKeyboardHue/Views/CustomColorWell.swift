@@ -26,13 +26,13 @@ class CustomColorWell: NSColorWell {
     override func mouseUp(with event: NSEvent) {
         super.mouseUp(with: event)
         if (isSelected) {
-            if (ColorController.shared.reactionModeSelected!.count < 1) {
+            if (ColorController.shared.reactionBoxColors!.count < 1) {
                 ColorController.shared.setColor(color)
             }
             
-            ColorController.shared.reactionModeSelected?.add(self)
+            ColorController.shared.reactionBoxColors?.add(self)
         } else if (!isSelected) {
-            ColorController.shared.reactionModeSelected?.remove(self)
+            ColorController.shared.reactionBoxColors?.remove(self)
         }
         
         needsDisplay = true
@@ -42,18 +42,25 @@ class CustomColorWell: NSColorWell {
         super.drawWell(inside: dirtyRect)
         let border = NSBezierPath(rect: bounds)
         border.lineWidth = 5.0
-        if (isSelected) {
-            NSColor.white.setStroke()
-            border.stroke()
+        
+        if isSelected {
+            if (color.scaledBrightness < 0.5) {
+                let bright = KeysView.map(x: Float(color.scaledBrightness), in_min: 0, in_max: 0.5, out_min: 0, out_max: 0.8)
+                NSColor.white.usingColorSpace(.genericRGB)?.darkerColor(percent: bright).set()
+
+            } else {
+                color.darkerColor(percent: 0.5).set()
+                border.lineWidth = 6.0
+            }
         } else {
-            color.setStroke()
-            border.stroke()
+            color.set()
         }
+        border.stroke()
     }
     
     func removeSelected() {
         isSelected = false
-        ColorController.shared.reactionModeSelected?.remove(self)
+        ColorController.shared.reactionBoxColors?.remove(self)
         needsDisplay = true
     }
 }

@@ -13,8 +13,16 @@ class KeyboardViewController: NSViewController {
     // var colorBackground = RGB(r: 242, g: 242, b: 250) // Light Mode
     var colorBackground = RGB(r: 14, g: 14, b: 15) // Dark Mode
     var keyboardBackground = RGB(r: 30, g: 30, b: 30) // Dark Mode
-    
+    let dataURL = URL (
+        fileURLWithPath: "test2"
+    )
+
     @IBOutlet weak var keyboardView: KeyboardView!
+    @IBOutlet weak var savePresetButton: NSButton!
+    @IBOutlet weak var cancelButton:NSButton!
+    
+    var saveKeysAsPreset: [UInt8]!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.wantsLayer = true
@@ -28,11 +36,11 @@ class KeyboardViewController: NSViewController {
         switch KeyboardManager.shared.keyboardManager.getKeyboardModel() {
         case PerKeyGS65:
             createGS65Keyboard()
-            createNullKeysGS65(isGS65: true)
+            createNullKeys(isGS65: true)
         case PerKey:
             keyboardView.frame = NSRect(x: keyboardView.frame.origin.x - 50, y: keyboardView.frame.origin.y, width: keyboardView.frame.width + 100, height: keyboardView.frame.height - 40)
             createPerKeyKeyboard()
-            createNullKeysGS65(isGS65: false)
+            createNullKeys(isGS65: false)
         case ThreeRegion:
             print("ThreeRegion")
         case UnknownModel:
@@ -42,13 +50,13 @@ class KeyboardViewController: NSViewController {
         }
         
         // Sets initial color
-        KeyboardManager.shared.keyboardView.sendColorToKeyboard(region: regions.0, createOutput: false)
-        KeyboardManager.shared.keyboardView.sendColorToKeyboard(region: regions.1, createOutput: false)
-        KeyboardManager.shared.keyboardView.sendColorToKeyboard(region: regions.2, createOutput: false)
-        KeyboardManager.shared.keyboardView.sendColorToKeyboard(region: regions.3, createOutput: true)
+        // KeyboardManager.shared.keyboardView.sendColorToKeyboard(region: regions.0, createOutput: false)
+        // KeyboardManager.shared.keyboardView.sendColorToKeyboard(region: regions.1, createOutput: false)
+        // KeyboardManager.shared.keyboardView.sendColorToKeyboard(region: regions.2, createOutput: false)
+        // KeyboardManager.shared.keyboardView.sendColorToKeyboard(region: regions.3, createOutput: true)
     }
     
-    private func createNullKeysGS65(isGS65: Bool) {
+    private func createNullKeys(isGS65: Bool) {
         let nullKeys: KeyValuePairs<UInt8, String>!
         if (isGS65) {
             nullKeys = KeyboardLayout.nullGS65Keys
@@ -262,6 +270,26 @@ class KeyboardViewController: NSViewController {
         }
     }
     
+    @IBAction func saveClicked(_ sender: NSButton) {
+        /*
+        let keysModifierRegion = keyboardView.getKeysArray(region: regions.0)
+        let data = Data(bytes: keysModifierRegion, count: keysModifierRegion.count)
+        try? data.write(to: dataURL)
+        print("Save Clicked")
+        */
+    }
+    
+    @IBAction func cancelClicked(_ sender: NSButton) {
+        /*
+        print("Cancel clicked")
+        let savedData = try? Data(contentsOf: dataURL)
+        let savedTest = Array(savedData!)
+        for i in savedTest {
+            print(i)
+        }
+        */
+    }
+    
     // Make keys
     private func createKeys(keys: (key:UInt8, value:String), x: Int,y: Int, row: Int, width: Int, height: Int) -> KeysView {
         let region = getRegionKey(key: keys)
@@ -297,7 +325,7 @@ class KeyboardViewController: NSViewController {
             } else if (key.value == "F7") {
                 return regions.3
             }
-            let regionKey = keyboardManager.findKey(inRegion: key.key)
+            let regionKey = keyboardManager.findRegion(ofKey: key.key)
             return regionKey
         }
 

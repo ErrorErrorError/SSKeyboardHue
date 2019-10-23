@@ -12,7 +12,8 @@
 #import <SSKeyboard/sskeys.h>
 
 @interface KeysWrapper : NSObject
--(instancetype)initWithSteady:(uint8_t) keyCode : (char *) letter : (uint8_t) location :(struct RGB) steadyColor;
+-(instancetype)initWithSteady:(uint8_t) keyCode : (char *) letter : (uint8_t) location : (struct RGB) steadyColor;
+-(instancetype)initWithReactive:(uint8_t) keyCode : (char *) letter : (uint8_t) location : (struct RGB) active : (struct RGB) rest : (uint16_t) duration;
 -(struct RGB) getMainColor;
 -(struct RGB) getActiveColor;
 -(uint8_t) getRegion;
@@ -29,9 +30,8 @@
 @interface SSKeyboardWrapper : NSObject
 -(instancetype)init;
 -(IOReturn) sendColorKeys: (void *) keyArray : (bool) createOutputPackage;
--(IOReturn) closeKeyboardPort;
 -(enum KeyboardModels) getKeyboardModel;
 -(void) setSleepInMillis:(uint16_t) millis;
--(uint8_t) findKeyInRegion:(uint8_t) findThisKey;
+-(uint8_t) findRegionOfKey:(uint8_t) findThisKey;
 
 @end
