@@ -128,17 +128,18 @@ class KeyboardView: NSView {
         }
     }
     
-    public func getKeysArray(region: UInt8) -> [UnsafeMutableRawPointer] {
-        var keyboardArray: [UnsafeMutableRawPointer] = []
-        var regionKey: UnsafeMutableRawPointer
+    public func getKeysArray(region: UInt8) -> [KeysWrapper] {
+        var keyboardArray: [KeysWrapper] = []
+        var regionKey: KeysWrapper
         
-        regionKey = findAndGetKey(isRegionKey: true, keyToFind: region)!.key()
+        regionKey = findAndGetKey(isRegionKey: true, keyToFind: region)!
         if (region == regions.0) {
             keyboardArray.reserveCapacity(Int(kModifiersSize + 1))
             keyboardArray.append(regionKey)
             let modifierKeys = UnsafeRawBufferPointer(start: &modifiers, count: Int(kModifiersSize))
             for i in modifierKeys {
-                keyboardArray.append(findAndGetKey(isRegionKey: false, keyToFind: i)!.key())
+                
+                keyboardArray.append(findAndGetKey(isRegionKey: false, keyToFind: i)!)
             }
             
         } else if (regions.1 == region) {
@@ -147,7 +148,7 @@ class KeyboardView: NSView {
             keyboardArray.append(regionKey)
             let alphaKeys = UnsafeRawBufferPointer(start: &alphanums, count: Int(kAlphanumsSize))
             for i in alphaKeys {
-                keyboardArray.append(findAndGetKey(isRegionKey: false, keyToFind: i)!.key())
+                keyboardArray.append(findAndGetKey(isRegionKey: false, keyToFind: i)!)
             }
             
         } else if (regions.2 == region) {
@@ -155,7 +156,7 @@ class KeyboardView: NSView {
             keyboardArray.append(regionKey)
             let enterKeys = UnsafeRawBufferPointer(start: &enter, count: Int(kEnterSize))
             for i in enterKeys {
-                keyboardArray.append(findAndGetKey(isRegionKey: false, keyToFind: i)!.key())
+                keyboardArray.append(findAndGetKey(isRegionKey: false, keyToFind: i)!)
             }
             
         } else {
@@ -170,29 +171,40 @@ class KeyboardView: NSView {
             
             keyboardArray.append(regionKey)
             for i in specialKeys {
-                keyboardArray.append(findAndGetKey(isRegionKey: false, keyToFind: i)!.key())
+                keyboardArray.append(findAndGetKey(isRegionKey: false, keyToFind: i)!)
             }
         }
-        
+
         return keyboardArray
     }
     
     /**
      This method allows to refresh PerKey and GS65 keyboard if therewas any changes
     **/
-    public func updateKeys() {
+    public func updateKeys(forceRefresh: Bool = false) {
         let modifiersKeys       = regions.0
         let alphaNumsKeys       = regions.1
         let enterKeys           = regions.2
         let specialOrNumpadKeys = regions.3
-    
-        let refreshModifiers = regionNeedsRefresh(regionToSearch: modifiersKeys)
-        let refreshAlphanums = regionNeedsRefresh(regionToSearch: alphaNumsKeys)
-        let refreshEnter     = regionNeedsRefresh(regionToSearch: enterKeys)
-        let refreshSpecial   = regionNeedsRefresh(regionToSearch: specialOrNumpadKeys)
-
+        
+        var refreshModifiers: Bool
+        var refreshAlphanums: Bool
+        var refreshEnter: Bool
+        var refreshSpecial: Bool
+        
+        if (forceRefresh) {
+            refreshModifiers = true
+            refreshEnter = true
+            refreshSpecial = true
+            refreshAlphanums = true
+        } else {
+            refreshModifiers = regionNeedsRefresh(regionToSearch: modifiersKeys)
+            refreshAlphanums = regionNeedsRefresh(regionToSearch: alphaNumsKeys)
+            refreshEnter     = regionNeedsRefresh(regionToSearch: enterKeys)
+            refreshSpecial   = regionNeedsRefresh(regionToSearch: specialOrNumpadKeys)
+        }
         //This allows to have consistent times between single and multiple keys
-        let millis: UInt16 = 120
+        let millis: UInt16 = 240
         KeyboardManager.shared.keyboardManager.setSleepInMillis(millis)
         
         if (refreshModifiers && !refreshAlphanums && !refreshEnter && !refreshSpecial) {

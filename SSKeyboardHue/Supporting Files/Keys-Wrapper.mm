@@ -14,7 +14,7 @@
 @end
 
 @implementation KeysWrapper
-
+@synthesize keys = _keys;
 -(instancetype)initWithSteady:(uint8_t) keyCode : (char *) letter : (uint8_t) location : (struct RGB) steadyColor {
     self = [super init];
     if (self) {
@@ -66,5 +66,9 @@
 
 -(void)setDisabled{
     _keys.disableKey();
+}
+
+-(uint8_t)getEffectId {
+    return _keys.effect_id;
 }
 @end

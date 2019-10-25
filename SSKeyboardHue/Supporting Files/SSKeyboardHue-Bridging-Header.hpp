@@ -25,6 +25,7 @@
 -(enum PerKeyModes)getMode;
 -(uint16_t)getSpeed;
 -(void)setDisabled;
+-(uint8_t)getEffectId;
 @end
 
 @interface SSKeyboardWrapper : NSObject

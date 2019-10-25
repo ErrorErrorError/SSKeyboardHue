@@ -13,6 +13,7 @@ class KeyboardManager {
     var keyboardManager: SSKeyboardWrapper!
     weak var keyboardView: KeyboardView!
     var keysSelected: NSMutableArray? = NSMutableArray()
+    weak var keyboardViewController: KeyboardViewController!
 }
 
 class ColorController {
@@ -48,10 +49,20 @@ class ColorController {
             colorPicker.currentKeyMode.selectItem(withTitle: "Steady")
             colorPicker.setKeyMode(colorPicker.currentKeyMode)
         } else if (key.getMode() == Reactive) {
+            if (reactionBoxColors!.count > 0) {
+                for colorBox in reactionBoxColors! {
+                    let color = colorBox as! CustomColorWell
+                    color.removeSelected()
+                }
+            }
+            
             setColor(RGB(r: 0xff, g: 0xff, b: 0xff).nsColor)
             colorPicker.activeColor.color = key.getActiveColor().nsColor
             colorPicker.restColor.color = key.getMainColor().nsColor
             colorPicker.speedSlider.intValue = Int32(key.getSpeed())
+            var trimmed = colorPicker.speedSlider.intValue.description
+            trimmed.removeLast(2)
+            colorPicker.speedBox.string = trimmed + "s"
             colorPicker.currentKeyMode.selectItem(withTitle: "Reactive")
             colorPicker.setKeyMode(colorPicker.currentKeyMode)
         } else if (key.getMode() == Disabled) {

@@ -22,6 +22,5 @@ class CenterTextFieldCell: NSTextFieldCell {
     override func edit(withFrame rect: NSRect, in controlView: NSView, editor textObj: NSText, delegate: Any?, event: NSEvent?) {
         let newRect = NSRect(x: 0, y: (rect.size.height - 14) / 2, width: rect.size.width, height: 14)
         super.edit(withFrame: newRect, in: controlView, editor: textObj, delegate: delegate, event:  event)
-
     }
 }

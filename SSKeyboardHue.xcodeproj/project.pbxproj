@@ -30,6 +30,8 @@
 		13E0AFB42342D096009A5B41 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 13E0AFB22342D096009A5B41 /* Main.storyboard */; };
 		13E0AFC02342D096009A5B41 /* SSKeyboardHueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13E0AFBF2342D096009A5B41 /* SSKeyboardHueTests.swift */; };
 		13E0AFCB2342D096009A5B41 /* SSKeyboardHueUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13E0AFCA2342D096009A5B41 /* SSKeyboardHueUITests.swift */; };
+		13FAC656236147F80067BD3E /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13FAC654236147F80067BD3E /* ContentViewController.swift */; };
+		13FAC657236147F80067BD3E /* ContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13FAC655236147F80067BD3E /* ContentViewController.xib */; };
 		13FC9F10235289F400630F99 /* CenterTextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13FC9F0F235289F400630F99 /* CenterTextFieldCell.swift */; };
 		13FE55CD234806420061ACFF /* GradientSliderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13FE55CC234806420061ACFF /* GradientSliderCell.swift */; };
 		13FE55D02348132A0061ACFF /* SharedClasses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13FE55CF2348132A0061ACFF /* SharedClasses.swift */; };
@@ -113,6 +115,8 @@
 		13E0AFC62342D096009A5B41 /* SSKeyboardHueUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SSKeyboardHueUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		13E0AFCA2342D096009A5B41 /* SSKeyboardHueUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSKeyboardHueUITests.swift; sourceTree = "<group>"; };
 		13E0AFCC2342D096009A5B41 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		13FAC654236147F80067BD3E /* ContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
+		13FAC655236147F80067BD3E /* ContentViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContentViewController.xib; sourceTree = "<group>"; };
 		13FC9F0F235289F400630F99 /* CenterTextFieldCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterTextFieldCell.swift; sourceTree = "<group>"; };
 		13FE55CC234806420061ACFF /* GradientSliderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientSliderCell.swift; sourceTree = "<group>"; };
 		13FE55CF2348132A0061ACFF /* SharedClasses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedClasses.swift; sourceTree = "<group>"; };
@@ -188,18 +192,6 @@
 			path = ../Window;
 			sourceTree = "<group>";
 		};
-		1370F646234E707600290D69 /* Supporting FIles */ = {
-			isa = PBXGroup;
-			children = (
-				1353ED91235605E100AF863C /* SSKeyboardHue-Bridging-Header.hpp */,
-				1370F652234E7CE900290D69 /* SSKeyboard_SwiftWrapper.mm */,
-				13E0AFB52342D096009A5B41 /* Info.plist */,
-				13E0AFB02342D096009A5B41 /* Assets.xcassets */,
-				13796F15235676C8006B716D /* Keys-Wrapper.mm */,
-			);
-			name = "Supporting FIles";
-			sourceTree = "<group>";
-		};
 		139B10772343B0A400E3787D /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -222,6 +214,8 @@
 				13A8DEB32345380400709D9F /* CustomSplitViewController.swift */,
 				13AF593F234555210091D6C4 /* SideBarViewControllerr.swift */,
 				1370FF3B2346327F005D325E /* ColorPickerController.swift */,
+				13FAC654236147F80067BD3E /* ContentViewController.swift */,
+				13FAC655236147F80067BD3E /* ContentViewController.xib */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -250,7 +244,7 @@
 		13E0AFAB2342D095009A5B41 /* SSKeyboardHue */ = {
 			isa = PBXGroup;
 			children = (
-				1370F646234E707600290D69 /* Supporting FIles */,
+				13FAC653236146C80067BD3E /* Supporting Files */,
 				13FE55CE234813190061ACFF /* Classes */,
 				130CDEE12346D1D9007E2028 /* Utils */,
 				13A8DEAC234535C300709D9F /* Controllers */,
@@ -279,6 +273,18 @@
 				13E0AFCC2342D096009A5B41 /* Info.plist */,
 			);
 			path = SSKeyboardHueUITests;
+			sourceTree = "<group>";
+		};
+		13FAC653236146C80067BD3E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				1353ED91235605E100AF863C /* SSKeyboardHue-Bridging-Header.hpp */,
+				1370F652234E7CE900290D69 /* SSKeyboard_SwiftWrapper.mm */,
+				13E0AFB52342D096009A5B41 /* Info.plist */,
+				13E0AFB02342D096009A5B41 /* Assets.xcassets */,
+				13796F15235676C8006B716D /* Keys-Wrapper.mm */,
+			);
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		13FE55CE234813190061ACFF /* Classes */ = {
@@ -466,6 +472,7 @@
 			files = (
 				13E0AFB12342D096009A5B41 /* Assets.xcassets in Resources */,
 				13E0AFB42342D096009A5B41 /* Main.storyboard in Resources */,
+				13FAC657236147F80067BD3E /* ContentViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -537,6 +544,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				13FAC656236147F80067BD3E /* ContentViewController.swift in Sources */,
 				133EEAC12345C617006D9AFF /* ColorWheelView.swift in Sources */,
 				130CDEE32346D1EC007E2028 /* ColorUtils.swift in Sources */,
 				133EEABD2345BC1F006D9AFF /* KeysView.swift in Sources */,
@@ -735,7 +743,7 @@
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = NO;
-				INFOPLIST_FILE = SSKeyboardHue/Info.plist;
+				INFOPLIST_FILE = "SSKeyboardHue/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -745,7 +753,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.errorerrorerror.SSKeyboardHue;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "SSKeyboardHue/SSKeyboardHue-Bridging-Header.hpp";
+				SWIFT_OBJC_BRIDGING_HEADER = "SSKeyboardHue/Supporting Files/SSKeyboardHue-Bridging-Header.hpp";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -762,7 +770,7 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				INFOPLIST_FILE = SSKeyboardHue/Info.plist;
+				INFOPLIST_FILE = "SSKeyboardHue/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -773,7 +781,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.errorerrorerror.SSKeyboardHue;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "SSKeyboardHue/SSKeyboardHue-Bridging-Header.hpp";
+				SWIFT_OBJC_BRIDGING_HEADER = "SSKeyboardHue/Supporting Files/SSKeyboardHue-Bridging-Header.hpp";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 			};

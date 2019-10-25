@@ -8,26 +8,30 @@
 
 import Cocoa
 
-class KeyboardViewController: NSViewController {
+class KeyboardViewController: NSViewController, NSPopoverDelegate {
     
     // var colorBackground = RGB(r: 242, g: 242, b: 250) // Light Mode
     var colorBackground = RGB(r: 14, g: 14, b: 15) // Dark Mode
     var keyboardBackground = RGB(r: 30, g: 30, b: 30) // Dark Mode
-    let dataURL = URL (
-        fileURLWithPath: "test2"
-    )
 
     @IBOutlet weak var keyboardView: KeyboardView!
-    @IBOutlet weak var savePresetButton: NSButton!
-    @IBOutlet weak var cancelButton:NSButton!
+    @IBOutlet weak var optionsButton: NSButton!
     
-    var saveKeysAsPreset: [UInt8]!
+    lazy var optionsPopOver: NSPopover = {
+        let popover = NSPopover()
+        popover.behavior = .semitransient
+        popover.contentViewController = ContentViewController()
+        popover.delegate = self
+        popover.animates = true
+        return popover
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.wantsLayer = true
         keyboardView.roundCorners(cornerRadius: 15.0)
         KeyboardManager.shared.keyboardManager = SSKeyboardWrapper()
+        KeyboardManager.shared.keyboardViewController = self
         detectKeyboard()
     }
     
@@ -270,25 +274,23 @@ class KeyboardViewController: NSViewController {
         }
     }
     
-    @IBAction func saveClicked(_ sender: NSButton) {
-        /*
-        let keysModifierRegion = keyboardView.getKeysArray(region: regions.0)
-        let data = Data(bytes: keysModifierRegion, count: keysModifierRegion.count)
-        try? data.write(to: dataURL)
-        print("Save Clicked")
-        */
+    @IBAction func optionClicked(_ sender: NSButton) {
+        let entryRect = sender.convert(sender.bounds, to: self.view.window?.contentView)
+        optionsPopOver.show(relativeTo: entryRect, of: self.view.window!.contentView!, preferredEdge: .maxY)
+        
+        // Sets text to textbox if a file is selected
+        let vc = optionsPopOver.contentViewController as! ContentViewController
+        let currentFile = ColorController.shared.colorPicker.selectedFile
+        var stringToSend = ""
+        if (currentFile != nil) {
+            stringToSend = currentFile!.lastPathComponent
+            stringToSend.removeLast(4)
+        }
+        vc.presetName.stringValue = stringToSend
+        
     }
     
-    @IBAction func cancelClicked(_ sender: NSButton) {
-        /*
-        print("Cancel clicked")
-        let savedData = try? Data(contentsOf: dataURL)
-        let savedTest = Array(savedData!)
-        for i in savedTest {
-            print(i)
-        }
-        */
-    }
+    
     
     // Make keys
     private func createKeys(keys: (key:UInt8, value:String), x: Int,y: Int, row: Int, width: Int, height: Int) -> KeysView {

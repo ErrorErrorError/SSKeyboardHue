@@ -15,15 +15,29 @@ class ColorPickerController: NSViewController {
     @IBOutlet weak var colorLabel: NSTextField!
     @IBOutlet weak var brightnessSlider: NSSlider!
     @IBOutlet weak var currentKeyMode: NSPopUpButtonCell!
+    @IBOutlet weak var presetsTableView: NSTableView!
+    @IBOutlet weak var presetDeleteButton: NSButton!
+    @IBOutlet weak var presetsLabel: NSTextField!
+    var hasResizeReactiveViews = false
+    var filesList: [URL] = []
+    var selectedFile: URL! {
+        didSet {
+            if (self.selectedFile != nil) {
+                setKeyboardColorFromFile()
+            }
+        }
+    }
+    
     var hasSetExtended = false
     // Reactive View
-    let activeColor = CustomColorWell(frame: NSRect(origin: CGPoint(x: 26, y: 50), size: CGSize(width: 25, height: 25)))
-    let restColor = CustomColorWell(frame: NSRect(origin: CGPoint(x: 116, y: 50), size: CGSize(width: 25, height: 25)))
-    let activeText = NSTextView(frame: NSRect(origin: CGPoint(x: 56, y: 45), size: CGSize(width: 45, height: 25)))
-    let restText = NSTextView(frame: NSRect(origin: CGPoint(x: 146, y: 45), size: CGSize(width: 35, height: 25)))
-    let speedSlider = NSSlider(frame: NSRect(x: 25, y: 5, width: 150, height: 20))
-    let speedText = NSTextView(frame: NSRect(x:23, y: 30, width: 55, height: 10))
-    let speedBox = NSTextView(frame: NSRect(x: 180, y: 13, width: 55, height: 10))
+    var activeColor: CustomColorWell!
+    var restColor: CustomColorWell!
+    var activeText: NSTextView!
+    var restText: NSTextView!
+    var speedSlider: NSSlider!
+    var speedText: NSTextView!
+    var speedBox: NSTextView!
+    var presetsTableRect: NSRect!
     
     var originalFrame: NSRect!
     override func viewDidLoad() {
@@ -36,36 +50,103 @@ class ColorPickerController: NSViewController {
         colorLabel.isBezeled = false
         
         currentKeyMode.addItem(withTitle: "Steady")
-        //currentKeyMode.addItem(withTitle: "ColorShift")
-        //currentKeyMode.addItem(withTitle: "Breathing")
+        currentKeyMode.addItem(withTitle: "ColorShift")
+        currentKeyMode.addItem(withTitle: "Breathing")
         currentKeyMode.addItem(withTitle: "Reactive")
         currentKeyMode.addItem(withTitle: "Disabled")
         setUpReactiveViews()
+        checkForPresets()
+        presetDeleteButton.isEnabled = false
+    }
+    
+    func checkForPresets() {
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = paths[0]
+        let docURL = URL(string: documentsDirectory)!
+        let directoryPath = docURL.appendingPathComponent("presets")
+
+        if FileManager.default.fileExists(atPath: directoryPath.absoluteString) {
+            filesList = contentsOf(folder: directoryPath)
+            self.presetsTableView.reloadData()
+        }
+
+    }
+    
+    func contentsOf(folder: URL) -> [URL] {
+    
+      let fileManager = FileManager.default
+      do {
+        let contents = try fileManager.contentsOfDirectory(at: folder, includingPropertiesForKeys: .none, options: .skipsHiddenFiles)
+        return contents
+      } catch {
+        return []
+      }
+    }
+
+    private func setKeyboardColorFromFile() {
+        let data = try? Data(contentsOf: selectedFile)
+        let array = [UInt8](data!)
         
+        if (KeyboardManager.shared.keyboardManager.getKeyboardModel() == PerKeyGS65 || KeyboardManager.shared.keyboardManager.getKeyboardModel() == PerKey) {
+            for i in 0...(array.count/12) - 1 {
+                let currentIndex  = i * 12
+                let region = array[currentIndex]
+                let keycode = array[currentIndex + 1]
+                let keyViewArray = KeyboardManager.shared.keyboardView.subviews
+                let mode = array[currentIndex + 11]
+                let colorMain = RGB(r: array[currentIndex + 2], g: array[currentIndex + 3], b: array[currentIndex + 4])
+                let colorActive = RGB(r: array[currentIndex + 5], g: array[currentIndex + 6], b: array[currentIndex + 7])
+                let duration = UInt16(array[currentIndex + 9]) << 8 | UInt16(array[currentIndex + 8])
+                let foundKeyArray = keyViewArray.filter {(findKey) -> Bool in
+                    let castKey = findKey as! KeysView
+                    return castKey.keyModel.getRegion() == region && castKey.keyModel.getKeyCode() == keycode
+                }
+                let keyFound = foundKeyArray[0] as! KeysView
+                
+                if (mode == 0x01) {
+                    keyFound.setSteady(newColor: colorMain.nsColor)
+                } else if (mode == 0x08) {
+                    keyFound.setReactive(active: colorActive.nsColor, rest: colorMain.nsColor, speed: duration)
+                } else if (mode == 0x03){
+                    keyFound.setDisabled()
+                } else {
+                    /// Todo - Breathing and Waves
+                }
+                
+            }
+        } else {
+            /// TODO - Implement ThreeRegion
+        }
+        
+        KeyboardManager.shared.keyboardView.updateKeys(forceRefresh: true)
     }
     
     private func setUpReactiveViews() {
-        
+        activeColor = CustomColorWell(frame: NSRect(origin: CGPoint(x: 26, y: 360), size: CGSize(width: 25, height: 25)))
         activeColor.isBordered = false
         activeColor.color = RGB(r: 0xff, g: 0x00, b: 0x00).nsColor
         activeColor.roundCorners(cornerRadius: 5.0)
         activeColor.isHidden = true
         
+        activeText = NSTextView(frame: NSRect(origin: CGPoint(x: 56, y: 350), size: CGSize(width: 45, height: 25)))
         activeText.isHidden = true
         activeText.string = "Active"
         activeText.isEditable = false
         activeText.textColor = NSColor.white
         
+        restColor = CustomColorWell(frame: NSRect(origin: CGPoint(x: 116, y: 360), size: CGSize(width: 25, height: 25)))
         restColor.isBordered = false
         restColor.color = RGB(r: 0x00, g: 0x00, b: 0x00).nsColor
         restColor.roundCorners(cornerRadius: 5.0)
         restColor.isHidden = true
         
+        restText = NSTextView(frame: NSRect(origin: CGPoint(x: 146, y: 350), size: CGSize(width: 35, height: 25)))
         restText.isHidden = true
         restText.string = "Rest"
         restText.isEditable = false
         restText.textColor = NSColor.white
         
+        speedSlider = NSSlider(frame: NSRect(x: 25, y: 310, width: 150, height: 20))
         speedSlider.isHidden = true
         speedSlider.minValue = 100
         speedSlider.maxValue = 1000
@@ -73,11 +154,13 @@ class ColorPickerController: NSViewController {
         speedSlider.cell!.action = #selector(setSpeed(_:))
         speedSlider.intValue = 300
 
+        speedText = NSTextView(frame: NSRect(x:23, y: 340, width: 55, height: 10))
         speedText.isHidden = true
         speedText.string = "Speed"
         speedText.isEditable = false
         speedText.textColor = NSColor.white
         
+        speedBox = NSTextView(frame: NSRect(x: 180, y: 317, width: 55, height: 10))
         speedBox.isHidden = true
         var trimmed = speedSlider.intValue.description
         trimmed.removeLast(2)
@@ -105,30 +188,28 @@ class ColorPickerController: NSViewController {
     }
     
     @IBAction func setKeyMode(_ sender: NSPopUpButtonCell) {
-        if (KeyboardManager.shared.keyboardManager.getKeyboardModel() != ThreeRegion) {
-            if (originalFrame == nil) {
-                originalFrame = view.superview?.frame
-            }
-    
-            if (sender.titleOfSelectedItem == "Reactive") {
-                if (!hasSetExtended) {
-                    view.superview?.frame = NSRect(origin: CGPoint(x: (view.superview?.frame.origin.x)!, y: (view.superview?.frame.origin.y)! - 70), size: CGSize(width: (view.superview?.frame.size.width)!, height: (view.superview?.frame.size.height)! + 70))
-                    hasSetExtended = true
-                }
-                
-                showReactive(show: true)
-            } else {
-                if (ColorController.shared.reactionBoxColors!.count > 0) {
-                    for i in ColorController.shared.reactionBoxColors! {
-                        (i as! CustomColorWell).removeSelected()
-                    }
-                }
-                view.superview?.frame = ((originalFrame != nil) ? originalFrame : view.superview?.frame)!
-                showReactive(show: false)
-                hasSetExtended = false;
-            }
+        if (presetsTableRect == nil) {
+            presetsTableRect = presetsTableView.superview?.superview!.frame
         }
-    
+        
+        if (sender.titleOfSelectedItem == "Reactive") {
+            showReactive(show: true)
+            presetsTableView.superview?.superview!.frame = NSRect(x: (presetsTableView.superview?.superview!.frame.origin.x)!, y: (presetsTableView.superview?.superview!.frame.origin.y)!, width: presetsTableRect.width, height: presetsTableRect.height - 80)
+            if (!hasResizeReactiveViews) {
+                presetsLabel.frame.origin.y -= 80
+                presetDeleteButton.frame.origin.y -= 80
+                hasResizeReactiveViews = true
+            }
+        } else {
+            if (hasResizeReactiveViews) {
+                presetsLabel.frame.origin.y += 80
+                presetDeleteButton.frame.origin.y += 80
+                hasResizeReactiveViews = false
+            }
+            showReactive(show: false)
+            presetsTableView.superview?.superview!.frame = presetsTableRect
+        }
+
         updateKeys(shouldUpdateKeys: true)
     }
 
@@ -158,6 +239,7 @@ class ColorPickerController: NSViewController {
         let color = NSColor(hexString: sender.stringValue)
         ColorController.shared.setColor(color)
         view.window?.makeFirstResponder(view)
+        updateKeys(shouldUpdateKeys: true)
     }
     
     func updateColorWheel(redrawCrosshair: Bool = true) {
@@ -208,6 +290,46 @@ class ColorPickerController: NSViewController {
         }
     }
     
+    
+    @IBAction func deletePreset(_ sender: NSButton) {
+        if (selectedFile != nil) {
+            do {
+                let fileManager = FileManager.default
+                try fileManager.removeItem(at: selectedFile)
+                selectedFile = nil
+                checkForPresets()
+                self.presetDeleteButton.isEnabled = false
+            }
+            catch let error as NSError {
+                print("An error took place: \(error)")
+            }
+        }
+    }
+}
+
+extension ColorPickerController: NSTableViewDataSource, NSTableViewDelegate {
+    
+    func numberOfRows(in tableView: NSTableView) -> Int {
+        return (filesList.count)
+    }
+    
+    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
+        let file = filesList[row]
+        
+        guard let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "FileCell"), owner: self) as? NSTableCellView else { return nil }
+        cell.textField?.stringValue = file.deletingPathExtension().lastPathComponent
+        return cell
+    }
+    
+    func tableViewSelectionDidChange(_ notification: Notification) {
+        if presetsTableView.selectedRow < 0 {
+            selectedFile = nil
+            presetDeleteButton.isEnabled = false
+            return
+        }
+        presetDeleteButton.isEnabled = true
+        selectedFile = filesList[presetsTableView.selectedRow]
+    }
 }
 
 extension NSView {
