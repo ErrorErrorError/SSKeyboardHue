@@ -11,15 +11,22 @@ This app is still in development.
 
 # Goal
 The goal is to support all MSI Laptop keyboards that have RGB.
-# Supported Models 
+<br>
+***Currently only the individual per key keyboard RGB is supported.***
+# Supported Models
 *   MSI GS65
 *   MSI GE63 Raider RGB
+
+<br>***Should support all other per-key rgb keyboard but It's been only tested on these models.***
 
 ### Supported Modes: PerKey
 *   Steady
 *   Reactive
+*   Disabled
 *   More coming soon...
-*   
+
+### Supported Modes: Three Region
+*   Coming soon...
 # Download/Build
 ### Download:
 Download the latest pre-release [here](https://github.com/ErrorErrorError/SSKeyboardHue/releases).
@@ -33,4 +40,5 @@ Make sure you use ```.xcworkspace``` file if you're planning to run the app from
 # Thanks to:
 [@skyline75489](https://github.com/skyline75489) for providing his debug files for GE63 Raider RGB. <br>
 [@Askannz](https://github.com/Askannz/) for his documentation of keycodes - [msi-perkeyrgb](https://github.com/Askannz/msi-perkeyrgb). <br>
-[@stevelacy](https://github.com/stevelacy) for his inspiration to design a gui to control color keyboard - [msi-keyboard-gui](https://github.com/Askannz/msi-perkeyrgb).
+[@stevelacy](https://github.com/stevelacy) for his inspiration to design a gui to control color keyboard - [msi-keyboard-gui](https://github.com/Askannz/msi-perkeyrgb). <br>
+[@TauAkiou](https://github.com/TauAkiou) for providing his doumentation on key effects.
