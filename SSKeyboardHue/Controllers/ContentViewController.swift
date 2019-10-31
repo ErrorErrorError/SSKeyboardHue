@@ -30,6 +30,7 @@ class ContentViewController: NSViewController {
         let keysSpecial = KeyboardManager.shared.keyboardView.getKeysArray(region: regions.3)
         let arraySpecial = createPacket(keysArray: keysSpecial)
         
+        // let effects = createEffectsPacket()
         var data = Data(bytes: arrayModifiers, count: arrayModifiers.count)
         data.append(arrayAlpha, count: arrayAlpha.count)
         data.append(arrayEnter, count: arrayEnter.count)
@@ -47,10 +48,18 @@ class ContentViewController: NSViewController {
         self.view.window?.performClose(self)
     }
     
+    private func createEffectsPacket() -> [UInt8] {
+        // let effects = KeyboardManager.shared.effectsArray!
+        let arrayPacket: [UInt8] = Array(repeating: 0, count: 0)
+        
+        /// TODO - Needs implementation
+        return arrayPacket
+    }
+    
     private func createPacket(keysArray: [KeysWrapper]) -> [UInt8] {
         var arrayPacket: [UInt8] = Array(repeating: 0, count: keysArray.count * 12)
                 
-        for i in 0...keysArray.count - 1 {
+        for i in 0..<keysArray.count {
             let index = (12 * i);
             let currentKey = keysArray[i]
             var mode: UInt8;
@@ -80,15 +89,14 @@ class ContentViewController: NSViewController {
             arrayPacket[index + 10]   = currentKey.getEffectId()
             arrayPacket[index + 11]   = mode
         }
+       
+        
         
         return arrayPacket
     }
 
     
     private func filePath(forKey key: String) -> URL? {
-        //let fileManager = FileManager.default
-        //guard let documentURL = fileManager.urls(for: .documentDirectory,in: FileManager.SearchPathDomainMask.userDomainMask).first else { return nil }
-        
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = paths[0]
         let docURL = URL(string: documentsDirectory)!

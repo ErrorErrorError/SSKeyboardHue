@@ -8,9 +8,14 @@
 
 import Cocoa
 
-class CustomColorWell: NSColorWell {
+class CustomColorWell: NSView {
     private var isBeingDragged = false
     var isSelected = false
+    var color = NSColor.white.usingColorSpace(.genericRGB)! {
+        didSet {
+            needsDisplay = true
+        }
+    }
     override func mouseDown(with event: NSEvent) {
         if (isSelected) {
             isSelected = false
@@ -39,10 +44,10 @@ class CustomColorWell: NSColorWell {
     }
     
     override func draw(_ dirtyRect: NSRect) {
-        super.drawWell(inside: dirtyRect)
+        color.setFill()
+        dirtyRect.fill()
         let border = NSBezierPath(rect: bounds)
         border.lineWidth = 5.0
-        
         if isSelected {
             if (color.scaledBrightness < 0.5) {
                 let bright = KeysView.map(x: Float(color.scaledBrightness), in_min: 0, in_max: 0.5, out_min: 0, out_max: 0.8)

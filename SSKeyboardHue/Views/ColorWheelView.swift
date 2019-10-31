@@ -144,6 +144,7 @@ class ColorWheelView: NSView {
     // MARK: - Mouse
     /// - postcondition: May call `NSWindow.makeFirstResponder`
     override func mouseDown(with event: NSEvent) {
+        super.mouseDown(with: event)
         mouseUp = false
 
         let (clampedPoint, wasClamped) = clamped(convert(event.locationInWindow, from: nil))
@@ -153,13 +154,13 @@ class ColorWheelView: NSView {
             isClampedOutside = wasClamped
         } else {
             isClampedOutside = false
-            setColor(at: clampedPoint)
             pickerLocation = clampedPoint
             needsDisplay = true
         }
     }
     
     override func mouseDragged(with event: NSEvent) {
+        super.mouseDown(with: event)
         mouseUp = false
         if (!isClampedOutside) {
             let (clampedPoint, _) = clamped(convert(event.locationInWindow, from: nil))

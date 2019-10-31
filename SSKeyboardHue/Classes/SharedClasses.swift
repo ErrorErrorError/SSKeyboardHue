@@ -13,7 +13,7 @@ class KeyboardManager {
     var keyboardManager: SSKeyboardWrapper!
     weak var keyboardView: KeyboardView!
     var keysSelected: NSMutableArray? = NSMutableArray()
-    weak var keyboardViewController: KeyboardViewController!
+    var effectsArray: NSMutableArray? = NSMutableArray()
 }
 
 class ColorController {
@@ -65,6 +65,39 @@ class ColorController {
             colorPicker.speedBox.string = trimmed + "s"
             colorPicker.currentKeyMode.selectItem(withTitle: "Reactive")
             colorPicker.setKeyMode(colorPicker.currentKeyMode)
+        } else if (key.getMode() == ColorShift) {
+            if (transitionThumbColors!.count > 0) {
+                for sliders in transitionThumbColors! {
+                    let thumb = sliders as! SliderThumb
+                    thumb.removeSelected()
+                }
+            }
+            
+            let findEffectId = key.getEffectId()
+            var keyEffect: KeyEffectWrapper = KeyEffectWrapper()
+            for effects in KeyboardManager.shared.effectsArray! {
+                let effect = effects as! KeyEffectWrapper
+                if (effect.getEffectId() == findEffectId) {
+                    keyEffect = effect
+                    break
+                }
+            }
+            
+            var totalDuration: Int32 = 0
+            let transitions = UnsafeMutablePointer<KeyTransition>(keyEffect.getTransitions())
+            for i in 0..<keyEffect.getTransitionSize() {
+                totalDuration += Int32(transitions![Int(i)].duration)
+            }
+            
+            setColor(RGB(r: 0xff, g: 0xff, b: 0xff).nsColor)
+            colorPicker.speedSlider.intValue = totalDuration
+            colorPicker.multiGradientSlider.setThumbsFromTransitions(transitions: transitions!, count: Int(keyEffect.getTransitionSize()))
+            var trimmed = colorPicker.speedSlider.intValue.description
+            trimmed.removeLast(2)
+            colorPicker.speedBox.string = trimmed + "s"
+            colorPicker.currentKeyMode.selectItem(withTitle: "ColorShift")
+            colorPicker.setKeyMode(colorPicker.currentKeyMode)
+
         } else if (key.getMode() == Disabled) {
             setColor(key.getMainColor().nsColor)
             colorPicker.currentKeyMode.selectItem(withTitle: "Disabled")
@@ -73,6 +106,8 @@ class ColorController {
     }
     // If reactionMode is selected
     var reactionBoxColors: NSMutableArray? = NSMutableArray(capacity: 2)
+    
+    var transitionThumbColors: NSMutableArray? = NSMutableArray()
 
     // This is called only if user wants to change the color of the color picker controller
     func setColor(_ color: NSColor) {
@@ -87,5 +122,4 @@ class ColorController {
         colorPicker.updateLabel()
         colorPicker.updateKeys(shouldUpdateKeys: false)
     }
-    
 }

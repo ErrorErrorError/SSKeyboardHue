@@ -11,7 +11,7 @@ import Cocoa
 /// `ColorPickerViewController` content view. Allows colors to be dragged in.
 @IBDesignable
 class ColorPickerView: NSView {
-    
+    /*
     required init?(coder decoder: NSCoder) {
         super.init(coder: decoder)
         registerForDraggedTypes([.color])
@@ -48,7 +48,7 @@ class ColorPickerView: NSView {
         ColorController.shared.setColor(keys[0])
         return true
     }
- 
+    */
  
     // Allows mouse click to lose `ColorPickerViewController`'s text field's focus
     override func mouseDown(with event: NSEvent) {

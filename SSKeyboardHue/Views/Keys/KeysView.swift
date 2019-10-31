@@ -11,7 +11,6 @@ import Cocoa
 @IBDesignable
 class KeysView: NSView {
     var isSelected = false
-    var isBeingDragged = false
     var bezel: NSBezierPath!
     var keyModel: KeysWrapper!
     var textSize: CGFloat!
@@ -59,35 +58,15 @@ class KeysView: NSView {
     }
     
     override func mouseDown(with event: NSEvent) {
-    }
-    
-    override func mouseDragged(with event: NSEvent) {
-        /*
-        let pasteboardItem = NSPasteboardItem()
-        pasteboardItem.setDataProvider(keyModel, forTypes: [.keysShift])
-        let draggingImage = NSImage(size: NSSize(width: 18, height: 18))
-        draggingImage.lockFocus()
-        currentColor.drawSwatch(in: NSRect(x: 0, y: 0, width: 18, height: 18))
-        draggingImage.unlockFocus()
-        let dragPoint = convert(event.locationInWindow, from: nil)
-        let draggingItem = NSDraggingItem(pasteboardWriter: pasteboardItem)
-        draggingItem.setDraggingFrame(NSRect(x: dragPoint.x-11, y: dragPoint.y-6, width: 18, height: 18),
-                                      contents: draggingImage)
-        beginDraggingSession(with: [draggingItem], event: event, source: self)
-        */
-        isBeingDragged = true
+        super.mouseDown(with: event)
 
-    }
-    
-    override func mouseUp(with event: NSEvent) {
-        super.mouseUp(with: event)
-        if (!isBeingDragged && !isSelected) {
-            setSelected(selected: true, fromGroupSelection: false)
-        } else if (!isBeingDragged && isSelected) {
-            setSelected(selected: false, fromGroupSelection: false)
+        if (isSelected) {
+            isSelected = false
         } else {
-            isBeingDragged = false
+            isSelected = true
         }
+        
+        setSelected(selected: isSelected, fromGroupSelection: false)
     }
     
     override func draw(_ rect: NSRect) {
@@ -146,6 +125,12 @@ class KeysView: NSView {
     func setReactive(active: NSColor, rest: NSColor, speed: UInt16) {
         keyModel.setReactiveMode(active.getRGB, rest.getRGB, speed)
         currentColor = rest
+        needsDisplay = true
+    }
+    
+    func setEffectKey(_id: uint8, mode: PerKeyModes) {
+        keyModel.setEffectKey(_id, mode)
+        currentColor = RGB().nsColor
         needsDisplay = true
     }
     

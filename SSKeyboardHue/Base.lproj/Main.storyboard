@@ -915,6 +915,10 @@
                                     <action selector="deletePreset:" target="6ZD-9K-ovb" id="BT8-eM-5Rb"/>
                                 </connections>
                             </button>
+                            <customView hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NSa-f5-hRg" customClass="MultiGradientSlider" customModule="SSKeyboardHue" customModuleProvider="target">
+                                <rect key="frame" x="16" y="323" width="193" height="58"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            </customView>
                         </subviews>
                     </view>
                     <connections>
@@ -922,6 +926,7 @@
                         <outlet property="colorLabel" destination="a4p-2Y-eiy" id="nTg-sK-qac"/>
                         <outlet property="colorWheelView" destination="9RK-Vm-QKk" id="nlv-Xe-PbY"/>
                         <outlet property="currentKeyMode" destination="1Pd-I8-mdU" id="Qtr-id-rMz"/>
+                        <outlet property="multiGradientSlider" destination="NSa-f5-hRg" id="0aH-zU-i2g"/>
                         <outlet property="presetDeleteButton" destination="IGH-jb-Q2N" id="gUA-w7-01d"/>
                         <outlet property="presetsLabel" destination="fCA-FD-qBM" id="gtU-Cc-n8M"/>
                         <outlet property="presetsTableView" destination="bji-mZ-lLr" id="riM-xL-GXL"/>

@@ -31,7 +31,6 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
         self.view.wantsLayer = true
         keyboardView.roundCorners(cornerRadius: 15.0)
         KeyboardManager.shared.keyboardManager = SSKeyboardWrapper()
-        KeyboardManager.shared.keyboardViewController = self
         detectKeyboard()
     }
     
@@ -275,9 +274,14 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
     }
     
     @IBAction func optionClicked(_ sender: NSButton) {
-        let entryRect = sender.convert(sender.bounds, to: self.view.window?.contentView)
-        optionsPopOver.show(relativeTo: entryRect, of: self.view.window!.contentView!, preferredEdge: .maxY)
-        
+        if (optionsPopOver.isShown) {
+            optionsPopOver.close()
+            return
+        } else {
+            let entryRect = sender.convert(sender.bounds, to: self.view.window?.contentView)
+            optionsPopOver.show(relativeTo: entryRect, of: self.view.window!.contentView!, preferredEdge: .maxY)
+        }
+
         // Sets text to textbox if a file is selected
         let vc = optionsPopOver.contentViewController as! ContentViewController
         let currentFile = ColorController.shared.colorPicker.selectedFile

@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1301D0092368AE7400DFB0D1 /* SliderThumb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1301D0082368AE7400DFB0D1 /* SliderThumb.swift */; };
+		1309AAA22369197700EDE1C7 /* KeyEffect - Wrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1309AAA12369197700EDE1C7 /* KeyEffect - Wrapper.mm */; };
 		130CDEE32346D1EC007E2028 /* ColorUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130CDEE22346D1EC007E2028 /* ColorUtils.swift */; };
+		132120812366A249009E67BB /* MultiGradientSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132120802366A249009E67BB /* MultiGradientSlider.swift */; };
 		132FEEAE23481BAD008A47FF /* ColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132FEEAD23481BAD008A47FF /* ColorPickerView.swift */; };
 		133EEAB92345AC6D006D9AFF /* CustomSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13A8DEB32345380400709D9F /* CustomSplitViewController.swift */; };
 		133EEABB2345B19A006D9AFF /* CustomSplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133EEABA2345B19A006D9AFF /* CustomSplitView.swift */; };
@@ -83,7 +86,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1301D0082368AE7400DFB0D1 /* SliderThumb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SliderThumb.swift; path = SSKeyboardHue/Views/SliderThumb.swift; sourceTree = SOURCE_ROOT; };
+		1309AAA12369197700EDE1C7 /* KeyEffect - Wrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "KeyEffect - Wrapper.mm"; sourceTree = "<group>"; };
 		130CDEE22346D1EC007E2028 /* ColorUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorUtils.swift; sourceTree = "<group>"; };
+		132120802366A249009E67BB /* MultiGradientSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MultiGradientSlider.swift; path = SSKeyboardHue/Views/MultiGradientSlider.swift; sourceTree = SOURCE_ROOT; };
 		132FEEAD23481BAD008A47FF /* ColorPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerView.swift; sourceTree = "<group>"; };
 		133EEABA2345B19A006D9AFF /* CustomSplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSplitView.swift; sourceTree = "<group>"; };
 		133EEABC2345BC1F006D9AFF /* KeysView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeysView.swift; sourceTree = "<group>"; };
@@ -203,6 +209,8 @@
 				13AEB399234927B2008B1026 /* KeyboardView.swift */,
 				13FC9F0F235289F400630F99 /* CenterTextFieldCell.swift */,
 				135650432358D37600A833FF /* CustomColorWell.swift */,
+				132120802366A249009E67BB /* MultiGradientSlider.swift */,
+				1301D0082368AE7400DFB0D1 /* SliderThumb.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -283,6 +291,7 @@
 				13E0AFB52342D096009A5B41 /* Info.plist */,
 				13E0AFB02342D096009A5B41 /* Assets.xcassets */,
 				13796F15235676C8006B716D /* Keys-Wrapper.mm */,
+				1309AAA12369197700EDE1C7 /* KeyEffect - Wrapper.mm */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -342,7 +351,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13E0AFD22342D096009A5B41 /* Build configuration list for PBXNativeTarget "SSKeyboardHueTests" */;
 			buildPhases = (
-				B3B4E515819CB82690C0BC71 /* [CP] Check Pods Manifest.lock */,
 				13E0AFB72342D096009A5B41 /* Sources */,
 				13E0AFB82342D096009A5B41 /* Frameworks */,
 				13E0AFB92342D096009A5B41 /* Resources */,
@@ -361,7 +369,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13E0AFD52342D096009A5B41 /* Build configuration list for PBXNativeTarget "SSKeyboardHueUITests" */;
 			buildPhases = (
-				8A52220B2CC2B28F5CDC7F59 /* [CP] Check Pods Manifest.lock */,
 				13E0AFC22342D096009A5B41 /* Sources */,
 				13E0AFC32342D096009A5B41 /* Frameworks */,
 				13E0AFC42342D096009A5B41 /* Resources */,
@@ -492,53 +499,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		8A52220B2CC2B28F5CDC7F59 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-SSKeyboardHueUITests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B3B4E515819CB82690C0BC71 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-SSKeyboardHueTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		13E0AFA52342D095009A5B41 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -557,9 +517,12 @@
 				1370F653234E7CE900290D69 /* SSKeyboard_SwiftWrapper.mm in Sources */,
 				13FE55D02348132A0061ACFF /* SharedClasses.swift in Sources */,
 				13AF5940234555220091D6C4 /* SideBarViewControllerr.swift in Sources */,
+				1301D0092368AE7400DFB0D1 /* SliderThumb.swift in Sources */,
 				13AEB39A234927B2008B1026 /* KeyboardView.swift in Sources */,
 				133EEABB2345B19A006D9AFF /* CustomSplitView.swift in Sources */,
+				1309AAA22369197700EDE1C7 /* KeyEffect - Wrapper.mm in Sources */,
 				13FC9F10235289F400630F99 /* CenterTextFieldCell.swift in Sources */,
+				132120812366A249009E67BB /* MultiGradientSlider.swift in Sources */,
 				13A8DEB42345380400709D9F /* CustomSplitViewController.swift in Sources */,
 				13796F16235676C8006B716D /* Keys-Wrapper.mm in Sources */,
 				132FEEAE23481BAD008A47FF /* ColorPickerView.swift in Sources */,

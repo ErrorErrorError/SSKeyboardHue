@@ -14,7 +14,6 @@
 @end
 
 @implementation KeysWrapper
-@synthesize keys = _keys;
 -(instancetype)initWithSteady:(uint8_t) keyCode : (char *) letter : (uint8_t) location : (struct RGB) steadyColor {
     self = [super init];
     if (self) {
@@ -39,6 +38,11 @@
 -(void) setSteadyMode: (struct RGB) steadyColor {
     _keys.setSteadyKey(steadyColor);
 }
+
+-(void)setEffectKey:(uint8_t) _id : (enum PerKeyModes) breathOrShift {
+    _keys.setEffectKey(_id, breathOrShift);
+}
+
 -(struct RGB) getMainColor {
     return _keys.getMainColor();
 }

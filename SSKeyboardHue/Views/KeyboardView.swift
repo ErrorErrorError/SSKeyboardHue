@@ -10,7 +10,6 @@ import Cocoa
 
 @IBDesignable
 class KeyboardView: NSView {
-    var isMouseBeingDragged = false
     var startPoint: NSPoint!
     var shapeLayer: CAShapeLayer!
     let serialQueue = DispatchQueue(label: "send_keyboard_command")
@@ -26,8 +25,19 @@ class KeyboardView: NSView {
     }
 
     override func mouseDown(with event: NSEvent) {
-        resetKeysSelected()
-        startPoint = convert(event.locationInWindow, from: nil)        
+        startPoint = convert(event.locationInWindow, from: nil)
+        var resetKeys = true
+        for i in subviews {
+            if (NSPointInRect(startPoint, i.frame)) {
+                resetKeys = false
+                break
+            }
+        }
+        
+        if (resetKeys) {
+            resetKeysSelected()
+        }
+        
         shapeLayer = CAShapeLayer(layer: layer!)
         shapeLayer.lineWidth = 1.0;
         shapeLayer.strokeColor = NSColor.blue.cgColor;
@@ -36,7 +46,6 @@ class KeyboardView: NSView {
     }
     
     override func mouseDragged(with event: NSEvent) {
-        isMouseBeingDragged = true
         let point: NSPoint = convert(event.locationInWindow, from: nil)
         let path: CGMutablePath = CGMutablePath()
         path.move(to: startPoint)
@@ -74,54 +83,47 @@ class KeyboardView: NSView {
     
     public func sendColorToKeyboard(region: UInt8, sendUpdateCommand: Bool) {
 
-        var keyboardArray: [UnsafeMutableRawPointer] = []
-        var regionKey: UnsafeMutableRawPointer
+        var keyboardArray: [KeysWrapper] = []
+        var regionKey: KeysWrapper
         
-        regionKey = findAndGetKey(isRegionKey: true, keyToFind: region)!.key()
+        regionKey = findAndGetKey(isRegionKey: true, keyToFind: region)!
         if (region == regions.0) {
-            keyboardArray.reserveCapacity(Int(kModifiersSize + 1))
             keyboardArray.append(regionKey)
             let modifierKeys = UnsafeRawBufferPointer(start: &modifiers, count: Int(kModifiersSize))
             for i in modifierKeys {
-                
-                keyboardArray.append(findAndGetKey(isRegionKey: false, keyToFind: i)!.key())
+                keyboardArray.append(findAndGetKey(isRegionKey: false, keyToFind: i)!)
             }
             
         } else if (regions.1 == region) {
-            
-            keyboardArray.reserveCapacity(Int(kAlphanumsSize + 1))
             keyboardArray.append(regionKey)
             let alphaKeys = UnsafeRawBufferPointer(start: &alphanums, count: Int(kAlphanumsSize))
             for i in alphaKeys {
-                keyboardArray.append(findAndGetKey(isRegionKey: false, keyToFind: i)!.key())
+                keyboardArray.append(findAndGetKey(isRegionKey: false, keyToFind: i)!)
             }
             
         } else if (regions.2 == region) {
-            keyboardArray.reserveCapacity(Int(kEnterSize + 1))
             keyboardArray.append(regionKey)
             let enterKeys = UnsafeRawBufferPointer(start: &enter, count: Int(kEnterSize))
             for i in enterKeys {
-                keyboardArray.append(findAndGetKey(isRegionKey: false, keyToFind: i)!.key())
+                keyboardArray.append(findAndGetKey(isRegionKey: false, keyToFind: i)!)
             }
             
         } else {
             let specialKeys: UnsafeRawBufferPointer
             if (KeyboardManager.shared.keyboardManager.getKeyboardModel() == PerKeyGS65) {
-                keyboardArray.reserveCapacity(Int(kSpecialSize + 1))
                 specialKeys = UnsafeRawBufferPointer(start: &special, count: Int(kSpecialSize))
             } else  {
-                keyboardArray.reserveCapacity(Int(kSpecialPerKeySize + 1))
                 specialKeys = UnsafeRawBufferPointer(start: &specialPerKey, count: Int(kSpecialPerKeySize))
             }
             
             keyboardArray.append(regionKey)
             for i in specialKeys {
-                keyboardArray.append(findAndGetKey(isRegionKey: false, keyToFind: i)!.key())
+                keyboardArray.append(findAndGetKey(isRegionKey: false, keyToFind: i)!)
             }
         }
         
         serialQueue.async {
-            let retVal = KeyboardManager.shared.keyboardManager.sendColorKeys(&keyboardArray, sendUpdateCommand)
+            let retVal = KeyboardManager.shared.keyboardManager.sendColorKeys(keyboardArray, sendUpdateCommand)
             if (retVal != kIOReturnSuccess) {
                 print("could not send package", retVal)
             }
@@ -192,6 +194,10 @@ class KeyboardView: NSView {
         var refreshEnter: Bool
         var refreshSpecial: Bool
         
+        if (KeyboardManager.shared.effectsArray!.count > 0)  {
+            updateEffects()
+        }
+        
         if (forceRefresh) {
             refreshModifiers = true
             refreshEnter = true
@@ -204,7 +210,7 @@ class KeyboardView: NSView {
             refreshSpecial   = regionNeedsRefresh(regionToSearch: specialOrNumpadKeys)
         }
         //This allows to have consistent times between single and multiple keys
-        let millis: UInt16 = 240
+        let millis: UInt16 = 360
         KeyboardManager.shared.keyboardManager.setSleepInMillis(millis)
         
         if (refreshModifiers && !refreshAlphanums && !refreshEnter && !refreshSpecial) {
@@ -271,6 +277,21 @@ class KeyboardView: NSView {
         }
     }
     
+    private func updateEffects() {
+        let effectArray = KeyboardManager.shared.effectsArray!
+        serialQueue.async {
+            for i in 0..<effectArray.count {
+                let effect = effectArray[i] as! KeyEffectWrapper
+                
+                // let sendUpdateCommand = (!((i + 1) < effectArray.count))
+                let retVal = KeyboardManager.shared.keyboardManager.sendEffect(effect, false)
+                if (retVal != kIOReturnSuccess) {
+                    print("could not send package", retVal)
+                }
+            }
+        }
+    }
+    
     private func regionNeedsRefresh(regionToSearch: UInt8) -> Bool {
         var needRefresh = false
         var index = 0
@@ -284,6 +305,18 @@ class KeyboardView: NSView {
             }
         }
         return needRefresh
+    }
+    
+    public func getUsedEffectId() -> [UInt8] {
+        var effectIds: [UInt8] = []
+        for keySubview in subviews {
+            let keys = keySubview as! KeysView
+            if (!effectIds.contains(keys.keyModel.getEffectId()) && keys.keyModel.getEffectId() != 0) {
+                effectIds.append(keys.keyModel.getEffectId())
+            }
+        }
+        
+        return effectIds
     }
     
     public func findAndGetKey(isRegionKey: Bool, keyToFind: UInt8) ->  KeysWrapper? {
@@ -300,7 +333,6 @@ class KeyboardView: NSView {
                 return keyView.keyModel
             }
         }
-        
         // Will never get to this point
         return nil
     }
