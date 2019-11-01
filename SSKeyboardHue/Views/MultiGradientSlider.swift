@@ -8,17 +8,17 @@
 
 import Cocoa
 protocol MultiGradientSliderDelegate: class {
-    func sliderDidChange(_ sliderThumb: SliderThumb, mouseUp: Bool)
+    func viewDidChange(_ sliderThumb: SliderThumb, mouseUp: Bool)
 }
 
 @IBDesignable
 class MultiGradientSlider: NSView {
     weak var delegate: MultiGradientSliderDelegate?
 
-    var backgroundColorGradient: NSGradient!
-    let widthSlider: CGFloat = 18
-    let heightSlider: CGFloat = 21
-    var gradientMode: PerKeyModes = ColorShift
+    private var backgroundColorGradient: NSGradient!
+    private let widthSlider: CGFloat = 18
+    private let heightSlider: CGFloat = 21
+    private var gradientMode: PerKeyModes = ColorShift
     
     var currentSlider: SliderThumb!
     var maxSize = 14
@@ -40,52 +40,49 @@ class MultiGradientSlider: NSView {
     }
     
     private func setup() {
-        let thumbOne = SliderThumb(frame: NSRect(x: 0, y: 0, width: widthSlider, height: heightSlider))
-        let thumbTwo = SliderThumb(frame: NSRect(x: 60, y: 0, width: widthSlider, height: heightSlider))
-        let thumbThree = SliderThumb(frame: NSRect(x: 120, y: 0, width: widthSlider, height: heightSlider))
-        thumbOne.color = RGB(r: 0xff, g: 0x0, b: 0xe1).nsColor
-        thumbTwo.color = RGB(r: 0xff, g: 0xea, b: 0).nsColor
-        thumbThree.color = RGB(r: 0, g: 0xcc, b: 0xff).nsColor
-        addSubview(thumbOne)
-        addSubview(thumbTwo)
-        addSubview(thumbThree)
-        
+        createDefaultGradientColorShift()
     }
     
     override func mouseDown(with event: NSEvent) {
         super.mouseDown(with: event)
-        let currentPoint = convert(event.locationInWindow, from: nil)
         
+        let currentPoint = convert(event.locationInWindow, from: nil)
+        for i in subviews {
+            if (NSPointInRect(currentPoint, i.frame)) {
+                return // Only return if a subview was clicked
+            }
+        }
+        
+        // create new subview if there was no thumbs clicked
+        if (subviews.count < maxSize) {
+        let point = calcPoint(point: currentPoint)
+            let newRectForThumb = NSRect(x: point.x, y: point.y, width: widthSlider, height: heightSlider)
+            let newSlider = SliderThumb(frame: newRectForThumb)
+            addSubview(newSlider)
+            newSlider.color = backgroundColorGradient.interpolatedColor(atLocation: point.x / (bounds.width - widthSlider))
+            needsDisplay = true
+        }
+    }
+    
+    override func mouseDragged(with event: NSEvent) {
+        super.mouseDragged(with: event)
+        let currentPoint = convert(event.locationInWindow, from: nil)
         for i in subviews {
             if (NSPointInRect(currentPoint, i.frame)) {
                 currentSlider = i as? SliderThumb
             }
         }
         
-        if (currentSlider != nil) {
+        if (currentSlider == nil) {
             return
         }
         
-        let point = calcPoint(point: currentPoint)
-        let newRectForThumb = NSRect(x: point.x, y: point.y, width: widthSlider, height: heightSlider)
-        let newThumb = SliderThumb(frame: newRectForThumb)
-        addSubview(newThumb)
-        newThumb.color = backgroundColorGradient.interpolatedColor(atLocation: point.x / (bounds.width - widthSlider))
-        
-    }
-    
-    override func mouseDragged(with event: NSEvent) {
-        if (currentSlider == nil) {
-            return super.mouseDragged(with: event)
-        }
-        
-        let currentPoint = convert(event.locationInWindow, from: nil)
         currentSlider.setFrameOrigin(calcPoint(point: currentPoint))
+        delegate?.viewDidChange(currentSlider, mouseUp: false)
         needsDisplay = true
-        
-        delegate?.sliderDidChange(currentSlider, mouseUp: false)
+        return super.mouseDragged(with: event)
     }
-    
+        
     private func calcPoint(point: NSPoint) -> NSPoint {
         var x: CGFloat
         var y: CGFloat
@@ -103,7 +100,6 @@ class MultiGradientSlider: NSView {
         } else {
             y = point.y
         }
-        
         return NSPoint(x: x, y: y)
     }
     
@@ -119,29 +115,21 @@ class MultiGradientSlider: NSView {
                     currentSlider.setFrameOrigin(NSPoint(x: currentSlider.frame.origin.x, y: 0))
                 }
             }
-            
-            delegate?.sliderDidChange(currentSlider, mouseUp: true)
-            currentSlider = nil
+            delegate?.viewDidChange(currentSlider, mouseUp: true)
         }
         
+        currentSlider = nil
         needsDisplay = true
     }
     
     func getSubviewsInOrder() -> [SliderThumb] {
-        var subviewsInOrder: [SliderThumb] = subviews as! [SliderThumb]
-        for i in 0..<subviews.count {
-            for k in (i+1)..<subviews.count {
-                if (subviews[i].frame.origin.x > subviews[k].frame.origin.x) {
-                    let temp = subviews[i]
-                    subviewsInOrder[i] = subviews[k] as! SliderThumb;
-                    subviewsInOrder[k] = temp as! SliderThumb;
-                }
-             }
+        let subviewsInOrder = subviews.sorted { (slider1, slider2) -> Bool in
+            return slider1.frame.origin.x < slider2.frame.origin.x
         }
-        return subviewsInOrder
+        return subviewsInOrder as! [SliderThumb]
     }
     
-    func setThumbsFromTransitions(transitions: UnsafeMutablePointer<KeyTransition>, count: Int) {
+    func setThumbsFromTransitions(transitions: UnsafeMutablePointer<KeyTransition>, count: Int, mode: PerKeyModes) {
         for view in subviews {
             view.removeFromSuperview()
         }
@@ -152,15 +140,32 @@ class MultiGradientSlider: NSView {
         }
         
         var xPoint:CGFloat = 0
-        for i in 0..<count {
-            let transition = transitions[i]
-            let point = NSPoint(x: xPoint, y: 0)
-            xPoint += (CGFloat(transition.duration) * (bounds.width - widthSlider)) / total
-            let size = NSSize(width: widthSlider, height: heightSlider)
-            let rect = NSRect(origin: point, size: size)
-            let newThumb = SliderThumb(frame: rect, trans: transition)
-            addSubview(newThumb)
+        if (mode == ColorShift) {
+            for i in 0..<count {
+                let transition = transitions[i]
+                let point = NSPoint(x: xPoint, y: 0)
+                xPoint += (CGFloat(transition.duration) * (bounds.width - widthSlider)) / total
+                let size = NSSize(width: widthSlider, height: heightSlider)
+                let rect = NSRect(origin: point, size: size)
+                let newThumb = SliderThumb(frame: rect, trans: transition)
+                addSubview(newThumb)
+            }
+        } else {
+            for i in 0..<count/2 {
+                let index = i * 2
+                var transition = transitions[index]
+                let blackTransition = transitions[index + 1]
+                let newDuration = transition.duration + blackTransition.duration
+                transition.duration = newDuration
+                let point = NSPoint(x: xPoint, y: 0)
+                xPoint += (CGFloat(newDuration) * (bounds.width - widthSlider)) / total
+                let size = NSSize(width: widthSlider, height: heightSlider)
+                let rect = NSRect(origin: point, size: size)
+                let newThumb = SliderThumb(frame: rect, trans: transition)
+                addSubview(newThumb)
+            }
         }
+        
         needsDisplay = true
     }
     
@@ -175,6 +180,21 @@ class MultiGradientSlider: NSView {
         return transitions
     }
     
+    func getTransitionArrayBreathing() -> [KeyTransition] {
+        var transitions: [KeyTransition] = []
+        
+        let sliderThumbs = getSubviewsInOrder()
+        for i in 0..<sliderThumbs.count {
+            var transition = sliderThumbs[i].transition
+            let newDuration = transition.duration / 2
+            transition.duration = newDuration
+            transitions.append(transition)
+            let newTrans = KeyTransition(color: RGB(r: 0, g: 0, b: 0), duration: newDuration)
+            transitions.append(newTrans)
+        }
+        
+        return transitions
+    }
     override func draw(_ dirtyRect: NSRect) {
         let newRect = NSRect(x: bounds.origin.x + widthSlider/2, y: heightSlider, width: bounds.width - widthSlider, height: bounds.height - heightSlider)
         var colorArr: [NSColor] = []
@@ -216,4 +236,42 @@ class MultiGradientSlider: NSView {
         backgroundColorGradient.draw(in: newRect, angle: 0)
     }
     
+    func setGradientMode(colorShiftOrBreathing: PerKeyModes, fromKey: Bool) {
+        gradientMode = colorShiftOrBreathing
+        if (gradientMode == ColorShift && !fromKey) {
+            createDefaultGradientColorShift()
+        } else if (gradientMode == Breathing && !fromKey){
+            createDefaultGradientBreathing()
+        }
+        
+        needsDisplay = true
+    }
+    
+    private func createDefaultGradientBreathing() {
+        for i in subviews {
+            i.removeFromSuperview()
+        }
+        
+        let thumbOne = SliderThumb(frame: NSRect(x: 0, y: 0, width: widthSlider, height: heightSlider))
+        thumbOne.color = RGB(r: 0xff, g: 0x0, b: 0x0).nsColor
+        addSubview(thumbOne)
+    }
+    
+    private func createDefaultGradientColorShift() {
+        for i in subviews {
+            i.removeFromSuperview()
+        }
+        
+        let thumbOne = SliderThumb(frame: NSRect(x: 0, y: 0, width: widthSlider, height: heightSlider))
+        let thumbTwo = SliderThumb(frame: NSRect(x: 60, y: 0, width: widthSlider, height: heightSlider))
+        let thumbThree = SliderThumb(frame: NSRect(x: 120, y: 0, width: widthSlider, height: heightSlider))
+        thumbOne.color = RGB(r: 0xff, g: 0x0, b: 0xe1).nsColor
+        thumbTwo.color = RGB(r: 0xff, g: 0xea, b: 0).nsColor
+        thumbThree.color = RGB(r: 0, g: 0xcc, b: 0xff).nsColor
+        addSubview(thumbOne)
+        addSubview(thumbTwo)
+        addSubview(thumbThree)
+
+        
+    }
 }

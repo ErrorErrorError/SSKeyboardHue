@@ -31,13 +31,13 @@ class CustomColorWell: NSView {
     override func mouseUp(with event: NSEvent) {
         super.mouseUp(with: event)
         if (isSelected) {
-            if (ColorController.shared.reactionBoxColors!.count < 1) {
+            if (ColorController.shared.reactionBoxColors.count < 1) {
                 ColorController.shared.setColor(color)
             }
             
-            ColorController.shared.reactionBoxColors?.add(self)
+            ColorController.shared.reactionBoxColors.add(self)
         } else if (!isSelected) {
-            ColorController.shared.reactionBoxColors?.remove(self)
+            ColorController.shared.reactionBoxColors.remove(self)
         }
         
         needsDisplay = true
@@ -65,7 +65,7 @@ class CustomColorWell: NSView {
     
     func removeSelected() {
         isSelected = false
-        ColorController.shared.reactionBoxColors?.remove(self)
+        ColorController.shared.reactionBoxColors.remove(self)
         needsDisplay = true
     }
 }

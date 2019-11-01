@@ -30,11 +30,13 @@ class ContentViewController: NSViewController {
         let keysSpecial = KeyboardManager.shared.keyboardView.getKeysArray(region: regions.3)
         let arraySpecial = createPacket(keysArray: keysSpecial)
         
-        // let effects = createEffectsPacket()
+        let effects = createEffectsPacket()
+        
         var data = Data(bytes: arrayModifiers, count: arrayModifiers.count)
         data.append(arrayAlpha, count: arrayAlpha.count)
         data.append(arrayEnter, count: arrayEnter.count)
         data.append(arraySpecial, count: arraySpecial.count)
+        data.append(effects, count: effects.count)
         
         if let filePath = filePath(forKey: presetName.stringValue) {
             do {
@@ -49,9 +51,32 @@ class ContentViewController: NSViewController {
     }
     
     private func createEffectsPacket() -> [UInt8] {
-        // let effects = KeyboardManager.shared.effectsArray!
-        let arrayPacket: [UInt8] = Array(repeating: 0, count: 0)
-        
+        let effects = KeyboardManager.shared.effectsArray
+        var arrayPacket: [UInt8] = []
+        for i in effects {
+            let effect = i as! KeyEffectWrapper
+            arrayPacket.append(effect.getEffectId())
+            arrayPacket.append(effect.getTransitionSize())
+            for i in 0..<effect.getTransitionSize() {
+                let transition = effect.getTransitions()![Int(i)]
+                arrayPacket.append(transition.color.r)
+                arrayPacket.append(transition.color.g)
+                arrayPacket.append(transition.color.b)
+                arrayPacket.append(UInt8(transition.duration & 0x00ff))
+                arrayPacket.append(UInt8((transition.duration & 0xff00) >> 8))
+            }
+            arrayPacket.append(UInt8(effect.getWaveDirection().rawValue))
+            
+            arrayPacket.append(UInt8(effect.getWaveLength() & 0x00ff))
+            arrayPacket.append(UInt8((effect.getWaveLength() & 0xff00) >> 8))
+            
+            arrayPacket.append(UInt8(effect.getWaveOrigin().x & 0x00ff))
+            arrayPacket.append(UInt8((effect.getWaveOrigin().x & 0xff00) >> 8))
+            arrayPacket.append(UInt8(effect.getWaveOrigin().y & 0x00ff))
+            arrayPacket.append(UInt8((effect.getWaveOrigin().y & 0xff00) >> 8))
+            arrayPacket.append(UInt8(effect.getWaveRadControl().rawValue))
+            arrayPacket.append(effect.isWaveModeActive() ? 1 : 0)
+        }
         /// TODO - Needs implementation
         return arrayPacket
     }
@@ -62,16 +87,6 @@ class ContentViewController: NSViewController {
         for i in 0..<keysArray.count {
             let index = (12 * i);
             let currentKey = keysArray[i]
-            var mode: UInt8;
-            if (currentKey.getMode() == Steady) {
-                mode = 0x01;
-            } else if (currentKey.getMode() == Reactive) {
-                mode = 0x08;
-            } else if (currentKey.getMode() == Disabled){
-                mode = 0x03;
-            } else {
-                mode = 0x0;
-            }
                         
             // The first key should be the the region key.
             arrayPacket[index]    = currentKey.getRegion()
@@ -87,10 +102,8 @@ class ContentViewController: NSViewController {
             arrayPacket[index + 8]    = UInt8(currentKey.getSpeed() & 0x00ff)
             arrayPacket[index + 9]    = UInt8((currentKey.getSpeed() & 0xff00) >> 8)
             arrayPacket[index + 10]   = currentKey.getEffectId()
-            arrayPacket[index + 11]   = mode
+            arrayPacket[index + 11]   = UInt8(currentKey.getMode().rawValue)
         }
-       
-        
         
         return arrayPacket
     }

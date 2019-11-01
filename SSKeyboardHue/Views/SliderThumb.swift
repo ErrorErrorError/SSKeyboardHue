@@ -56,7 +56,7 @@ class SliderThumb: NSView {
                     distance = ((widthSuperview - thumb.frame.origin.x) + firstThumb.frame.origin.x) / widthSuperview
                 }
                 let currentSpeed = CGFloat(ColorController.shared.colorPicker.speedSlider.floatValue)
-                let durationAnimation: UInt16 = UInt16(ceil(distance *  currentSpeed))
+                let durationAnimation: UInt16 = UInt16((distance *  currentSpeed))
                 transition.duration = durationAnimation
                 break
             }
@@ -123,15 +123,20 @@ class SliderThumb: NSView {
     
     private func checkTransitionArray() {
         if (isSelected) {
-            ColorController.shared.transitionThumbColors?.add(self)
+            let thumbsArray = ColorController.shared.transitionThumbColors
+            for i in thumbsArray {
+                (i as! SliderThumb).removeSelected()
+            }
+            ColorController.shared.setColor(color)
+            ColorController.shared.transitionThumbColors.add(self)
         } else {
-            ColorController.shared.transitionThumbColors?.remove(self)
+            ColorController.shared.transitionThumbColors.remove(self)
         }
     }
     
     func removeSelected() {
         isSelected = false
-        ColorController.shared.transitionThumbColors?.remove(self)
+        ColorController.shared.transitionThumbColors.remove(self)
         needsDisplay = true
     }
 }

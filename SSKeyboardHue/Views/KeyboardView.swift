@@ -194,7 +194,7 @@ class KeyboardView: NSView {
         var refreshEnter: Bool
         var refreshSpecial: Bool
         
-        if (KeyboardManager.shared.effectsArray!.count > 0)  {
+        if (KeyboardManager.shared.effectsArray.count > 0)  {
             updateEffects()
         }
         
@@ -210,7 +210,7 @@ class KeyboardView: NSView {
             refreshSpecial   = regionNeedsRefresh(regionToSearch: specialOrNumpadKeys)
         }
         //This allows to have consistent times between single and multiple keys
-        let millis: UInt16 = 360
+        let millis: UInt16 = 240
         KeyboardManager.shared.keyboardManager.setSleepInMillis(millis)
         
         if (refreshModifiers && !refreshAlphanums && !refreshEnter && !refreshSpecial) {
@@ -278,7 +278,7 @@ class KeyboardView: NSView {
     }
     
     private func updateEffects() {
-        let effectArray = KeyboardManager.shared.effectsArray!
+        let effectArray = KeyboardManager.shared.effectsArray
         serialQueue.async {
             for i in 0..<effectArray.count {
                 let effect = effectArray[i] as! KeyEffectWrapper
@@ -295,7 +295,7 @@ class KeyboardView: NSView {
     private func regionNeedsRefresh(regionToSearch: UInt8) -> Bool {
         var needRefresh = false
         var index = 0
-        let keysSelected = KeyboardManager.shared.keysSelected!
+        let keysSelected = KeyboardManager.shared.keysSelected
         while (!needRefresh && index < keysSelected.count) {
             let keys = keysSelected[index] as! KeysView
             if ((keys.keyModel.getRegion()) == regionToSearch) {

@@ -37,7 +37,7 @@ class KeysView: NSView {
     required init(frame frameRect: NSRect, key: KeysWrapper) {
         super.init(frame: frameRect)
         self.keyModel = key
-        setup()
+        setup() 
     }
     
     private func setup() {
@@ -147,20 +147,20 @@ class KeysView: NSView {
     func setSelected(selected: Bool, fromGroupSelection: Bool) {
         isSelected = selected
         if (selected && fromGroupSelection) {
-            if (!KeyboardManager.shared.keysSelected!.contains(self)) {
-                KeyboardManager.shared.keysSelected!.add(self)
+            if (!KeyboardManager.shared.keysSelected.contains(self)) {
+                KeyboardManager.shared.keysSelected.add(self)
             }
         } else if (selected && !fromGroupSelection) {
-            if (KeyboardManager.shared.keysSelected!.count < 1) {
+            if (KeyboardManager.shared.keysSelected.count < 1) {
                 ColorController.shared.setKey(key: keyModel)
             }
             
-            if (!KeyboardManager.shared.keysSelected!.contains(self)) {
-                KeyboardManager.shared.keysSelected!.add(self)
+            if (!KeyboardManager.shared.keysSelected.contains(self)) {
+                KeyboardManager.shared.keysSelected.add(self)
             }
             
         } else {
-            KeyboardManager.shared.keysSelected!.remove(self)
+            KeyboardManager.shared.keysSelected.remove(self)
         }
         
         needsDisplay = true

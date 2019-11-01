@@ -170,7 +170,7 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
                     shiftedPosition += 8
                 }
                 
-                if (keys.value == "ENTER") {
+                if (keys.value == "ENTER ") {
                     height += 46
                 }
 

@@ -19,6 +19,10 @@ class ColorPickerController: NSViewController {
     @IBOutlet weak var presetDeleteButton: NSButton!
     @IBOutlet weak var presetsLabel: NSTextField!
     @IBOutlet weak var multiGradientSlider: MultiGradientSlider!
+    @IBOutlet weak var waveModeCheckBox: NSButton!
+    @IBOutlet weak var setOriginButton: NSButton!
+    @IBOutlet weak var waveDirectionPopup: NSPopUpButton!
+    @IBOutlet weak var waveLengthSlider: NSSlider!
     
     var filesList: [URL] = []
     var selectedFile: URL! {
@@ -44,6 +48,8 @@ class ColorPickerController: NSViewController {
     var speedTextRect: NSRect!
     var presetsLabelRect: NSRect!
     
+    var shiftDown: CGFloat = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.wantsLayer = true
@@ -56,7 +62,7 @@ class ColorPickerController: NSViewController {
         
         currentKeyMode.addItem(withTitle: "Steady")
         currentKeyMode.addItem(withTitle: "ColorShift")
-        // currentKeyMode.addItem(withTitle: "Breathing")
+        currentKeyMode.addItem(withTitle: "Breathing")
         currentKeyMode.addItem(withTitle: "Reactive")
         currentKeyMode.addItem(withTitle: "Disabled")
         setUpReactiveViews()
@@ -64,12 +70,18 @@ class ColorPickerController: NSViewController {
         presetDeleteButton.isEnabled = false
     }
     
+    override func viewWillAppear() {
+        view.layer?.backgroundColor = colorBackground.nsColor.cgColor
+        view.roundCorners(cornerRadius: 10.0)
+        ColorController.shared.setColor(NSColor.white.usingColorSpace(.genericRGB)!)
+    }
+
     func checkForPresets() {
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = paths[0]
         let docURL = URL(string: documentsDirectory)!
         let directoryPath = docURL.appendingPathComponent("presets")
-
+        
         if FileManager.default.fileExists(atPath: directoryPath.absoluteString) {
             filesList = contentsOf(folder: directoryPath)
             self.presetsTableView.reloadData()
@@ -77,47 +89,98 @@ class ColorPickerController: NSViewController {
     }
     
     func contentsOf(folder: URL) -> [URL] {
-    
-      let fileManager = FileManager.default
-      do {
-        let contents = try fileManager.contentsOfDirectory(at: folder, includingPropertiesForKeys: .none, options: .skipsHiddenFiles)
-        return contents
-      } catch {
-        return []
-      }
+        
+        let fileManager = FileManager.default
+        do {
+            let contents = try fileManager.contentsOfDirectory(at: folder, includingPropertiesForKeys: .none, options: .skipsHiddenFiles)
+            return contents
+        } catch {
+            return []
+        }
     }
-
+    
     private func setKeyboardColorFromFile() {
         let data = try? Data(contentsOf: selectedFile)
         let array = [UInt8](data!)
         
         if (KeyboardManager.shared.keyboardManager.getKeyboardModel() == PerKeyGS65 || KeyboardManager.shared.keyboardManager.getKeyboardModel() == PerKey) {
-            for i in 0...(array.count/12) - 1 {
+            var numKeys: Int
+            if (KeyboardManager.shared.keyboardManager.getKeyboardModel() == PerKeyGS65) {
+                numKeys = KeyboardLayout.keysGS65.count + KeyboardLayout.nullGS65Keys.count
+            } else {
+                numKeys = KeyboardLayout.keysPerKey.count + KeyboardLayout.nullPerKey.count
+            }
+            
+            for i in 0..<(numKeys) {
+                let keyViewArray = KeyboardManager.shared.keyboardView.subviews
                 let currentIndex  = i * 12
                 let region = array[currentIndex]
                 let keycode = array[currentIndex + 1]
-                let keyViewArray = KeyboardManager.shared.keyboardView.subviews
-                let mode = array[currentIndex + 11]
                 let colorMain = RGB(r: array[currentIndex + 2], g: array[currentIndex + 3], b: array[currentIndex + 4])
                 let colorActive = RGB(r: array[currentIndex + 5], g: array[currentIndex + 6], b: array[currentIndex + 7])
                 let duration = UInt16(array[currentIndex + 9]) << 8 | UInt16(array[currentIndex + 8])
+                let effectId = array[currentIndex + 10]
+                let mode: PerKeyModes = PerKeyModes(rawValue: PerKeyModes.RawValue(array[currentIndex + 11]))
                 let foundKeyArray = keyViewArray.filter {(findKey) -> Bool in
                     let castKey = findKey as! KeysView
                     return castKey.keyModel.getRegion() == region && castKey.keyModel.getKeyCode() == keycode
                 }
+                
                 let keyFound = foundKeyArray[0] as! KeysView
-                
-                if (mode == 0x01) {
+                if (mode == Steady) {
                     keyFound.setSteady(newColor: colorMain.nsColor)
-                } else if (mode == 0x08) {
+                } else if (mode == Reactive) {
                     keyFound.setReactive(active: colorActive.nsColor, rest: colorMain.nsColor, speed: duration)
-                } else if (mode == 0x03){
-                    keyFound.setDisabled()
+                } else if (mode == ColorShift || mode == Breathing) {
+                    keyFound.setEffectKey(_id: effectId, mode: mode)
                 } else {
-                    /// Todo - Breathing and Waves
+                    keyFound.setDisabled()
                 }
-                
             }
+            
+            // If there is any effects in the file, it will detect the effects and load them into the effects array.
+            // Minimum effect size is 16 bytes
+            if (array.count > (numKeys * 12)) {
+                var startIndexEffect = (array.count - (array.count - (numKeys * 12)))
+                var transitions: [KeyTransition] = []
+                while (startIndexEffect < array.count) {
+                    let effectId = array[startIndexEffect]
+                    let transitionSize = array[startIndexEffect + 1]
+                    for i in 0..<transitionSize {
+                        let index: Int = (startIndexEffect + 2) + Int((i * 5))
+                        let transitionColor = RGB(r: array[index], g: array[index + 1], b: array[index + 2])
+                        let transitionDuration = UInt16(array[index + 4]) << 8 | UInt16(array[index + 3])
+                        transitions.append(KeyTransition(color: transitionColor, duration: transitionDuration))
+                    }
+                    
+                    startIndexEffect += Int((2 + (transitionSize * 5)))
+                    let waveDirection = array[startIndexEffect]
+                    let waveLength = UInt16(array[startIndexEffect + 2]) << 8 | UInt16(array[startIndexEffect + 1])
+                    let wavePointX = UInt16(array[startIndexEffect + 4]) << 8 | UInt16(array[startIndexEffect + 3])
+                    let wavePointY = UInt16(array[startIndexEffect + 6]) << 8 | UInt16(array[startIndexEffect + 5])
+                    let wavePoint = KeyPoint(x: wavePointX, y: wavePointY)
+                    let waveRadControl = array[startIndexEffect + 7]
+                    let isWaveModeActive = array[startIndexEffect + 8]
+                    
+                    let keyEffect = KeyEffectWrapper(keyEffect: effectId, &transitions, transitionSize)
+                    
+                    if (isWaveModeActive == 1) {
+                        keyEffect?.setWaveMode(wavePoint, waveLength, WaveRadControl(rawValue: WaveRadControl.RawValue(waveRadControl)), WaveDirection(rawValue: WaveDirection.RawValue(waveDirection)))
+                    }
+                    
+                    let effectsArray = KeyboardManager.shared.effectsArray
+                    for effects in effectsArray {
+                        let effect = effects as! KeyEffectWrapper
+                        if (effect.getEffectId() == effectId) {
+                            effectsArray.remove(effect)
+                        }
+                    }
+                    
+                    KeyboardManager.shared.effectsArray.add(keyEffect!)
+                    startIndexEffect += 9
+                }
+            }
+            /// Find effect in array
         } else {
             /// TODO - Implement ThreeRegion
         }
@@ -126,12 +189,12 @@ class ColorPickerController: NSViewController {
     }
     
     private func setUpReactiveViews() {
-        activeColor = CustomColorWell(frame: NSRect(origin: CGPoint(x: 26, y: 360), size: CGSize(width: 25, height: 25)))
+        activeColor = CustomColorWell(frame: NSRect(origin: CGPoint(x: 22, y: 360), size: CGSize(width: 25, height: 25)))
         activeColor.color = RGB(r: 0xff, g: 0x00, b: 0x00).nsColor
         activeColor.roundCorners(cornerRadius: 5.0)
         activeColor.isHidden = true
         
-        activeText = NSTextView(frame: NSRect(origin: CGPoint(x: 56, y: 350), size: CGSize(width: 45, height: 25)))
+        activeText = NSTextView(frame: NSRect(origin: CGPoint(x: 52, y: 352), size: CGSize(width: 45, height: 25)))
         activeText.isHidden = true
         activeText.string = "Active"
         activeText.isEditable = false
@@ -142,13 +205,13 @@ class ColorPickerController: NSViewController {
         restColor.roundCorners(cornerRadius: 5.0)
         restColor.isHidden = true
         
-        restText = NSTextView(frame: NSRect(origin: CGPoint(x: 146, y: 350), size: CGSize(width: 35, height: 25)))
+        restText = NSTextView(frame: NSRect(origin: CGPoint(x: 146, y: 352), size: CGSize(width: 35, height: 25)))
         restText.isHidden = true
         restText.string = "Rest"
         restText.isEditable = false
         restText.textColor = NSColor.white
         
-        speedRect = NSRect(x: 25, y: 310, width: 150, height: 20)
+        speedRect = NSRect(x: 16, y: 310, width: 170, height: 20)
         speedSlider = NSSlider(frame: speedRect)
         speedSlider.isHidden = true
         speedSlider.minValue = 100
@@ -156,15 +219,15 @@ class ColorPickerController: NSViewController {
         speedSlider.cell!.target = self
         speedSlider.cell!.action = #selector(setSpeed(_:))
         speedSlider.intValue = 300
-
-        speedTextRect = NSRect(x:23, y: 340, width: 55, height: 10)
+        
+        speedTextRect = NSRect(x:14, y: 332, width: 55, height: 10)
         speedText = NSTextView(frame: speedTextRect)
         speedText.isHidden = true
         speedText.string = "Speed"
         speedText.isEditable = false
         speedText.textColor = NSColor.white
         
-        speedBoxRect = NSRect(x: 180, y: 317, width: 55, height: 10)
+        speedBoxRect = NSRect(x: 188, y: 313, width: 55, height: 10)
         speedBox = NSTextView(frame: speedBoxRect)
         speedBox.isHidden = true
         var trimmed = speedSlider.intValue.description
@@ -172,7 +235,7 @@ class ColorPickerController: NSViewController {
         speedBox.string = trimmed + "s"
         speedBox.isEditable = false
         speedBox.textColor = NSColor.white
-
+        
         view.addSubview(activeText)
         view.addSubview(restText)
         view.addSubview(activeColor)
@@ -181,7 +244,8 @@ class ColorPickerController: NSViewController {
         view.addSubview(speedText)
         view.addSubview(speedBox)
     }
-    private func showReactive(show: Bool) {
+    
+    private func showReactive(show: Bool, fromKey:Bool) {
         let isHidden = (show) ? false : true
         activeColor.isHidden = isHidden
         restColor.isHidden = isHidden
@@ -190,33 +254,17 @@ class ColorPickerController: NSViewController {
         speedSlider.isHidden = isHidden
         speedText.isHidden = isHidden
         speedBox.isHidden = isHidden
-        speedSlider.minValue = 100
-        speedSlider.maxValue = 1000
-        speedSlider.intValue = 300
-    }
-    
-    private func showColorShift(show: Bool) {
-        let isHidden = (show) ? false : true
-        multiGradientSlider.isHidden = isHidden
-        speedSlider.isHidden = isHidden
-        speedText.isHidden = isHidden
-        speedBox.isHidden = isHidden
-        speedSlider.minValue = 100
-        speedSlider.maxValue = 3000
-        speedSlider.intValue = 300
-    }
-    
-    var shiftDown: CGFloat = 0
-    @IBAction func setKeyMode(_ sender: NSPopUpButtonCell) {
-        if (presetsTableRect == nil) {
-            presetsTableRect = presetsTableView.superview?.superview!.frame
-            presetsLabelRect = presetsLabel.frame
-        }
         
-        if (sender.titleOfSelectedItem == "Reactive") {
+        if(show) {
+            speedSlider.minValue = 100
+            speedSlider.maxValue = 1000
+            
+            if (!fromKey) {
+                speedSlider.intValue = 300
+            }
+            updateSpeedSliderValue()
+            
             shiftDown = 80
-            showColorShift(show: false)
-            showReactive(show: true)
             presetsTableView.superview?.superview!.frame = NSRect(x: (presetsTableView.superview?.superview!.frame.origin.x)!, y: (presetsTableView.superview?.superview!.frame.origin.y)!, width: presetsTableRect.width, height: presetsTableRect.height - shiftDown)
             
             speedSlider.frame.origin.y = speedRect.origin.y
@@ -224,30 +272,113 @@ class ColorPickerController: NSViewController {
             speedText.frame.origin.y = speedTextRect.origin.y
             presetsLabel.frame.origin.y = presetsLabelRect.origin.y - shiftDown
             presetDeleteButton.frame.origin.y = presetsLabelRect.origin.y - shiftDown
-        } else if (sender.titleOfSelectedItem == "ColorShift") {
-            shiftDown = 120
-            showReactive(show: false)
-            showColorShift(show: true)
+        }
+        
+    }
+    
+    private func showColorShift(show: Bool, fromKey: Bool) {
+        let isHidden = (show) ? false : true
+        multiGradientSlider.isHidden = isHidden
+        speedSlider.isHidden = isHidden
+        speedText.isHidden = isHidden
+        speedBox.isHidden = isHidden
+        waveModeCheckBox.isHidden = isHidden
+        setOriginButton.isHidden = isHidden
+        waveDirectionPopup.isHidden = isHidden
+        waveLengthSlider.isHidden = isHidden
+        
+        if(show) {
+            speedSlider.minValue = 100
+            speedSlider.maxValue = 3000
+            if (!fromKey) {
+                speedSlider.intValue = 300
+                waveModeCheckBox.state = .off
+            }
+            updateSpeedSliderValue()
             
-            speedSlider.frame.origin.y = speedRect.origin.y - 40
-            speedBox.frame.origin.y = speedBoxRect.origin.y - 40
-            speedText.frame.origin.y = speedTextRect.origin.y - 40
+            shiftDown = 210
+            speedSlider.frame.origin.y = speedRect.origin.y - 26
+            speedBox.frame.origin.y = speedBoxRect.origin.y - 26
+            speedText.frame.origin.y = speedTextRect.origin.y - 26
             presetsLabel.frame.origin.y = presetsLabelRect.origin.y - shiftDown
             presetDeleteButton.frame.origin.y = presetsLabelRect.origin.y - shiftDown
-
+            
             presetsTableView.superview?.superview!.frame = NSRect(x: (presetsTableView.superview?.superview!.frame.origin.x)!, y: (presetsTableView.superview?.superview!.frame.origin.y)!, width: presetsTableRect.width, height: presetsTableRect.height - shiftDown)
-            } else {
-
-            showReactive(show: false)
-            showColorShift(show: false)
-            presetsTableView.superview?.superview!.frame = presetsTableRect
-        
-            presetsLabel.frame.origin.y = presetsLabelRect.origin.y
-            presetDeleteButton.frame.origin.y = presetsLabelRect.origin.y
-
+            multiGradientSlider.setGradientMode(colorShiftOrBreathing: ColorShift, fromKey: fromKey)
+        } else {
+            waveModeCheckBox.state = .off
         }
-
-        updateKeys(shouldUpdateKeys: true)
+    }
+    
+    private func showBreathing(show: Bool, fromKey: Bool) {
+        let isHidden = (show) ? false : true
+        multiGradientSlider.isHidden = isHidden
+        speedSlider.isHidden = isHidden
+        speedText.isHidden = isHidden
+        speedBox.isHidden = isHidden
+        
+        if (show) {
+            speedSlider.minValue = 200
+            speedSlider.maxValue = 3000
+            
+            if (!fromKey) {
+                speedSlider.intValue = 400
+            }
+            updateSpeedSliderValue()
+            
+            shiftDown = 120
+            speedSlider.frame.origin.y = speedRect.origin.y - 26
+            speedBox.frame.origin.y = speedBoxRect.origin.y - 26
+            speedText.frame.origin.y = speedTextRect.origin.y - 26
+            presetsLabel.frame.origin.y = presetsLabelRect.origin.y - shiftDown
+            presetDeleteButton.frame.origin.y = presetsLabelRect.origin.y - shiftDown
+            
+            presetsTableView.superview?.superview!.frame = NSRect(x: (presetsTableView.superview?.superview!.frame.origin.x)!, y: (presetsTableView.superview?.superview!.frame.origin.y)!, width: presetsTableRect.width, height: presetsTableRect.height - shiftDown)
+            
+            multiGradientSlider.setGradientMode(colorShiftOrBreathing: Breathing, fromKey: fromKey)
+        }
+    }
+    
+    private func updateSpeedSliderValue() {
+        var trimmed = speedSlider.intValue.description
+        trimmed.removeLast(2)
+        speedBox.string = trimmed + "s"
+    }
+    
+    public func setMode(mode: String, fromKey: Bool) {
+        if (presetsTableRect == nil) {
+            presetsTableRect = presetsTableView.superview?.superview!.frame
+            presetsLabelRect = presetsLabel.frame
+        }
+        
+        if (mode == "Reactive") {
+            showColorShift(show: false, fromKey: false)
+            showBreathing(show: false, fromKey: false)
+            showReactive(show: true, fromKey: fromKey)
+        } else if (mode == "ColorShift") {
+            showReactive(show: false, fromKey: false)
+            showBreathing(show: false, fromKey: false)
+            showColorShift(show: true, fromKey: fromKey)
+        } else if (mode == "Breathing") {
+            showColorShift(show: false, fromKey: false)
+            showReactive(show: false, fromKey: false)
+            showBreathing(show: true, fromKey: fromKey)
+        } else {
+            showReactive(show: false, fromKey: false)
+            showColorShift(show: false, fromKey: false)
+            showBreathing(show: false, fromKey: false)
+            presetsTableView.superview?.superview!.frame = presetsTableRect
+            
+            presetsLabel.frame.origin.y = presetsLabelRect.origin.y
+            presetDeleteButton.frame.origin.y = presetsLabelRect.origin.y - 4
+            
+        }
+        
+        updateKeys(shouldUpdateKeys: fromKey ? false : true)
+    }
+    
+    @IBAction func currentMode(_ sender: NSPopUpButtonCell) {
+        setMode(mode: sender.titleOfSelectedItem!, fromKey: false)
     }
     
     @IBAction func setSpeed(_ sender: NSSlider) {
@@ -257,13 +388,7 @@ class ColorPickerController: NSViewController {
         let shouldSendKeyCommand = (NSApplication.shared.currentEvent?.type == NSEvent.EventType.leftMouseUp) ? true : false
         updateKeys(shouldUpdateKeys: shouldSendKeyCommand)
     }
-    
-    override func viewWillAppear() {
-        view.layer?.backgroundColor = colorBackground.nsColor.cgColor
-        view.roundCorners(cornerRadius: 10.0)
-        ColorController.shared.setColor(NSColor.white.usingColorSpace(.genericRGB)!)
-    }
-    
+        
     @IBAction func setBrightness(_ sender: NSSlider) {
         ColorController.shared.brightness = CGFloat((sender.maxValue-sender.doubleValue) / sender.maxValue)
         updateColorWheel(redrawCrosshair: false)
@@ -279,6 +404,23 @@ class ColorPickerController: NSViewController {
         updateKeys(shouldUpdateKeys: true)
     }
     
+    @IBAction func setWaveModeClicked(_ sender: NSButton) {
+        if (sender.state == .on) {
+            updateWaveMode(enable: true)
+        } else {
+            updateWaveMode(enable: false)
+        }
+    }
+    
+    @IBAction func setOriginButtonClicked(_ sender: NSPopUpButtonCell) {
+    }
+    
+    private func updateWaveMode(enable: Bool) {
+        setOriginButton.isEnabled = enable
+        waveLengthSlider.isEnabled = enable
+        waveDirectionPopup.isEnabled = enable
+    }
+    
     func updateColorWheel(redrawCrosshair: Bool = true) {
         colorWheelView.setColor(ColorController.shared.selectedColor, redrawCrosshair)
     }
@@ -287,7 +429,7 @@ class ColorPickerController: NSViewController {
         colorLabel.backgroundColor = ColorController.shared.selectedColor
         colorLabel.stringValue = "#"+ColorController.shared.selectedColor.rgbHexString
     }
-
+    
     func updateSlider() {
         guard let sliderCell = brightnessSlider.cell as? GradientSliderCell else { fatalError() }
         sliderCell.colorA = ColorController.shared.masterColor
@@ -299,21 +441,21 @@ class ColorPickerController: NSViewController {
     func updateKeys(shouldUpdateKeys: Bool) {
         if (KeyboardManager.shared.keyboardManager.getKeyboardModel() != ThreeRegion) {
             if (currentKeyMode.titleOfSelectedItem == "Steady") {
-                for key in KeyboardManager.shared.keysSelected! {
+                for key in KeyboardManager.shared.keysSelected {
                     (key as! KeysView).setSteady(newColor: ColorController.shared.selectedColor)
                 }
             } else if (currentKeyMode.titleOfSelectedItem == "Reactive") {
-                for selected in ColorController.shared.reactionBoxColors! {
+                for selected in ColorController.shared.reactionBoxColors {
                     (selected as! CustomColorWell).color = ColorController.shared.selectedColor
                 }
                 
-                for key in KeyboardManager.shared.keysSelected! {
+                for key in KeyboardManager.shared.keysSelected {
                     (key as! KeysView).setReactive(active: activeColor.color, rest: restColor.color, speed: UInt16(speedSlider.intValue))
                 }
                 
             } else if (currentKeyMode.titleOfSelectedItem == "ColorShift"){
                 // Sets Transition color if was changed
-                for transition in ColorController.shared.transitionThumbColors! {
+                for transition in ColorController.shared.transitionThumbColors {
                     (transition as! SliderThumb).color = ColorController.shared.selectedColor
                 }
                 
@@ -324,19 +466,33 @@ class ColorPickerController: NSViewController {
                 
                 if (shouldUpdateKeys) {
                     let keyEffect = getKeyEffect(isColorShift: true)
-                    for key in KeyboardManager.shared.keysSelected! {
+                    for key in KeyboardManager.shared.keysSelected {
                         (key as! KeysView).setEffectKey(_id: keyEffect.getEffectId(), mode: ColorShift)
                     }
-                    /// Removes unused effects
-                    removeUnusedEffects()
+                }
+            } else if (currentKeyMode.titleOfSelectedItem == "Breathing") {
+                for transition in ColorController.shared.transitionThumbColors {
+                    (transition as! SliderThumb).color = ColorController.shared.selectedColor
                 }
                 
+                // Updates duration if speed changed
+                for transition in multiGradientSlider.getSubviewsInOrder() {
+                    transition.calcDuration()
+                }
+                
+                if (shouldUpdateKeys) {
+                    let keyEffect = getKeyEffect(isColorShift: false)
+                    for key in KeyboardManager.shared.keysSelected {
+                        (key as! KeysView).setEffectKey(_id: keyEffect.getEffectId(), mode: Breathing)
+                    }
+                }
             } else if (currentKeyMode.titleOfSelectedItem == "Disabled") {
-                for key in KeyboardManager.shared.keysSelected! {
+                for key in KeyboardManager.shared.keysSelected {
                     (key as! KeysView).setDisabled()
                 }
             }
-            
+            /// Removes unused effects
+            removeUnusedEffects()
         } else {
             // TODO - Three Region Keyboard
         }
@@ -350,12 +506,12 @@ class ColorPickerController: NSViewController {
     
     private func removeUnusedEffects() {
         let usedEffectId = KeyboardManager.shared.keyboardView.getUsedEffectId()
-
-        for effects in KeyboardManager.shared.effectsArray! {
+        
+        for effects in KeyboardManager.shared.effectsArray {
             let effect = (effects as! KeyEffectWrapper)
             let contains = usedEffectId.contains(effect.getEffectId())
             if (!contains) {
-                KeyboardManager.shared.effectsArray?.remove(effect)
+                KeyboardManager.shared.effectsArray.remove(effect)
             }
         }
     }
@@ -363,7 +519,7 @@ class ColorPickerController: NSViewController {
     private func getKeyEffect(isColorShift: Bool) -> KeyEffectWrapper {
         var id: UInt8 = 1
         let usedEffectId = KeyboardManager.shared.keyboardView.getUsedEffectId()
-            
+        
         for i in 1...255 {
             let containsId = usedEffectId.contains(UInt8(i))
             
@@ -372,12 +528,22 @@ class ColorPickerController: NSViewController {
                 break
             }
         }
-
-        var transitions = multiGradientSlider.getTransitionArray()
+        
+        var transitions: [KeyTransition]
+        if (isColorShift) {
+            transitions = multiGradientSlider.getTransitionArray()
+            
+        } else {
+            transitions = multiGradientSlider.getTransitionArrayBreathing()
+        }
         
         let keyEffect = KeyEffectWrapper(keyEffect: id, &transitions, UInt8(transitions.count))
         
-        for effects in KeyboardManager.shared.effectsArray! {
+        if (waveModeCheckBox.state == .on) {
+            // keyEffect?.setWaveMode(<#T##origin: KeyPoint##KeyPoint#>, <#T##waveLength: UInt16##UInt16#>, <#T##radControl: WaveRadControl##WaveRadControl#>, <#T##direction: WaveDirection##WaveDirection#>)
+        }
+        
+        for effects in KeyboardManager.shared.effectsArray {
             let effect = (effects as! KeyEffectWrapper)
             if (effect.isEqual(keyEffect)) {
                 return effect
@@ -385,12 +551,10 @@ class ColorPickerController: NSViewController {
         }
         
         /// Will add new effect to array if there was no same effects found
-        KeyboardManager.shared.effectsArray?.add(keyEffect!)
+        KeyboardManager.shared.effectsArray.add(keyEffect!)
         
         return keyEffect!
     }
-    
-    private func checkForUnusedEffects() {}
     
     @IBAction func deletePreset(_ sender: NSButton) {
         if (selectedFile != nil) {
@@ -453,7 +617,7 @@ extension ColorPickerController: ColorWheelViewDelegate {
 }
 
 extension ColorPickerController: MultiGradientSliderDelegate {
-    func sliderDidChange(_ sliderThumb: SliderThumb, mouseUp: Bool) {
+    func viewDidChange(_ sliderThumb: SliderThumb, mouseUp: Bool) {
         updateKeys(shouldUpdateKeys: mouseUp)
     }
 }

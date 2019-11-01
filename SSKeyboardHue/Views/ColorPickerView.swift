@@ -54,8 +54,8 @@ class ColorPickerView: NSView {
     override func mouseDown(with event: NSEvent) {
         window?.makeFirstResponder(self)
         
-        if (ColorController.shared.reactionBoxColors!.count > 0) {
-            for i in ColorController.shared.reactionBoxColors! {
+        if (ColorController.shared.reactionBoxColors.count > 0) {
+            for i in ColorController.shared.reactionBoxColors {
                 (i as! CustomColorWell).removeSelected()
             }
         }
