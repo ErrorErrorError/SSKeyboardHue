@@ -53,11 +53,5 @@ class ColorPickerView: NSView {
     // Allows mouse click to lose `ColorPickerViewController`'s text field's focus
     override func mouseDown(with event: NSEvent) {
         window?.makeFirstResponder(self)
-        
-        if (ColorController.shared.reactionBoxColors.count > 0) {
-            for i in ColorController.shared.reactionBoxColors {
-                (i as! CustomColorWell).removeSelected()
-            }
-        }
     }
 }

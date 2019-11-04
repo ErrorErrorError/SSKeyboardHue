@@ -24,10 +24,14 @@
 		1370FF3C2346327F005D325E /* ColorPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1370FF3B2346327F005D325E /* ColorPickerController.swift */; };
 		1376FDBB234A404400FE4B1A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1376FDBA234A404400FE4B1A /* Constants.swift */; };
 		13796F16235676C8006B716D /* Keys-Wrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13796F15235676C8006B716D /* Keys-Wrapper.mm */; };
+		1399A01E236E9A9F00419816 /* GradientViewPointPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1399A01D236E9A9F00419816 /* GradientViewPointPicker.swift */; };
 		139B107A2343B0CE00E3787D /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139B10782343B0CE00E3787D /* KeyboardViewController.swift */; };
 		13A8DEB42345380400709D9F /* CustomSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13A8DEB32345380400709D9F /* CustomSplitViewController.swift */; };
 		13AEB39A234927B2008B1026 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AEB399234927B2008B1026 /* KeyboardView.swift */; };
 		13AF5940234555220091D6C4 /* SideBarViewControllerr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AF593F234555210091D6C4 /* SideBarViewControllerr.swift */; };
+		13C2EE9E236FD5A4000789C6 /* xy_radiation.png in Resources */ = {isa = PBXBuildFile; fileRef = 13C2EE9B236FD5A4000789C6 /* xy_radiation.png */; };
+		13C2EE9F236FD5A4000789C6 /* x_radiation.png in Resources */ = {isa = PBXBuildFile; fileRef = 13C2EE9C236FD5A4000789C6 /* x_radiation.png */; };
+		13C2EEA0236FD5A4000789C6 /* y_radiation.png in Resources */ = {isa = PBXBuildFile; fileRef = 13C2EE9D236FD5A4000789C6 /* y_radiation.png */; };
 		13E0AFAD2342D095009A5B41 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13E0AFAC2342D095009A5B41 /* AppDelegate.swift */; };
 		13E0AFB12342D096009A5B41 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13E0AFB02342D096009A5B41 /* Assets.xcassets */; };
 		13E0AFB42342D096009A5B41 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 13E0AFB22342D096009A5B41 /* Main.storyboard */; };
@@ -104,10 +108,14 @@
 		1370FF3B2346327F005D325E /* ColorPickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerController.swift; sourceTree = "<group>"; };
 		1376FDBA234A404400FE4B1A /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		13796F15235676C8006B716D /* Keys-Wrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "Keys-Wrapper.mm"; sourceTree = "<group>"; };
+		1399A01D236E9A9F00419816 /* GradientViewPointPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GradientViewPointPicker.swift; path = SSKeyboardHue/Views/GradientViewPointPicker.swift; sourceTree = SOURCE_ROOT; };
 		139B10782343B0CE00E3787D /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
 		13A8DEB32345380400709D9F /* CustomSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSplitViewController.swift; sourceTree = "<group>"; };
 		13AEB399234927B2008B1026 /* KeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardView.swift; sourceTree = "<group>"; };
 		13AF593F234555210091D6C4 /* SideBarViewControllerr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideBarViewControllerr.swift; sourceTree = "<group>"; };
+		13C2EE9B236FD5A4000789C6 /* xy_radiation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xy_radiation.png; sourceTree = "<group>"; };
+		13C2EE9C236FD5A4000789C6 /* x_radiation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = x_radiation.png; sourceTree = "<group>"; };
+		13C2EE9D236FD5A4000789C6 /* y_radiation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = y_radiation.png; sourceTree = "<group>"; };
 		13CDA9632354345200978746 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		13E0AFA92342D095009A5B41 /* SSKeyboardHue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SSKeyboardHue.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13E0AFAC2342D095009A5B41 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -211,6 +219,7 @@
 				135650432358D37600A833FF /* CustomColorWell.swift */,
 				132120802366A249009E67BB /* MultiGradientSlider.swift */,
 				1301D0082368AE7400DFB0D1 /* SliderThumb.swift */,
+				1399A01D236E9A9F00419816 /* GradientViewPointPicker.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -226,6 +235,16 @@
 				13FAC655236147F80067BD3E /* ContentViewController.xib */,
 			);
 			path = Controllers;
+			sourceTree = "<group>";
+		};
+		13C2EE9A236FD5A4000789C6 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				13C2EE9B236FD5A4000789C6 /* xy_radiation.png */,
+				13C2EE9C236FD5A4000789C6 /* x_radiation.png */,
+				13C2EE9D236FD5A4000789C6 /* y_radiation.png */,
+			);
+			path = images;
 			sourceTree = "<group>";
 		};
 		13E0AFA02342D095009A5B41 = {
@@ -286,6 +305,7 @@
 		13FAC653236146C80067BD3E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				13C2EE9A236FD5A4000789C6 /* images */,
 				1353ED91235605E100AF863C /* SSKeyboardHue-Bridging-Header.hpp */,
 				1370F652234E7CE900290D69 /* SSKeyboard_SwiftWrapper.mm */,
 				13E0AFB52342D096009A5B41 /* Info.plist */,
@@ -477,9 +497,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				13C2EE9F236FD5A4000789C6 /* x_radiation.png in Resources */,
 				13E0AFB12342D096009A5B41 /* Assets.xcassets in Resources */,
 				13E0AFB42342D096009A5B41 /* Main.storyboard in Resources */,
+				13C2EE9E236FD5A4000789C6 /* xy_radiation.png in Resources */,
 				13FAC657236147F80067BD3E /* ContentViewController.xib in Resources */,
+				13C2EEA0236FD5A4000789C6 /* y_radiation.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -521,6 +544,7 @@
 				13AEB39A234927B2008B1026 /* KeyboardView.swift in Sources */,
 				133EEABB2345B19A006D9AFF /* CustomSplitView.swift in Sources */,
 				1309AAA22369197700EDE1C7 /* KeyEffect - Wrapper.mm in Sources */,
+				1399A01E236E9A9F00419816 /* GradientViewPointPicker.swift in Sources */,
 				13FC9F10235289F400630F99 /* CenterTextFieldCell.swift in Sources */,
 				132120812366A249009E67BB /* MultiGradientSlider.swift in Sources */,
 				13A8DEB42345380400709D9F /* CustomSplitViewController.swift in Sources */,

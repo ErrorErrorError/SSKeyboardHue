@@ -23,6 +23,11 @@ class ColorWheelView: NSView {
     private(set) var selectedColor = NSColor(red: 0x0, green: 0x0, blue: 0x0, alpha: 1.0)
     private var mouseUp = false
     private var isClampedOutside = false
+    var isEnabled = true {
+        didSet {
+            needsDisplay = true
+        }
+    }
     
     required override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -45,7 +50,11 @@ class ColorWheelView: NSView {
         context.addEllipse(in: dirtyRect)
         context.clip()
         context.draw(blackImage, in: dirtyRect)
-        context.setAlpha(brightness)
+        if (isEnabled) {
+            context.setAlpha(brightness)
+        } else {
+            context.setAlpha(0.5)
+        }
         context.draw(colorWheelImage, in: dirtyRect)
         context.setAlpha(1.0)
         
@@ -145,37 +154,43 @@ class ColorWheelView: NSView {
     /// - postcondition: May call `NSWindow.makeFirstResponder`
     override func mouseDown(with event: NSEvent) {
         super.mouseDown(with: event)
-        mouseUp = false
+        if (isEnabled) {
+            mouseUp = false
 
-        let (clampedPoint, wasClamped) = clamped(convert(event.locationInWindow, from: nil))
-        
-        if wasClamped {
-            window?.makeFirstResponder(window?.contentView)
-            isClampedOutside = wasClamped
-        } else {
-            isClampedOutside = false
-            pickerLocation = clampedPoint
-            needsDisplay = true
+            let (clampedPoint, wasClamped) = clamped(convert(event.locationInWindow, from: nil))
+            
+            if wasClamped {
+                window?.makeFirstResponder(window?.contentView)
+                isClampedOutside = wasClamped
+            } else {
+                isClampedOutside = false
+                pickerLocation = clampedPoint
+                needsDisplay = true
+            }
         }
     }
     
     override func mouseDragged(with event: NSEvent) {
         super.mouseDown(with: event)
-        mouseUp = false
-        if (!isClampedOutside) {
-            let (clampedPoint, _) = clamped(convert(event.locationInWindow, from: nil))
-            setColor(at: clampedPoint)
-            pickerLocation = clampedPoint
-            needsDisplay = true
+        if (isEnabled) {
+            mouseUp = false
+            if (!isClampedOutside) {
+                let (clampedPoint, _) = clamped(convert(event.locationInWindow, from: nil))
+                setColor(at: clampedPoint)
+                pickerLocation = clampedPoint
+                needsDisplay = true
+            }
         }
     }
     
     override func mouseUp(with event: NSEvent) {
         super.mouseUp(with: event)
-        mouseUp = true
-        if (!isClampedOutside) {
-            let (clampedPoint, _) = clamped(convert(event.locationInWindow, from: nil))
-            setColor(at: clampedPoint)
+        if (isEnabled) {
+            mouseUp = true
+            if (!isClampedOutside) {
+                let (clampedPoint, _) = clamped(convert(event.locationInWindow, from: nil))
+                setColor(at: clampedPoint)
+            }
         }
     }
 }

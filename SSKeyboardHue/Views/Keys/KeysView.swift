@@ -51,9 +51,9 @@ class KeysView: NSView {
         }
         
         if (keyModel.getMode() == Steady) {
-            currentColor = keyModel.getMainColor().nsColor
+            currentColor = keyModel.getMainColor().nsColor.usingColorSpace(.genericRGB)
         } else if (keyModel.getMode() == Reactive) {
-            currentColor = keyModel.getMainColor().nsColor
+            currentColor = keyModel.getMainColor().nsColor.usingColorSpace(.genericRGB)
         }
     }
     
@@ -80,8 +80,8 @@ class KeysView: NSView {
         bezel.lineWidth = 5.0
         if isSelected {
             if (currentColor.scaledBrightness < 0.5) {
-                let bright = KeysView.map(x: Float(currentColor.scaledBrightness), in_min: 0, in_max: 0.5, out_min: 0, out_max: 0.8)
-                NSColor.white.usingColorSpace(.genericRGB)?.darkerColor(percent: bright).set()
+                let bright = KeysView.map(x: currentColor.scaledBrightness, in_min: 0, in_max: 0.5, out_min: 0, out_max: 0.8)
+                NSColor.white.usingColorSpace(.genericRGB)?.darkerColor(percent: Double(bright)).set()
 
             } else {
                 currentColor.darkerColor(percent: 0.5).set()
@@ -108,11 +108,11 @@ class KeysView: NSView {
         text!.draw(in: newRect, withAttributes: attributes)
     }
     
-    public static func map(x: Float, in_min: Float, in_max: Float, out_min: Float, out_max: Float) -> Double {
+    public static func map(x: CGFloat, in_min: CGFloat, in_max: CGFloat, out_min: CGFloat, out_max: CGFloat) -> CGFloat {
         let t = x - in_min
         let v = out_max - out_min
         let n = (in_max - in_min) + out_min
-        return Double((t * v) / n)
+        return CGFloat((t * v) / n)
     }
 
     
@@ -128,9 +128,9 @@ class KeysView: NSView {
         needsDisplay = true
     }
     
-    func setEffectKey(_id: uint8, mode: PerKeyModes) {
+    func setEffectKey(_id: uint8, mode: PerKeyModes, color: NSColor) {
         keyModel.setEffectKey(_id, mode)
-        currentColor = RGB().nsColor
+        currentColor = color
         needsDisplay = true
     }
     

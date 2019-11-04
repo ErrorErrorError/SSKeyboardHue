@@ -13,6 +13,7 @@ class KeyboardView: NSView {
     var startPoint: NSPoint!
     var shapeLayer: CAShapeLayer!
     let serialQueue = DispatchQueue(label: "send_keyboard_command")
+    var setMixedMode = false
 
     required init?(coder decoder: NSCoder) {
         super.init(coder: decoder)
@@ -46,6 +47,7 @@ class KeyboardView: NSView {
     }
     
     override func mouseDragged(with event: NSEvent) {
+        super.mouseDragged(with: event)
         let point: NSPoint = convert(event.locationInWindow, from: nil)
         let path: CGMutablePath = CGMutablePath()
         path.move(to: startPoint)
@@ -56,14 +58,37 @@ class KeyboardView: NSView {
         shapeLayer.path = path
         for key in subviews {
             let keyView = key as! KeysView
-            let keyCenter = NSPoint(x: key.frame.origin.x + key.frame.size.width/2,
-                                     y: key.frame.origin.y + key.frame.size.height/2)
-            if (path.contains(keyCenter)) {
-                if (keyView.isSelected != true) {
+
+            if (path.boundingBox.intersects(keyView.frame)) {
+                if (!keyView.isSelected) {
                     keyView.setSelected(selected: true, fromGroupSelection: true)
                 }
+                
+                var count = 0
+                let keyArray = KeyboardManager.shared.keysSelected
+                while (!setMixedMode && count < keyArray.count) {
+                    let t = keyArray[count] as! KeysView
+                
+                    if (!(t.keyModel.isEqual(keyView.keyModel))) {
+                        setMixedMode = true
+                    } else {
+                        count += 1
+                    }
+                }
+                
+                if (setMixedMode) {
+                    ColorController.shared.colorPicker.setMixedMode(shouldSet: true)
+                    setMixedMode = false
+                } else {
+                    if (!ColorController.shared.colorPicker.isCurrentModeEqual(key: keyView.keyModel)) {
+                        ColorController.shared.setKey(key: keyView.keyModel)
+                    }
+                }
+                
             } else {
-                keyView.setSelected(selected: false, fromGroupSelection: true)
+                if (keyView.isSelected) {
+                    keyView.setSelected(selected: false, fromGroupSelection: true)
+                }
             }
         }
     }
@@ -75,6 +100,7 @@ class KeyboardView: NSView {
     }
     
     override func mouseUp(with event: NSEvent) {
+        super.mouseUp(with: event)
         if (shapeLayer != nil) {
             shapeLayer.removeFromSuperlayer()
             shapeLayer = nil

@@ -56,7 +56,7 @@ class SliderThumb: NSView {
                     distance = ((widthSuperview - thumb.frame.origin.x) + firstThumb.frame.origin.x) / widthSuperview
                 }
                 let currentSpeed = CGFloat(ColorController.shared.colorPicker.speedSlider.floatValue)
-                let durationAnimation: UInt16 = UInt16((distance *  currentSpeed))
+                let durationAnimation: UInt16 = UInt16(round(distance *  currentSpeed))
                 transition.duration = durationAnimation
                 break
             }
@@ -64,16 +64,21 @@ class SliderThumb: NSView {
     }
     override func mouseDown(with event: NSEvent) {
         super.mouseDown(with: event)
+        isBeingDragged = false
         if (isSelected) {
             isSelected = false
         } else {
             isSelected = true
         }
+        
+        calcDuration()
     }
     
     override func mouseDragged(with event: NSEvent) {
         super.mouseDragged(with: event)
         isBeingDragged = true
+        calcDuration()
+        checkTransitionArray()
     }
     
     override func mouseUp(with event: NSEvent) {
@@ -105,8 +110,8 @@ class SliderThumb: NSView {
         
         if isSelected {
             if (color.scaledBrightness < 0.5) {
-                let bright = KeysView.map(x: Float(color.scaledBrightness), in_min: 0, in_max: 0.5, out_min: 0, out_max: 0.8)
-                NSColor.white.usingColorSpace(.genericRGB)?.darkerColor(percent: bright).set()
+                let bright = KeysView.map(x: color.scaledBrightness, in_min: 0, in_max: 0.5, out_min: 0, out_max: 0.8)
+                NSColor.white.usingColorSpace(.genericRGB)?.darkerColor(percent: Double(bright)).set()
 
             } else {
                 color.darkerColor(percent: 0.5).set()
@@ -122,15 +127,20 @@ class SliderThumb: NSView {
     }
     
     private func checkTransitionArray() {
-        if (isSelected) {
-            let thumbsArray = ColorController.shared.transitionThumbColors
+        let thumbsArray = ColorController.shared.transitionThumbColors
+        if (isSelected && !isBeingDragged) {
             for i in thumbsArray {
                 (i as! SliderThumb).removeSelected()
             }
             ColorController.shared.setColor(color)
-            ColorController.shared.transitionThumbColors.add(self)
+            thumbsArray.add(self)
+        } else if (isSelected && isBeingDragged) {
+            isSelected = false
+            for i in thumbsArray {
+                (i as! SliderThumb).removeSelected()
+            }
         } else {
-            ColorController.shared.transitionThumbColors.remove(self)
+            thumbsArray.remove(self)
         }
     }
     

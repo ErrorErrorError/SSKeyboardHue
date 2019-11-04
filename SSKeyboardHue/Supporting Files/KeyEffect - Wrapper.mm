@@ -101,7 +101,6 @@
         return false;
     }
     
-    
     if (!(self.getTransitionSize == obj.getTransitionSize)) {
         return false;
     }

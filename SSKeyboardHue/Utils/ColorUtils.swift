@@ -19,6 +19,10 @@ extension RGB {
             self.b = UInt8(newColor.blueComponent * 255)
         }
     }
+    
+    static func == (lhs: RGB, rhs: RGB) -> Bool {
+        return lhs.r == rhs.r && lhs.g == rhs.g && lhs.b == rhs.b
+    }
 }
 
 public struct HSV {

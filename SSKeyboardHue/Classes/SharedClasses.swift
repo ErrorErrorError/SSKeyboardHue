@@ -40,14 +40,14 @@ class ColorController {
     var selectedColor = NSColor(calibratedRed: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
     // Injected by ColorPickerViewController
     weak var colorPicker: ColorPickerController!
-    /// - postcondition: Mutates `colorPicker`
+
+    weak var gradientViewPoint: GradientViewPointPicker!
     
     // This changes the color picker based on current key
     func setKey(key: KeysWrapper) {
         if (key.getMode() == Steady) {
             setColor(key.getMainColor().nsColor)
-            colorPicker.currentKeyMode.selectItem(withTitle: "Steady")
-            colorPicker.setMode(mode: "Steady", fromKey: true)
+            colorPicker.setMode(mode: Steady, fromKey: true)
         } else if (key.getMode() == Reactive) {
             if (reactionBoxColors.count > 0) {
                 for colorBox in reactionBoxColors {
@@ -60,8 +60,7 @@ class ColorController {
             colorPicker.activeColor.color = key.getActiveColor().nsColor
             colorPicker.restColor.color = key.getMainColor().nsColor
             colorPicker.speedSlider.intValue = Int32(key.getSpeed())
-            colorPicker.currentKeyMode.selectItem(withTitle: "Reactive")
-            colorPicker.setMode(mode: "Reactive", fromKey: true)
+            colorPicker.setMode(mode: Reactive, fromKey: true)
         } else if (key.getMode() == ColorShift || key.getMode() == Breathing) {
             if (transitionThumbColors.count > 0) {
                 for sliders in transitionThumbColors {
@@ -79,6 +78,7 @@ class ColorController {
                     break
                 }
             }
+            
             var totalDuration: Int32 = 0
             let transitions = UnsafeMutablePointer<KeyTransition>(keyEffect.getTransitions())!
             for i in 0..<keyEffect.getTransitionSize() {
@@ -88,15 +88,21 @@ class ColorController {
             setColor(RGB(r: 0xff, g: 0xff, b: 0xff).nsColor)
             colorPicker.speedSlider.intValue = totalDuration
             colorPicker.multiGradientSlider.setThumbsFromTransitions(transitions: transitions, count: Int(keyEffect.getTransitionSize()), mode: key.getMode())
-            colorPicker.waveModeCheckBox.state = keyEffect.isWaveModeActive() ? .on : .off
-            let modeString = (key.getMode() == ColorShift) ? "ColorShift" : "Breathing"
-            colorPicker.currentKeyMode.selectItem(withTitle: modeString)
-            colorPicker.setMode(mode: modeString, fromKey: true)
-
+            
+            if (key.getMode() == ColorShift) {
+                colorPicker.waveModeCheckBox.state = keyEffect.isWaveModeActive() ? .on : .off
+                colorPicker.enableWavemode(enable: keyEffect.isWaveModeActive())
+                colorPicker.waveDirectionSegment.selectedSegment = Int(keyEffect.getWaveDirection().rawValue)
+                colorPicker.waveRadType.selectedSegment = Int(keyEffect.getWaveRadControl().rawValue)
+                colorPicker.waveLengthSlider.intValue = Int32(keyEffect.getWaveLength())
+                colorPicker.setWaveSpeed(colorPicker.waveLengthSlider!)
+                gradientViewPoint.typeOfRad = keyEffect.getWaveRadControl()
+                gradientViewPoint.setFromTransitions(transitions: transitions, count: keyEffect.getTransitionSize())
+            }
+            colorPicker.setMode(mode: key.getMode(), fromKey: true)
         } else if (key.getMode() == Disabled) {
-            setColor(key.getMainColor().nsColor)
-            colorPicker.currentKeyMode.selectItem(withTitle: "Disabled")
-            colorPicker.setMode(mode: "Disabled", fromKey: true)
+            setColor(RGB(r: 0xff, g: 0xff, b: 0xff).nsColor)
+            colorPicker.setMode(mode: Disabled, fromKey: true)
         }
     }
     // If reactionMode is selected
@@ -115,6 +121,5 @@ class ColorController {
         colorPicker.updateColorWheel()
         colorPicker.updateSlider()
         colorPicker.updateLabel()
-        colorPicker.updateKeys(shouldUpdateKeys: false)
     }
 }

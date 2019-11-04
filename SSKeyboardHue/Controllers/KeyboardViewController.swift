@@ -13,9 +13,9 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
     // var colorBackground = RGB(r: 242, g: 242, b: 250) // Light Mode
     var colorBackground = RGB(r: 14, g: 14, b: 15) // Dark Mode
     var keyboardBackground = RGB(r: 30, g: 30, b: 30) // Dark Mode
-
     @IBOutlet weak var keyboardView: KeyboardView!
     @IBOutlet weak var optionsButton: NSButton!
+    @IBOutlet weak var gradientOriginView: NSView!
     
     lazy var optionsPopOver: NSPopover = {
         let popover = NSPopover()
@@ -26,13 +26,28 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
         return popover
     }()
     
+    
+    override func viewWillAppear() {
+        view.layer?.backgroundColor = colorBackground.nsColor.cgColor
+        keyboardView.layer?.backgroundColor = keyboardBackground.nsColor.cgColor
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.wantsLayer = true
+        ColorController.shared.colorPicker.delegate = self
         keyboardView.roundCorners(cornerRadius: 15.0)
         KeyboardManager.shared.keyboardManager = SSKeyboardWrapper()
         detectKeyboard()
+
+        setupGradientOriginPicker()
     }
+    
+    private func setupGradientOriginPicker() {
+        gradientOriginView.frame = keyboardView.frame
+        gradientOriginView.isHidden = true
+    }
+
     
     private func detectKeyboard() {
         
@@ -41,7 +56,7 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
             createGS65Keyboard()
             createNullKeys(isGS65: true)
         case PerKey:
-            keyboardView.frame = NSRect(x: keyboardView.frame.origin.x - 50, y: keyboardView.frame.origin.y, width: keyboardView.frame.width + 100, height: keyboardView.frame.height - 40)
+            keyboardView.frame = NSRect(x: keyboardView.frame.origin.x - 40, y: keyboardView.frame.origin.y, width: keyboardView.frame.width + 100, height: keyboardView.frame.height - 40)
             createPerKeyKeyboard()
             createNullKeys(isGS65: false)
         case ThreeRegion:
@@ -75,7 +90,6 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
         }
     }
     
-    
     private func createPerKeyKeyboard() {
         var row = 0
         var key = 0
@@ -85,7 +99,7 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
         var height: Int
         for keys in KeyboardLayout.keysPerKey {
             shiftedPosition = 0
-            hPosition = 30 + (key * 46)
+            hPosition = 20 + (key * 46)
             width = 40
             height = 40
             // Shifts hPosition of keys
@@ -95,7 +109,7 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
                 if (key > 15) {
                     shiftedPosition = -24
                 } else {
-                    hPosition = 30 + (key * 44)
+                    hPosition = 20 + (key * 44)
                 }
             } else if (row == 1) {
                 shiftedPosition = 20
@@ -173,11 +187,11 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
                 if (keys.value == "ENTER ") {
                     height += 46
                 }
-
+                
             }
             
             hPosition += shiftedPosition
-            let vertical = 290 - (row * 46)
+            let vertical = 250 - (row * 46)
             let keyView = createKeys(keys: keys, x: hPosition,y: vertical, row: row, width: width, height: height)
             keyView.textSize = 10.0
             keyboardView.addSubview(keyView)
@@ -199,13 +213,13 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
         var height: Int
         for keys in KeyboardLayout.keysGS65 {
             shiftedPosition = 0
-            hPosition = 45 + (key * 50)
+            hPosition = 35 + (key * 50)
             width = 40
             height = 40
             // Shifts hPosition of keys
             if (row == 0) {
                 height = 25
-                hPosition = 45 + key * 51
+                hPosition = 35 + key * 51
                 width = 42
                 
             } else if (row==1) {
@@ -241,7 +255,7 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
                 if (keys.key == 0xe0) {
                     width += 45
                     shiftedPosition = 0
-                // Right Shift Key
+                    // Right Shift Key
                 } else if (keys.key == 0xe4) {
                     width += 20
                 } else if (keys.value == "UP" || keys.value == "END") {
@@ -261,8 +275,8 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
             }
             
             hPosition += shiftedPosition
-            let vertical = 320 - (row * 50)
-            let keyView = createKeys(keys: keys, x: hPosition,y: vertical, row: row, width: width, height: height)
+            let vertical = 290 - (row * 50)
+            let keyView = createKeys(keys: keys, x: hPosition, y: vertical, row: row, width: width, height: height)
             keyboardView.addSubview(keyView)
             if (keys.value == "DEL" || keys.value == "HOME" || keys.value == "PGUP" || keys.value == "PGDN" || keys.value == "END") {
                 row += 1
@@ -281,7 +295,7 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
             let entryRect = sender.convert(sender.bounds, to: self.view.window?.contentView)
             optionsPopOver.show(relativeTo: entryRect, of: self.view.window!.contentView!, preferredEdge: .maxY)
         }
-
+        
         // Sets text to textbox if a file is selected
         let vc = optionsPopOver.contentViewController as! ContentViewController
         let currentFile = ColorController.shared.colorPicker.selectedFile
@@ -293,8 +307,6 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
         vc.presetName.stringValue = stringToSend
         
     }
-    
-    
     
     // Make keys
     private func createKeys(keys: (key:UInt8, value:String), x: Int,y: Int, row: Int, width: Int, height: Int) -> KeysView {
@@ -310,21 +322,23 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
         keyboardView.resetKeysSelected()
     }
     
-    override func viewWillAppear() {
-        view.layer?.backgroundColor = colorBackground.nsColor.cgColor
-        keyboardView.layer?.backgroundColor = keyboardBackground.nsColor.cgColor
+    private func shoudShowOriginView() {
+        if (gradientOriginView.isHidden) {
+            gradientOriginView.isHidden = false
+        } else {
+            gradientOriginView.isHidden = true
+        }
     }
     
-
     private func getRegionKey(key: (key:UInt8, value:String)) -> UInt8 {
         let keyboardManager = KeyboardManager.shared.keyboardManager!
         if (keyboardManager.getKeyboardModel() != ThreeRegion) {
-
+            
             if (key.value == "ESC") {
                 return regions.0
             } else if (key.value == "A") {
                 return regions.1
-
+                
             } else if (key.value == "ENTER") {
                 return regions.2
                 
@@ -334,7 +348,7 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
             let regionKey = keyboardManager.findRegion(ofKey: key.key)
             return regionKey
         }
-
+        
         return 0
     }
     
@@ -349,6 +363,13 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
         return result
     }
 }
+
+extension KeyboardViewController: OriginButtonClickedDelegate {
+    func buttonHasClicked(_ button: NSButton) {
+        shoudShowOriginView()
+    }
+}
+
 extension String {
     func getUnsafeMutablePointer() -> UnsafeMutablePointer<Int8> {
         let count = self.utf8.count + 1

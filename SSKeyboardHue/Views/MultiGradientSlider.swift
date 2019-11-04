@@ -8,7 +8,7 @@
 
 import Cocoa
 protocol MultiGradientSliderDelegate: class {
-    func viewDidChange(_ sliderThumb: SliderThumb, mouseUp: Bool)
+    func viewDidChange(_ sliderThumb: SliderThumb, updateView: Bool)
 }
 
 @IBDesignable
@@ -44,43 +44,44 @@ class MultiGradientSlider: NSView {
     }
     
     override func mouseDown(with event: NSEvent) {
-        super.mouseDown(with: event)
         
         let currentPoint = convert(event.locationInWindow, from: nil)
         for i in subviews {
             if (NSPointInRect(currentPoint, i.frame)) {
-                return // Only return if a subview was clicked
+                return super.mouseDown(with: event) // Only return if a subview was clicked
             }
         }
         
         // create new subview if there was no thumbs clicked
         if (subviews.count < maxSize) {
-        let point = calcPoint(point: currentPoint)
+            let point = calcPoint(point: currentPoint)
             let newRectForThumb = NSRect(x: point.x, y: point.y, width: widthSlider, height: heightSlider)
             let newSlider = SliderThumb(frame: newRectForThumb)
             addSubview(newSlider)
+            adjustSpeedValues(numOfSliders: subviews.count)
             newSlider.color = backgroundColorGradient.interpolatedColor(atLocation: point.x / (bounds.width - widthSlider))
             needsDisplay = true
+            delegate?.viewDidChange(newSlider, updateView: true)
         }
     }
     
     override func mouseDragged(with event: NSEvent) {
-        super.mouseDragged(with: event)
+        // super.mouseDragged(with: event)
         let currentPoint = convert(event.locationInWindow, from: nil)
         for i in subviews {
-            if (NSPointInRect(currentPoint, i.frame)) {
+            if (NSPointInRect(currentPoint, i.frame) && currentSlider == nil) {
                 currentSlider = i as? SliderThumb
             }
         }
         
         if (currentSlider == nil) {
-            return
+            return super.mouseDragged(with: event)
         }
         
+        super.mouseDragged(with: event)
         currentSlider.setFrameOrigin(calcPoint(point: currentPoint))
-        delegate?.viewDidChange(currentSlider, mouseUp: false)
+        delegate?.viewDidChange(currentSlider, updateView: false)
         needsDisplay = true
-        return super.mouseDragged(with: event)
     }
         
     private func calcPoint(point: NSPoint) -> NSPoint {
@@ -115,7 +116,9 @@ class MultiGradientSlider: NSView {
                     currentSlider.setFrameOrigin(NSPoint(x: currentSlider.frame.origin.x, y: 0))
                 }
             }
-            delegate?.viewDidChange(currentSlider, mouseUp: true)
+            
+            adjustSpeedValues(numOfSliders: subviews.count)
+            delegate?.viewDidChange(currentSlider, updateView: true)
         }
         
         currentSlider = nil
@@ -139,6 +142,7 @@ class MultiGradientSlider: NSView {
             total += CGFloat(transitions[i].duration)
         }
         
+        adjustSpeedValues(numOfSliders: count)
         var xPoint:CGFloat = 0
         if (mode == ColorShift) {
             for i in 0..<count {
@@ -165,7 +169,6 @@ class MultiGradientSlider: NSView {
                 addSubview(newThumb)
             }
         }
-        
         needsDisplay = true
     }
     
@@ -271,7 +274,10 @@ class MultiGradientSlider: NSView {
         addSubview(thumbOne)
         addSubview(thumbTwo)
         addSubview(thumbThree)
-
-        
+    }
+    
+    private func adjustSpeedValues(numOfSliders: Int) {
+        ColorController.shared.colorPicker.speedSlider.minValue = Double(Int(numOfSliders/4 * 100) + 100)
+        ColorController.shared.colorPicker.setSpeed(ColorController.shared.colorPicker.speedSlider)
     }
 }

@@ -17,30 +17,14 @@ class CustomColorWell: NSView {
         }
     }
     override func mouseDown(with event: NSEvent) {
+        super.mouseDown(with: event)
         if (isSelected) {
             isSelected = false
         } else {
             isSelected = true
         }
-    }
-    
-    override func mouseDragged(with event: NSEvent) {
-        super.mouseDown(with: event)
-    }
-    
-    override func mouseUp(with event: NSEvent) {
-        super.mouseUp(with: event)
-        if (isSelected) {
-            if (ColorController.shared.reactionBoxColors.count < 1) {
-                ColorController.shared.setColor(color)
-            }
-            
-            ColorController.shared.reactionBoxColors.add(self)
-        } else if (!isSelected) {
-            ColorController.shared.reactionBoxColors.remove(self)
-        }
         
-        needsDisplay = true
+        checkSelected()
     }
     
     override func draw(_ dirtyRect: NSRect) {
@@ -50,8 +34,8 @@ class CustomColorWell: NSView {
         border.lineWidth = 5.0
         if isSelected {
             if (color.scaledBrightness < 0.5) {
-                let bright = KeysView.map(x: Float(color.scaledBrightness), in_min: 0, in_max: 0.5, out_min: 0, out_max: 0.8)
-                NSColor.white.usingColorSpace(.genericRGB)?.darkerColor(percent: bright).set()
+                let bright = KeysView.map(x: color.scaledBrightness, in_min: 0, in_max: 0.5, out_min: 0, out_max: 0.8)
+                NSColor.white.usingColorSpace(.genericRGB)?.darkerColor(percent: Double(bright)).set()
 
             } else {
                 color.darkerColor(percent: 0.5).set()
@@ -62,6 +46,22 @@ class CustomColorWell: NSView {
         }
         border.stroke()
     }
+    
+    func checkSelected() {
+        if (isSelected) {
+            if (!ColorController.shared.reactionBoxColors.contains(self)) {
+                if (ColorController.shared.reactionBoxColors.count > 0) {
+                    (ColorController.shared.reactionBoxColors[0] as! CustomColorWell).removeSelected()
+                }
+                ColorController.shared.reactionBoxColors.add(self)
+                ColorController.shared.setColor(color)
+            }
+        } else {
+            ColorController.shared.reactionBoxColors.remove(self)
+        }
+        needsDisplay = true
+    }
+
     
     func removeSelected() {
         isSelected = false
