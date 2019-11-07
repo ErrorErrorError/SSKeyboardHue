@@ -26,6 +26,7 @@ class KeyboardView: NSView {
     }
 
     override func mouseDown(with event: NSEvent) {
+        super.mouseDown(with: event)
         startPoint = convert(event.locationInWindow, from: nil)
         var resetKeys = true
         for i in subviews {
@@ -56,9 +57,11 @@ class KeyboardView: NSView {
         path.addLine(to: NSPoint(x: point.x, y: startPoint.y))
         path.closeSubpath()
         shapeLayer.path = path
-        for key in subviews {
-            let keyView = key as! KeysView
-
+        for keyView in subviews.filter({ (filterView) -> Bool in
+            guard let iskey = filterView as? KeysView else { return false }
+            return (!iskey.isHidden)
+        }) {
+            let keyView = keyView as! KeysView
             if (path.boundingBox.intersects(keyView.frame)) {
                 if (!keyView.isSelected) {
                     keyView.setSelected(selected: true, fromGroupSelection: true)
@@ -80,7 +83,8 @@ class KeyboardView: NSView {
                     ColorController.shared.colorPicker.setMixedMode(shouldSet: true)
                     setMixedMode = false
                 } else {
-                    if (!ColorController.shared.colorPicker.isCurrentModeEqual(key: keyView.keyModel)) {
+                    let isEqual = ColorController.shared.colorPicker.isCurrentModeEqual(key: keyView.keyModel)
+                    if (!isEqual) {
                         ColorController.shared.setKey(key: keyView.keyModel)
                     }
                 }
@@ -349,8 +353,8 @@ class KeyboardView: NSView {
         for keysSubView in subviews {
             let keyView = keysSubView as! KeysView
             let isKeyEqual = (keyView.keyModel.getKeyCode()) == keyToFind
-            let keyText = NSString(utf8String: (keyView.keyModel.getKeyLetter()))
-            let isKeyRegionKey = keyText == "A" || keyText == "ESC" || keyText == "ENTER" || keyText == "F7"
+            // if they equal the same, then it's the region key
+            let isKeyRegionKey = keyView.keyModel.getKeyCode() == keyView.keyModel.getRegion()
             
             if (isRegionKey && isKeyEqual && isKeyRegionKey) {
                 return keyView.keyModel

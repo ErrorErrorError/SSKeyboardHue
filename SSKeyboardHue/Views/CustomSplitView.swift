@@ -19,5 +19,4 @@ class CustomSplitView: NSSplitView {
     override var dividerThickness:CGFloat {
         get { return 0.0 }
     }
-
 }

@@ -14,20 +14,18 @@
 @end
 
 @implementation KeysWrapper
--(instancetype)initWithSteady:(uint8_t) keyCode : (char *) letter : (uint8_t) location : (struct RGB) steadyColor {
+-(instancetype)initWithSteady:(uint8_t) keyCode : (uint8_t) location : (struct RGB) steadyColor {
     self = [super init];
     if (self) {
         _keys = Keys(keyCode, location, steadyColor);
-        _keys.keyLetter = letter;
     }
     return self;
 }
 
--(instancetype)initWithReactive:(uint8_t) keyCode : (char *) letter : (uint8_t) location : (struct RGB) active : (struct RGB) rest : (uint16_t) duration {
+-(instancetype)initWithReactive:(uint8_t) keyCode : (uint8_t) location : (struct RGB) active : (struct RGB) rest : (uint16_t) duration {
     self = [super init];
     if (self) {
         _keys = Keys(keyCode, location, active, rest, duration);
-        _keys.keyLetter = letter;
     }
     return self;
 }
@@ -35,6 +33,7 @@
 -(void) setReactiveMode:(struct RGB) active : (struct RGB) rest : (uint16_t) duration {
     _keys.setReactiveKey(active, rest, duration);
 }
+
 -(void) setSteadyMode: (struct RGB) steadyColor {
     _keys.setSteadyKey(steadyColor);
 }
@@ -52,18 +51,19 @@
 -(uint8_t) getRegion {
     return _keys.region;
 }
--(char *)getKeyLetter {
-    return _keys.keyLetter;
-}
+
 -(uint8_t)getKeyCode {
     return _keys.keycode;
 }
+
 -(void *)key{
     return &_keys;
 }
+
 -(PerKeyModes)getMode{
     return _keys.getMode();
 }
+
 -(uint16_t)getSpeed{
     return _keys.duration;
 }

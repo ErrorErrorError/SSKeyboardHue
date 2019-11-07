@@ -13,12 +13,11 @@
 #import <SSKeyboard/sseffect.h>
 
 @interface KeysWrapper : NSObject
--(instancetype)initWithSteady:(uint8_t) keyCode : (char *) letter : (uint8_t) location : (struct RGB) steadyColor;
--(instancetype)initWithReactive:(uint8_t) keyCode : (char *) letter : (uint8_t) location : (struct RGB) active : (struct RGB) rest : (uint16_t) duration;
--(struct RGB) getMainColor;
--(struct RGB) getActiveColor;
--(uint8_t) getRegion;
--(char *)getKeyLetter;
+-(instancetype)initWithSteady:(uint8_t) keyCode : (uint8_t) location : (struct RGB) steadyColor;
+-(instancetype)initWithReactive:(uint8_t) keyCode : (uint8_t) location : (struct RGB) active : (struct RGB) rest : (uint16_t) duration;
+-(struct RGB)getMainColor;
+-(struct RGB)getActiveColor;
+-(uint8_t)getRegion;
 -(uint8_t)getKeyCode;
 -(void)setSteadyMode:(struct RGB) steadyColor;
 -(void)setReactiveMode:(struct RGB) active : (struct RGB) rest : (uint16_t) duration;
@@ -37,21 +36,21 @@
 -(void)disableWavemode;
 -(void)setEffectId:(uint8_t) _id;
 -(void)setTransitions:(struct KeyTransition *) keyTransition : (uint8_t) size;
--(struct RGB) getStartColor;
+-(struct RGB)getStartColor;
 -(struct KeyTransition *)getTransitions;
--(uint8_t) getTransitionSize;
--(uint8_t) getEffectId;
--(bool) isWaveModeActive;
--(struct KeyPoint) getWaveOrigin;
--(enum WaveRadControl) getWaveRadControl;
+-(uint8_t)getTransitionSize;
+-(uint8_t)getEffectId;
+-(bool)isWaveModeActive;
+-(struct KeyPoint)getWaveOrigin;
+-(enum WaveRadControl)getWaveRadControl;
 -(uint16_t) getWaveLength;
--(enum WaveDirection) getWaveDirection;
+-(enum WaveDirection)getWaveDirection;
 -(void *)getEffect;
 @end
 
 @interface SSKeyboardWrapper : NSObject
 -(instancetype)init;
--(IOReturn) sendColorKeys:(NSArray<KeysWrapper *> *) keyArray : (bool) createOutputPackage;
+-(IOReturn)sendColorKeys:(NSArray<KeysWrapper *> *) keyArray : (bool) createOutputPackage;
 -(enum KeyboardModels)getKeyboardModel;
 -(void)setSleepInMillis:(uint16_t) millis;
 -(uint8_t)findRegionOfKey:(uint8_t) findThisKey;

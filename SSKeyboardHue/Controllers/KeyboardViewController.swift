@@ -16,7 +16,7 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
     @IBOutlet weak var keyboardView: KeyboardView!
     @IBOutlet weak var optionsButton: NSButton!
     @IBOutlet weak var gradientOriginView: NSView!
-    
+    var stringFile = ""
     lazy var optionsPopOver: NSPopover = {
         let popover = NSPopover()
         popover.behavior = .semitransient
@@ -66,12 +66,6 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
         default:
             print("default")
         }
-        
-        // Sets initial color
-        // KeyboardManager.shared.keyboardView.sendColorToKeyboard(region: regions.0, createOutput: false)
-        // KeyboardManager.shared.keyboardView.sendColorToKeyboard(region: regions.1, createOutput: false)
-        // KeyboardManager.shared.keyboardView.sendColorToKeyboard(region: regions.2, createOutput: false)
-        // KeyboardManager.shared.keyboardView.sendColorToKeyboard(region: regions.3, createOutput: true)
     }
     
     private func createNullKeys(isGS65: Bool) {
@@ -83,8 +77,8 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
         }
         for keys in nullKeys {
             let region = getRegionKey(key: keys)
-            let keyModel = KeysWrapper(steady: keys.key, keys.value.getUnsafeMutablePointer(), region, RGB(r: 0x00, g: 0x00, b: 0x00))!
-            let key = KeysView(frame: NSRect(x: 0, y: 0, width: 0, height: 0), key: keyModel)
+            let keyModel = KeysWrapper(steady: keys.key, region, RGB(r: 0x00, g: 0x00, b: 0x00))!
+            let key = KeysView(frame: NSRect(x: 0, y: 0, width: 0, height: 0), keyLetter: keys.value as NSString , key: keyModel)
             key.isHidden = true;
             keyboardView.addSubview(key)
         }
@@ -298,28 +292,25 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
         
         // Sets text to textbox if a file is selected
         let vc = optionsPopOver.contentViewController as! ContentViewController
-        let currentFile = ColorController.shared.colorPicker.selectedFile
-        var stringToSend = ""
-        if (currentFile != nil) {
-            stringToSend = currentFile!.lastPathComponent
-            stringToSend.removeLast(4)
-        }
-        vc.presetName.stringValue = stringToSend
-        
+        vc.presetName.stringValue = stringFile
     }
     
     // Make keys
     private func createKeys(keys: (key:UInt8, value:String), x: Int,y: Int, row: Int, width: Int, height: Int) -> KeysView {
         let region = getRegionKey(key: keys)
         let rect =  NSRect(x:  x, y: y, width: width, height: height)
-        let keyModel = KeysWrapper(steady: keys.key, keys.value.getUnsafeMutablePointer(), region, RGB(r: 0xff, g: 0x00, b: 0x00))!
-        let key = KeysView(frame: rect, key: keyModel)
+        let keyModel = KeysWrapper(steady: keys.key, region, RGB(r: 0xff, g: 0x00, b: 0x00))!
+        let key = KeysView(frame: rect,keyLetter: keys.value as NSString , key: keyModel)
         return key
     }
     
     override func mouseDown(with event: NSEvent) {
         super.mouseDown(with: event)
-        keyboardView.resetKeysSelected()
+        let currentPoint = event.locationInWindow
+        let isInKeyView = NSPointInRect(currentPoint, keyboardView.frame)
+        if (!isInKeyView) {
+            keyboardView.resetKeysSelected()
+        }
     }
     
     private func shoudShowOriginView() {
@@ -357,14 +348,13 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
         let count = str.utf8.count + 1
         let result = UnsafeMutablePointer<Int8>.allocate(capacity: count)
         str.withCString { (baseAddress) in
-            // func initialize(from: UnsafePointer<Pointee>, count: Int)
             result.initialize(from: baseAddress, count: count)
         }
         return result
     }
 }
 
-extension KeyboardViewController: OriginButtonClickedDelegate {
+extension KeyboardViewController: ColorPickerControllerDelegate {
     func buttonHasClicked(_ button: NSButton) {
         shoudShowOriginView()
     }

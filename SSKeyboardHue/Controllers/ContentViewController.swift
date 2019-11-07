@@ -9,18 +9,15 @@
 import Cocoa
 
 class ContentViewController: NSViewController {
-    func sendPresetName(str: String) {
-        presetName.stringValue = str
-    }
-    
     @IBOutlet weak var presetName: NSTextField!
     @IBOutlet weak var savePresetButton: NSButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
     @IBAction func clickedSave(_ sender: NSButton) {
-               
+        
         let keysModifiers = KeyboardManager.shared.keyboardView.getKeysArray(region: regions.0)
         let arrayModifiers = createPacket(keysArray: keysModifiers)
         let keysAlpha = KeyboardManager.shared.keyboardView.getKeysArray(region: regions.1)
@@ -46,7 +43,6 @@ class ContentViewController: NSViewController {
             }
         }
         
-        ColorController.shared.colorPicker.checkForPresets()
         self.view.window?.performClose(self)
     }
     
@@ -110,24 +106,10 @@ class ContentViewController: NSViewController {
 
     
     private func filePath(forKey key: String) -> URL? {
-        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        let documentsDirectory = paths[0]
-        let docURL = URL(string: documentsDirectory)!
-        let directoryPath = docURL.appendingPathComponent("presets")
-
-        if !FileManager.default.fileExists(atPath: directoryPath.absoluteString) {
-            do {
-                try FileManager.default.createDirectory(atPath: directoryPath.absoluteString, withIntermediateDirectories: true, attributes: nil)
-            } catch {
-                print(error.localizedDescription);
-            }
-            
-        }
+        guard let sskeyboardDirectory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first?.appendingPathComponent("SSKeyboardHue") else { return nil }
+        let presetsFolder = sskeyboardDirectory.appendingPathComponent("presets")
+        let newPreset = presetsFolder.appendingPathComponent(key + ".bin")
+        return newPreset
         
-        let pathData = URL(fileURLWithPath: directoryPath.absoluteString, isDirectory: true)
-        
-
-        return pathData.appendingPathComponent(key + ".bin")
     }
-
 }

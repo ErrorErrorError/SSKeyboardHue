@@ -8,7 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		1301D0092368AE7400DFB0D1 /* SliderThumb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1301D0082368AE7400DFB0D1 /* SliderThumb.swift */; };
+		130847DE23735DA500004C73 /* FileWatcher+Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130847DA23735DA400004C73 /* FileWatcher+Action.swift */; };
+		130847DF23735DA500004C73 /* FileWatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130847DB23735DA400004C73 /* FileWatcher.swift */; };
+		130847E023735DA500004C73 /* FileWatcherEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130847DC23735DA500004C73 /* FileWatcherEvent.swift */; };
+		130847E123735DA500004C73 /* FileWatcher+Type.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130847DD23735DA500004C73 /* FileWatcher+Type.swift */; };
 		1309AAA22369197700EDE1C7 /* KeyEffect - Wrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1309AAA12369197700EDE1C7 /* KeyEffect - Wrapper.mm */; };
+		130AC11A23730A9400E3FE0C /* PresetsOutlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130AC11923730A9400E3FE0C /* PresetsOutlineView.swift */; };
 		130CDEE32346D1EC007E2028 /* ColorUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130CDEE22346D1EC007E2028 /* ColorUtils.swift */; };
 		132120812366A249009E67BB /* MultiGradientSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132120802366A249009E67BB /* MultiGradientSlider.swift */; };
 		132FEEAE23481BAD008A47FF /* ColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132FEEAD23481BAD008A47FF /* ColorPickerView.swift */; };
@@ -24,6 +29,7 @@
 		1370FF3C2346327F005D325E /* ColorPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1370FF3B2346327F005D325E /* ColorPickerController.swift */; };
 		1376FDBB234A404400FE4B1A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1376FDBA234A404400FE4B1A /* Constants.swift */; };
 		13796F16235676C8006B716D /* Keys-Wrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13796F15235676C8006B716D /* Keys-Wrapper.mm */; };
+		138612B52370B5830032ACDD /* PresetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138612B42370B5830032ACDD /* PresetsViewController.swift */; };
 		1399A01E236E9A9F00419816 /* GradientViewPointPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1399A01D236E9A9F00419816 /* GradientViewPointPicker.swift */; };
 		139B107A2343B0CE00E3787D /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139B10782343B0CE00E3787D /* KeyboardViewController.swift */; };
 		13A8DEB42345380400709D9F /* CustomSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13A8DEB32345380400709D9F /* CustomSplitViewController.swift */; };
@@ -91,7 +97,12 @@
 
 /* Begin PBXFileReference section */
 		1301D0082368AE7400DFB0D1 /* SliderThumb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SliderThumb.swift; path = SSKeyboardHue/Views/SliderThumb.swift; sourceTree = SOURCE_ROOT; };
+		130847DA23735DA400004C73 /* FileWatcher+Action.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "FileWatcher+Action.swift"; path = "../../../../../../../../Downloads/FileWatcher-master/FileWatcher+Action.swift"; sourceTree = "<group>"; };
+		130847DB23735DA400004C73 /* FileWatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FileWatcher.swift; path = "../../../../../../../../Downloads/FileWatcher-master/FileWatcher.swift"; sourceTree = "<group>"; };
+		130847DC23735DA500004C73 /* FileWatcherEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FileWatcherEvent.swift; path = "../../../../../../../../Downloads/FileWatcher-master/FileWatcherEvent.swift"; sourceTree = "<group>"; };
+		130847DD23735DA500004C73 /* FileWatcher+Type.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "FileWatcher+Type.swift"; path = "../../../../../../../../Downloads/FileWatcher-master/FileWatcher+Type.swift"; sourceTree = "<group>"; };
 		1309AAA12369197700EDE1C7 /* KeyEffect - Wrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "KeyEffect - Wrapper.mm"; sourceTree = "<group>"; };
+		130AC11923730A9400E3FE0C /* PresetsOutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetsOutlineView.swift; sourceTree = "<group>"; };
 		130CDEE22346D1EC007E2028 /* ColorUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorUtils.swift; sourceTree = "<group>"; };
 		132120802366A249009E67BB /* MultiGradientSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MultiGradientSlider.swift; path = SSKeyboardHue/Views/MultiGradientSlider.swift; sourceTree = SOURCE_ROOT; };
 		132FEEAD23481BAD008A47FF /* ColorPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerView.swift; sourceTree = "<group>"; };
@@ -108,6 +119,7 @@
 		1370FF3B2346327F005D325E /* ColorPickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerController.swift; sourceTree = "<group>"; };
 		1376FDBA234A404400FE4B1A /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		13796F15235676C8006B716D /* Keys-Wrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "Keys-Wrapper.mm"; sourceTree = "<group>"; };
+		138612B42370B5830032ACDD /* PresetsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetsViewController.swift; sourceTree = "<group>"; };
 		1399A01D236E9A9F00419816 /* GradientViewPointPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GradientViewPointPicker.swift; path = SSKeyboardHue/Views/GradientViewPointPicker.swift; sourceTree = SOURCE_ROOT; };
 		139B10782343B0CE00E3787D /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
 		13A8DEB32345380400709D9F /* CustomSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSplitViewController.swift; sourceTree = "<group>"; };
@@ -162,9 +174,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		130847D923735D8A00004C73 /* FileWatcher */ = {
+			isa = PBXGroup;
+			children = (
+				130847DB23735DA400004C73 /* FileWatcher.swift */,
+				130847DA23735DA400004C73 /* FileWatcher+Action.swift */,
+				130847DD23735DA500004C73 /* FileWatcher+Type.swift */,
+				130847DC23735DA500004C73 /* FileWatcherEvent.swift */,
+			);
+			path = FileWatcher;
+			sourceTree = "<group>";
+		};
 		130CDEE12346D1D9007E2028 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				130847D923735D8A00004C73 /* FileWatcher */,
 				130CDEE22346D1EC007E2028 /* ColorUtils.swift */,
 				1376FDBA234A404400FE4B1A /* Constants.swift */,
 			);
@@ -209,6 +233,7 @@
 		139B10772343B0A400E3787D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				130AC11923730A9400E3FE0C /* PresetsOutlineView.swift */,
 				1329FBFE2343C29900FA5861 /* Keys */,
 				133EEABA2345B19A006D9AFF /* CustomSplitView.swift */,
 				133EEAC02345C617006D9AFF /* ColorWheelView.swift */,
@@ -233,6 +258,7 @@
 				1370FF3B2346327F005D325E /* ColorPickerController.swift */,
 				13FAC654236147F80067BD3E /* ContentViewController.swift */,
 				13FAC655236147F80067BD3E /* ContentViewController.xib */,
+				138612B42370B5830032ACDD /* PresetsViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -528,7 +554,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				13FAC656236147F80067BD3E /* ContentViewController.swift in Sources */,
+				130847E023735DA500004C73 /* FileWatcherEvent.swift in Sources */,
 				133EEAC12345C617006D9AFF /* ColorWheelView.swift in Sources */,
+				130AC11A23730A9400E3FE0C /* PresetsOutlineView.swift in Sources */,
 				130CDEE32346D1EC007E2028 /* ColorUtils.swift in Sources */,
 				133EEABD2345BC1F006D9AFF /* KeysView.swift in Sources */,
 				13FE55CD234806420061ACFF /* GradientSliderCell.swift in Sources */,
@@ -536,17 +564,21 @@
 				1376FDBB234A404400FE4B1A /* Constants.swift in Sources */,
 				135650442358D37600A833FF /* CustomColorWell.swift in Sources */,
 				1360D37123440034005054F8 /* WindowController.swift in Sources */,
+				130847DE23735DA500004C73 /* FileWatcher+Action.swift in Sources */,
 				1370FF3C2346327F005D325E /* ColorPickerController.swift in Sources */,
 				1370F653234E7CE900290D69 /* SSKeyboard_SwiftWrapper.mm in Sources */,
 				13FE55D02348132A0061ACFF /* SharedClasses.swift in Sources */,
 				13AF5940234555220091D6C4 /* SideBarViewControllerr.swift in Sources */,
 				1301D0092368AE7400DFB0D1 /* SliderThumb.swift in Sources */,
 				13AEB39A234927B2008B1026 /* KeyboardView.swift in Sources */,
+				138612B52370B5830032ACDD /* PresetsViewController.swift in Sources */,
 				133EEABB2345B19A006D9AFF /* CustomSplitView.swift in Sources */,
 				1309AAA22369197700EDE1C7 /* KeyEffect - Wrapper.mm in Sources */,
 				1399A01E236E9A9F00419816 /* GradientViewPointPicker.swift in Sources */,
 				13FC9F10235289F400630F99 /* CenterTextFieldCell.swift in Sources */,
 				132120812366A249009E67BB /* MultiGradientSlider.swift in Sources */,
+				130847E123735DA500004C73 /* FileWatcher+Type.swift in Sources */,
+				130847DF23735DA500004C73 /* FileWatcher.swift in Sources */,
 				13A8DEB42345380400709D9F /* CustomSplitViewController.swift in Sources */,
 				13796F16235676C8006B716D /* Keys-Wrapper.mm in Sources */,
 				132FEEAE23481BAD008A47FF /* ColorPickerView.swift in Sources */,
@@ -728,7 +760,7 @@
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = FYT4JTMSQ8;
 				ENABLE_HARDENED_RUNTIME = NO;
 				INFOPLIST_FILE = "SSKeyboardHue/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -754,7 +786,7 @@
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = FYT4JTMSQ8;
 				ENABLE_HARDENED_RUNTIME = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = "SSKeyboardHue/Supporting Files/Info.plist";

@@ -14,6 +14,7 @@ class KeysView: NSView {
     var bezel: NSBezierPath!
     var keyModel: KeysWrapper!
     var textSize: CGFloat!
+    private var keyLetter: NSString!
     private var currentColor: NSColor!
     
     required init?(coder: NSCoder) {
@@ -27,24 +28,25 @@ class KeysView: NSView {
         
     }
     
-    required init?(coder: NSCoder,key: KeysWrapper) {
+    required init?(coder: NSCoder, keyLetter: NSString, key: KeysWrapper) {
         super.init(coder: coder)
+        self.keyLetter = keyLetter
         self.keyModel = key
-
         setup()
     }
     
-    required init(frame frameRect: NSRect, key: KeysWrapper) {
+    required init(frame frameRect: NSRect, keyLetter: NSString, key: KeysWrapper) {
         super.init(frame: frameRect)
+        self.keyLetter = keyLetter
         self.keyModel = key
         setup() 
     }
     
     private func setup() {
         roundCorners(cornerRadius: 5.0)
-        let text = NSString(utf8String: keyModel.getKeyLetter())
+        // let text = NSString(utf8String: keyModel.getKeyLetter())
 
-        if (text == "BACKSPACE") {
+        if (keyLetter == "BACKSPACE") {
             textSize = 10.0
         } else {
             textSize = 12.0
@@ -104,8 +106,7 @@ class KeysView: NSView {
         let heightT: CGFloat = (textSize == 10.0) ? 12 : 15
         let newRect = NSRect(x: 0, y: (bounds.size.height - heightT) / 2, width: bounds.size.width, height: heightT)
         
-        let text = NSString(utf8String: keyModel.getKeyLetter())
-        text!.draw(in: newRect, withAttributes: attributes)
+        keyLetter.draw(in: newRect, withAttributes: attributes)
     }
     
     public static func map(x: CGFloat, in_min: CGFloat, in_max: CGFloat, out_min: CGFloat, out_max: CGFloat) -> CGFloat {
@@ -164,5 +165,9 @@ class KeysView: NSView {
         }
         
         needsDisplay = true
+    }
+    
+    func getKeyLetter() -> NSString {
+        return keyLetter
     }
 }

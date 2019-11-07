@@ -52,6 +52,7 @@ class ColorPickerView: NSView {
  
     // Allows mouse click to lose `ColorPickerViewController`'s text field's focus
     override func mouseDown(with event: NSEvent) {
+        super.mouseDown(with: event)
         window?.makeFirstResponder(self)
     }
 }
