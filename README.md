@@ -22,8 +22,9 @@ The goal is to support all MSI Laptop keyboards that have RGB.
 ### Supported Modes: PerKey
 *   Steady
 *   Reactive
+*   ColorShift
+*   Breathing
 *   Disabled
-*   More coming soon...
 
 ### Supported Modes: Three Region
 *   Coming soon...
