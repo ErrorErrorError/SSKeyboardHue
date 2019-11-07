@@ -12,6 +12,7 @@
 		130847DF23735DA500004C73 /* FileWatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130847DB23735DA400004C73 /* FileWatcher.swift */; };
 		130847E023735DA500004C73 /* FileWatcherEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130847DC23735DA500004C73 /* FileWatcherEvent.swift */; };
 		130847E123735DA500004C73 /* FileWatcher+Type.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130847DD23735DA500004C73 /* FileWatcher+Type.swift */; };
+		130847E62373B2EC00004C73 /* DarkMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130847E52373B2EB00004C73 /* DarkMode.swift */; };
 		1309AAA22369197700EDE1C7 /* KeyEffect - Wrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1309AAA12369197700EDE1C7 /* KeyEffect - Wrapper.mm */; };
 		130AC11A23730A9400E3FE0C /* PresetsOutlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130AC11923730A9400E3FE0C /* PresetsOutlineView.swift */; };
 		130CDEE32346D1EC007E2028 /* ColorUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130CDEE22346D1EC007E2028 /* ColorUtils.swift */; };
@@ -101,6 +102,7 @@
 		130847DB23735DA400004C73 /* FileWatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FileWatcher.swift; path = "../../../../../../../../Downloads/FileWatcher-master/FileWatcher.swift"; sourceTree = "<group>"; };
 		130847DC23735DA500004C73 /* FileWatcherEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FileWatcherEvent.swift; path = "../../../../../../../../Downloads/FileWatcher-master/FileWatcherEvent.swift"; sourceTree = "<group>"; };
 		130847DD23735DA500004C73 /* FileWatcher+Type.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "FileWatcher+Type.swift"; path = "../../../../../../../../Downloads/FileWatcher-master/FileWatcher+Type.swift"; sourceTree = "<group>"; };
+		130847E52373B2EB00004C73 /* DarkMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DarkMode.swift; sourceTree = "<group>"; };
 		1309AAA12369197700EDE1C7 /* KeyEffect - Wrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "KeyEffect - Wrapper.mm"; sourceTree = "<group>"; };
 		130AC11923730A9400E3FE0C /* PresetsOutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetsOutlineView.swift; sourceTree = "<group>"; };
 		130CDEE22346D1EC007E2028 /* ColorUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorUtils.swift; sourceTree = "<group>"; };
@@ -185,6 +187,14 @@
 			path = FileWatcher;
 			sourceTree = "<group>";
 		};
+		130847E42373B2EB00004C73 /* StyleKit */ = {
+			isa = PBXGroup;
+			children = (
+				130847E52373B2EB00004C73 /* DarkMode.swift */,
+			);
+			path = StyleKit;
+			sourceTree = "<group>";
+		};
 		130CDEE12346D1D9007E2028 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -233,7 +243,6 @@
 		139B10772343B0A400E3787D /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				130AC11923730A9400E3FE0C /* PresetsOutlineView.swift */,
 				1329FBFE2343C29900FA5861 /* Keys */,
 				133EEABA2345B19A006D9AFF /* CustomSplitView.swift */,
 				133EEAC02345C617006D9AFF /* ColorWheelView.swift */,
@@ -245,6 +254,7 @@
 				132120802366A249009E67BB /* MultiGradientSlider.swift */,
 				1301D0082368AE7400DFB0D1 /* SliderThumb.swift */,
 				1399A01D236E9A9F00419816 /* GradientViewPointPicker.swift */,
+				130AC11923730A9400E3FE0C /* PresetsOutlineView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -331,6 +341,7 @@
 		13FAC653236146C80067BD3E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				130847E42373B2EB00004C73 /* StyleKit */,
 				13C2EE9A236FD5A4000789C6 /* images */,
 				1353ED91235605E100AF863C /* SSKeyboardHue-Bridging-Header.hpp */,
 				1370F652234E7CE900290D69 /* SSKeyboard_SwiftWrapper.mm */,
@@ -575,6 +586,7 @@
 				133EEABB2345B19A006D9AFF /* CustomSplitView.swift in Sources */,
 				1309AAA22369197700EDE1C7 /* KeyEffect - Wrapper.mm in Sources */,
 				1399A01E236E9A9F00419816 /* GradientViewPointPicker.swift in Sources */,
+				130847E62373B2EC00004C73 /* DarkMode.swift in Sources */,
 				13FC9F10235289F400630F99 /* CenterTextFieldCell.swift in Sources */,
 				132120812366A249009E67BB /* MultiGradientSlider.swift in Sources */,
 				130847E123735DA500004C73 /* FileWatcher+Type.swift in Sources */,

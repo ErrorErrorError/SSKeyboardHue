@@ -9,8 +9,6 @@
 import Cocoa
 
 class ColorPickerController: NSViewController {
-    var colorBackground = RGB(r: 30, g: 30, b: 30) // Dark Mode
-    var textViewBackground = RGB(r: 52, g: 52, b: 52)
     @IBOutlet weak var colorWheelView: ColorWheelView!
     @IBOutlet weak var colorLabel: NSTextField!
     @IBOutlet weak var brightnessSlider: NSSlider!
@@ -43,7 +41,7 @@ class ColorPickerController: NSViewController {
         ColorController.shared.colorPicker = self
         
         colorLabel.roundCorners(cornerRadius: 10.0)
-        colorLabel.layer?.backgroundColor = textViewBackground.nsColor.cgColor
+        colorLabel.layer?.backgroundColor = DarkMode.textViewBackground.cgColor
         colorLabel.isBezeled = false
         
         currentKeyMode.addItem(withTitle: "Steady")
@@ -70,7 +68,8 @@ class ColorPickerController: NSViewController {
     }
     
     override func viewWillAppear() {
-       view.layer?.backgroundColor = colorBackground.nsColor.cgColor
+        view.wantsLayer = true
+        view.layer?.backgroundColor = DarkMode.subviews.cgColor
         ColorController.shared.setColor(NSColor.white.usingColorSpace(.genericRGB)!)
     }
 

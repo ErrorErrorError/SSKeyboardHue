@@ -27,8 +27,10 @@ class PresetsViewController: NSViewController {
     
     // private var directoryObserver: DirectoryObserver!
     private var directoryWatcher: FileWatcher!
-    var presetsDirectory: URL!
+    private var presetsDirectory: URL!
     var delegate: PresetsViewControllerDelegate!
+    private let customPresetsIndex: Int = 1
+    private let defaultPresetsIndex: Int = 0
     private var presetsArray: [Preset] = [Preset(type: .DefaultPresets),Preset(type: .CustomPresets)]
     
     override func viewDidLoad() {
@@ -218,7 +220,7 @@ class PresetsViewController: NSViewController {
     
     private func usedString(string: String) -> Bool {
         var isUsed = false
-        for i in presetsArray[1].presets {
+        for i in presetsArray[customPresetsIndex].presets {
             isUsed = i.name == string
             if (isUsed) {
                 break
@@ -231,7 +233,7 @@ class PresetsViewController: NSViewController {
         
         guard previousStringBeforeEditing != nil else {return}
         
-        let item = presetsArray[1].presets.filter { (someItem) -> Bool in
+        let item = presetsArray[customPresetsIndex].presets.filter { (someItem) -> Bool in
             return someItem.name == previousStringBeforeEditing
         }.first!
         
@@ -259,7 +261,7 @@ class PresetsViewController: NSViewController {
     @IBAction func clickedDelete(_ sender: Any) {
         guard let item = outlineView.item(atRow: outlineView.clickedRow) as? PresetItem else { return }
         let parentItem = outlineView.parent(forItem: item) as! Preset
-        let actuaIndexInOutline = outlineView.clickedRow - (presetsArray[0].presets.count + presetsArray.count)
+        let actuaIndexInOutline = outlineView.clickedRow - (presetsArray[defaultPresetsIndex].presets.count + presetsArray.count)
         let indexSet = NSIndexSet(index: actuaIndexInOutline)
         outlineView.removeItems(at: indexSet as IndexSet, inParent: parentItem, withAnimation: .effectFade)
         do {

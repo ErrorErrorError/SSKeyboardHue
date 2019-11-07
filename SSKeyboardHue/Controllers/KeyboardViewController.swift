@@ -11,8 +11,6 @@ import Cocoa
 class KeyboardViewController: NSViewController, NSPopoverDelegate {
     
     // var colorBackground = RGB(r: 242, g: 242, b: 250) // Light Mode
-    var colorBackground = RGB(r: 14, g: 14, b: 15) // Dark Mode
-    var keyboardBackground = RGB(r: 30, g: 30, b: 30) // Dark Mode
     @IBOutlet weak var keyboardView: KeyboardView!
     @IBOutlet weak var optionsButton: NSButton!
     @IBOutlet weak var gradientOriginView: NSView!
@@ -28,8 +26,8 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
     
     
     override func viewWillAppear() {
-        view.layer?.backgroundColor = colorBackground.nsColor.cgColor
-        keyboardView.layer?.backgroundColor = keyboardBackground.nsColor.cgColor
+        view.layer?.backgroundColor = DarkMode.background.cgColor
+        keyboardView.layer?.backgroundColor = DarkMode.subviews.cgColor
     }
     
     override func viewDidLoad() {
