@@ -8,10 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1301D0092368AE7400DFB0D1 /* SliderThumb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1301D0082368AE7400DFB0D1 /* SliderThumb.swift */; };
-		130847DE23735DA500004C73 /* FileWatcher+Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130847DA23735DA400004C73 /* FileWatcher+Action.swift */; };
-		130847DF23735DA500004C73 /* FileWatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130847DB23735DA400004C73 /* FileWatcher.swift */; };
-		130847E023735DA500004C73 /* FileWatcherEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130847DC23735DA500004C73 /* FileWatcherEvent.swift */; };
-		130847E123735DA500004C73 /* FileWatcher+Type.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130847DD23735DA500004C73 /* FileWatcher+Type.swift */; };
 		130847E62373B2EC00004C73 /* DarkMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130847E52373B2EB00004C73 /* DarkMode.swift */; };
 		1309AAA22369197700EDE1C7 /* KeyEffect - Wrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1309AAA12369197700EDE1C7 /* KeyEffect - Wrapper.mm */; };
 		130AC11A23730A9400E3FE0C /* PresetsOutlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130AC11923730A9400E3FE0C /* PresetsOutlineView.swift */; };
@@ -26,6 +22,10 @@
 		135650442358D37600A833FF /* CustomColorWell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 135650432358D37600A833FF /* CustomColorWell.swift */; };
 		13566D7B2351575600A3C1BA /* libSSKeyboard.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 13566D7A2351575600A3C1BA /* libSSKeyboard.a */; };
 		1360D37123440034005054F8 /* WindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1360D37023440034005054F8 /* WindowController.swift */; };
+		136ED2EF2373BCBB00103619 /* FileWatcherEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 136ED2EB2373BCBA00103619 /* FileWatcherEvent.swift */; };
+		136ED2F02373BCBB00103619 /* FileWatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 136ED2EC2373BCBA00103619 /* FileWatcher.swift */; };
+		136ED2F12373BCBB00103619 /* FileWatcher+Type.swift in Sources */ = {isa = PBXBuildFile; fileRef = 136ED2ED2373BCBA00103619 /* FileWatcher+Type.swift */; };
+		136ED2F22373BCBB00103619 /* FileWatcher+Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 136ED2EE2373BCBA00103619 /* FileWatcher+Action.swift */; };
 		1370F653234E7CE900290D69 /* SSKeyboard_SwiftWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1370F652234E7CE900290D69 /* SSKeyboard_SwiftWrapper.mm */; };
 		1370FF3C2346327F005D325E /* ColorPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1370FF3B2346327F005D325E /* ColorPickerController.swift */; };
 		1376FDBB234A404400FE4B1A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1376FDBA234A404400FE4B1A /* Constants.swift */; };
@@ -36,9 +36,6 @@
 		13A8DEB42345380400709D9F /* CustomSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13A8DEB32345380400709D9F /* CustomSplitViewController.swift */; };
 		13AEB39A234927B2008B1026 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AEB399234927B2008B1026 /* KeyboardView.swift */; };
 		13AF5940234555220091D6C4 /* SideBarViewControllerr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AF593F234555210091D6C4 /* SideBarViewControllerr.swift */; };
-		13C2EE9E236FD5A4000789C6 /* xy_radiation.png in Resources */ = {isa = PBXBuildFile; fileRef = 13C2EE9B236FD5A4000789C6 /* xy_radiation.png */; };
-		13C2EE9F236FD5A4000789C6 /* x_radiation.png in Resources */ = {isa = PBXBuildFile; fileRef = 13C2EE9C236FD5A4000789C6 /* x_radiation.png */; };
-		13C2EEA0236FD5A4000789C6 /* y_radiation.png in Resources */ = {isa = PBXBuildFile; fileRef = 13C2EE9D236FD5A4000789C6 /* y_radiation.png */; };
 		13E0AFAD2342D095009A5B41 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13E0AFAC2342D095009A5B41 /* AppDelegate.swift */; };
 		13E0AFB12342D096009A5B41 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13E0AFB02342D096009A5B41 /* Assets.xcassets */; };
 		13E0AFB42342D096009A5B41 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 13E0AFB22342D096009A5B41 /* Main.storyboard */; };
@@ -98,10 +95,6 @@
 
 /* Begin PBXFileReference section */
 		1301D0082368AE7400DFB0D1 /* SliderThumb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SliderThumb.swift; path = SSKeyboardHue/Views/SliderThumb.swift; sourceTree = SOURCE_ROOT; };
-		130847DA23735DA400004C73 /* FileWatcher+Action.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "FileWatcher+Action.swift"; path = "../../../../../../../../Downloads/FileWatcher-master/FileWatcher+Action.swift"; sourceTree = "<group>"; };
-		130847DB23735DA400004C73 /* FileWatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FileWatcher.swift; path = "../../../../../../../../Downloads/FileWatcher-master/FileWatcher.swift"; sourceTree = "<group>"; };
-		130847DC23735DA500004C73 /* FileWatcherEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FileWatcherEvent.swift; path = "../../../../../../../../Downloads/FileWatcher-master/FileWatcherEvent.swift"; sourceTree = "<group>"; };
-		130847DD23735DA500004C73 /* FileWatcher+Type.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "FileWatcher+Type.swift"; path = "../../../../../../../../Downloads/FileWatcher-master/FileWatcher+Type.swift"; sourceTree = "<group>"; };
 		130847E52373B2EB00004C73 /* DarkMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DarkMode.swift; sourceTree = "<group>"; };
 		1309AAA12369197700EDE1C7 /* KeyEffect - Wrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "KeyEffect - Wrapper.mm"; sourceTree = "<group>"; };
 		130AC11923730A9400E3FE0C /* PresetsOutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetsOutlineView.swift; sourceTree = "<group>"; };
@@ -117,6 +110,10 @@
 		135650432358D37600A833FF /* CustomColorWell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColorWell.swift; sourceTree = "<group>"; };
 		13566D7A2351575600A3C1BA /* libSSKeyboard.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libSSKeyboard.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		1360D37023440034005054F8 /* WindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WindowController.swift; path = SSKeyboardHue/Window/WindowController.swift; sourceTree = SOURCE_ROOT; };
+		136ED2EB2373BCBA00103619 /* FileWatcherEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileWatcherEvent.swift; sourceTree = "<group>"; };
+		136ED2EC2373BCBA00103619 /* FileWatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileWatcher.swift; sourceTree = "<group>"; };
+		136ED2ED2373BCBA00103619 /* FileWatcher+Type.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FileWatcher+Type.swift"; sourceTree = "<group>"; };
+		136ED2EE2373BCBA00103619 /* FileWatcher+Action.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FileWatcher+Action.swift"; sourceTree = "<group>"; };
 		1370F652234E7CE900290D69 /* SSKeyboard_SwiftWrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SSKeyboard_SwiftWrapper.mm; sourceTree = "<group>"; };
 		1370FF3B2346327F005D325E /* ColorPickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerController.swift; sourceTree = "<group>"; };
 		1376FDBA234A404400FE4B1A /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -127,9 +124,6 @@
 		13A8DEB32345380400709D9F /* CustomSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSplitViewController.swift; sourceTree = "<group>"; };
 		13AEB399234927B2008B1026 /* KeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardView.swift; sourceTree = "<group>"; };
 		13AF593F234555210091D6C4 /* SideBarViewControllerr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideBarViewControllerr.swift; sourceTree = "<group>"; };
-		13C2EE9B236FD5A4000789C6 /* xy_radiation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xy_radiation.png; sourceTree = "<group>"; };
-		13C2EE9C236FD5A4000789C6 /* x_radiation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = x_radiation.png; sourceTree = "<group>"; };
-		13C2EE9D236FD5A4000789C6 /* y_radiation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = y_radiation.png; sourceTree = "<group>"; };
 		13CDA9632354345200978746 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		13E0AFA92342D095009A5B41 /* SSKeyboardHue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SSKeyboardHue.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13E0AFAC2342D095009A5B41 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -179,10 +173,10 @@
 		130847D923735D8A00004C73 /* FileWatcher */ = {
 			isa = PBXGroup;
 			children = (
-				130847DB23735DA400004C73 /* FileWatcher.swift */,
-				130847DA23735DA400004C73 /* FileWatcher+Action.swift */,
-				130847DD23735DA500004C73 /* FileWatcher+Type.swift */,
-				130847DC23735DA500004C73 /* FileWatcherEvent.swift */,
+				136ED2EC2373BCBA00103619 /* FileWatcher.swift */,
+				136ED2EE2373BCBA00103619 /* FileWatcher+Action.swift */,
+				136ED2ED2373BCBA00103619 /* FileWatcher+Type.swift */,
+				136ED2EB2373BCBA00103619 /* FileWatcherEvent.swift */,
 			);
 			path = FileWatcher;
 			sourceTree = "<group>";
@@ -273,16 +267,6 @@
 			path = Controllers;
 			sourceTree = "<group>";
 		};
-		13C2EE9A236FD5A4000789C6 /* images */ = {
-			isa = PBXGroup;
-			children = (
-				13C2EE9B236FD5A4000789C6 /* xy_radiation.png */,
-				13C2EE9C236FD5A4000789C6 /* x_radiation.png */,
-				13C2EE9D236FD5A4000789C6 /* y_radiation.png */,
-			);
-			path = images;
-			sourceTree = "<group>";
-		};
 		13E0AFA02342D095009A5B41 = {
 			isa = PBXGroup;
 			children = (
@@ -342,7 +326,6 @@
 			isa = PBXGroup;
 			children = (
 				130847E42373B2EB00004C73 /* StyleKit */,
-				13C2EE9A236FD5A4000789C6 /* images */,
 				1353ED91235605E100AF863C /* SSKeyboardHue-Bridging-Header.hpp */,
 				1370F652234E7CE900290D69 /* SSKeyboard_SwiftWrapper.mm */,
 				13E0AFB52342D096009A5B41 /* Info.plist */,
@@ -534,12 +517,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				13C2EE9F236FD5A4000789C6 /* x_radiation.png in Resources */,
 				13E0AFB12342D096009A5B41 /* Assets.xcassets in Resources */,
 				13E0AFB42342D096009A5B41 /* Main.storyboard in Resources */,
-				13C2EE9E236FD5A4000789C6 /* xy_radiation.png in Resources */,
 				13FAC657236147F80067BD3E /* ContentViewController.xib in Resources */,
-				13C2EEA0236FD5A4000789C6 /* y_radiation.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -565,17 +545,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				13FAC656236147F80067BD3E /* ContentViewController.swift in Sources */,
-				130847E023735DA500004C73 /* FileWatcherEvent.swift in Sources */,
 				133EEAC12345C617006D9AFF /* ColorWheelView.swift in Sources */,
 				130AC11A23730A9400E3FE0C /* PresetsOutlineView.swift in Sources */,
 				130CDEE32346D1EC007E2028 /* ColorUtils.swift in Sources */,
+				136ED2F22373BCBB00103619 /* FileWatcher+Action.swift in Sources */,
 				133EEABD2345BC1F006D9AFF /* KeysView.swift in Sources */,
 				13FE55CD234806420061ACFF /* GradientSliderCell.swift in Sources */,
 				13E0AFAD2342D095009A5B41 /* AppDelegate.swift in Sources */,
 				1376FDBB234A404400FE4B1A /* Constants.swift in Sources */,
+				136ED2F12373BCBB00103619 /* FileWatcher+Type.swift in Sources */,
 				135650442358D37600A833FF /* CustomColorWell.swift in Sources */,
 				1360D37123440034005054F8 /* WindowController.swift in Sources */,
-				130847DE23735DA500004C73 /* FileWatcher+Action.swift in Sources */,
 				1370FF3C2346327F005D325E /* ColorPickerController.swift in Sources */,
 				1370F653234E7CE900290D69 /* SSKeyboard_SwiftWrapper.mm in Sources */,
 				13FE55D02348132A0061ACFF /* SharedClasses.swift in Sources */,
@@ -589,10 +569,10 @@
 				130847E62373B2EC00004C73 /* DarkMode.swift in Sources */,
 				13FC9F10235289F400630F99 /* CenterTextFieldCell.swift in Sources */,
 				132120812366A249009E67BB /* MultiGradientSlider.swift in Sources */,
-				130847E123735DA500004C73 /* FileWatcher+Type.swift in Sources */,
-				130847DF23735DA500004C73 /* FileWatcher.swift in Sources */,
 				13A8DEB42345380400709D9F /* CustomSplitViewController.swift in Sources */,
+				136ED2F02373BCBB00103619 /* FileWatcher.swift in Sources */,
 				13796F16235676C8006B716D /* Keys-Wrapper.mm in Sources */,
+				136ED2EF2373BCBB00103619 /* FileWatcherEvent.swift in Sources */,
 				132FEEAE23481BAD008A47FF /* ColorPickerView.swift in Sources */,
 				139B107A2343B0CE00E3787D /* KeyboardViewController.swift in Sources */,
 			);
