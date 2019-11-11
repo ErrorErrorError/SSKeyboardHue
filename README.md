@@ -31,7 +31,7 @@ The goal is to support all MSI Laptop keyboards that have RGB.
 *   Coming soon...
 # Download/Build
 ### Download:
-Download the latest pre-release [here](https://github.com/ErrorErrorError/SSKeyboardHue/releases).
+Download the latest release [here](https://github.com/ErrorErrorError/SSKeyboardHue/releases).
 ### Build: 
 Run on terminal:
 ```
@@ -40,7 +40,7 @@ git clone --recursive https://github.com/ErrorErrorError/SSKeyboardHue.git
 Make sure you use ```.xcworkspace``` file if you're planning to run the app from xcode.
 
 # Screenshots
-
+### GS65 Model
 <img src="images/sskeyboardhue-steady-mode.png">
 
 <img src="images/sskeyboardhue-colorshift-mode.png">
@@ -50,6 +50,18 @@ Make sure you use ```.xcworkspace``` file if you're planning to run the app from
 <img src="images/sskeyboardhue-reactive-mode.png">
 
 <img src="images/sskeyboardhue-custom-presets.png">
+
+### PerKey Model
+<img src="images/sskeyboardhue-steady-mode-perkey.png">
+
+<img src="images/sskeyboardhue-colorshift-mode-perkey.png">
+
+<img src="images/sskeyboardhue-breathing-mode-perkey.png">
+
+<img src="images/sskeyboardhue-reactive-mode-perkey.png">
+
+<img src="images/sskeyboardhue-custom-presets-perkey.png">
+
 
 # Open Source Libraries
 * [FileWatcher](https://github.com/eonist/FileWatcher)
