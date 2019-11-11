@@ -77,10 +77,10 @@ class ColorPickerController: NSViewController {
     
     private func setupCursor() {
         let path = Bundle.main.resourceURL
-        let selectableCursorPath = path!.appendingPathComponent("images/selectable-cursor.png");
+        let selectableCursorPath = path!.appendingPathComponent("images/selectable.png");
         currentCursor.setImage(NSImage(byReferencing: selectableCursorPath), forSegment: 0)
         
-        let selectAllCursor = path!.appendingPathComponent("images/select-all-cursor.png");
+        let selectAllCursor = path!.appendingPathComponent("images/select-all.png");
         currentCursor.setImage(NSImage(byReferencing: selectAllCursor), forSegment: 1)
     }
     

@@ -32,13 +32,13 @@
 		1370FF3C2346327F005D325E /* ColorPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1370FF3B2346327F005D325E /* ColorPickerController.swift */; };
 		1376FDBB234A404400FE4B1A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1376FDBA234A404400FE4B1A /* Constants.swift */; };
 		13796F16235676C8006B716D /* Keys-Wrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13796F15235676C8006B716D /* Keys-Wrapper.mm */; };
-		1383F2B62379130A00816597 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 1383F2B52379130A00816597 /* images */; };
 		138612B52370B5830032ACDD /* PresetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138612B42370B5830032ACDD /* PresetsViewController.swift */; };
 		1399A01E236E9A9F00419816 /* GradientViewPointPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1399A01D236E9A9F00419816 /* GradientViewPointPicker.swift */; };
 		139B107A2343B0CE00E3787D /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139B10782343B0CE00E3787D /* KeyboardViewController.swift */; };
 		13A8DEB42345380400709D9F /* CustomSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13A8DEB32345380400709D9F /* CustomSplitViewController.swift */; };
 		13AEB39A234927B2008B1026 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AEB399234927B2008B1026 /* KeyboardView.swift */; };
 		13AF5940234555220091D6C4 /* SideBarViewControllerr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AF593F234555210091D6C4 /* SideBarViewControllerr.swift */; };
+		13BFC81F2379AD180025A912 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 1383F2B52379130A00816597 /* images */; };
 		13E0AFAD2342D095009A5B41 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13E0AFAC2342D095009A5B41 /* AppDelegate.swift */; };
 		13E0AFB12342D096009A5B41 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13E0AFB02342D096009A5B41 /* Assets.xcassets */; };
 		13E0AFB42342D096009A5B41 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 13E0AFB22342D096009A5B41 /* Main.storyboard */; };
@@ -527,7 +527,7 @@
 				13E0AFB12342D096009A5B41 /* Assets.xcassets in Resources */,
 				13E0AFB42342D096009A5B41 /* Main.storyboard in Resources */,
 				132EB7AC237648A300ABAF8C /* default presets in Resources */,
-				1383F2B62379130A00816597 /* images in Resources */,
+				13BFC81F2379AD180025A912 /* images in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -759,7 +759,6 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = FYT4JTMSQ8;
 				ENABLE_HARDENED_RUNTIME = NO;
 				INFOPLIST_FILE = "SSKeyboardHue/Supporting Files/Info.plist";
@@ -768,7 +767,7 @@
 					"@executable_path/../Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/SSKeyboardHue-asflnvppwhdizuazvlszxordqdvm/Build/Products/Debug";
-				MARKETING_VERSION = 0.1.1;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.errorerrorerror.SSKeyboardHue;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -785,7 +784,6 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = FYT4JTMSQ8;
 				ENABLE_HARDENED_RUNTIME = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -795,7 +793,7 @@
 					"@executable_path/../Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/SSKeyboardHue-asflnvppwhdizuazvlszxordqdvm/Build/Products/Debug";
-				MARKETING_VERSION = 0.1.1;
+				MARKETING_VERSION = 1.0.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.errorerrorerror.SSKeyboardHue;
 				PRODUCT_NAME = "$(TARGET_NAME)";
