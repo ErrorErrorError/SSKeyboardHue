@@ -111,7 +111,7 @@ class GradientViewPointPicker: NSView {
                 newColorArray.append(color.withAlphaComponent(0.70))
                 newLocation.append(location)
             }
-            let bgGradient = NSGradient(colors: newColorArray, atLocations: newLocation, colorSpace: .genericRGB)!
+            guard let bgGradient = NSGradient(colors: newColorArray, atLocations: newLocation, colorSpace: .genericRGB) else { return }
             let newPointX = KeysView.map(x: crosshairLocation!.x, in_min: 0, in_max: frame.width, out_min: -1.0, out_max: 1.0) - 1
             let newPointY = KeysView.map(x: crosshairLocation!.y, in_min: 0, in_max: frame.height, out_min: -1.0, out_max: 1.0) - 1
             bgGradient.draw(in: dirtyRect, relativeCenterPosition: NSPoint(x: newPointX, y: newPointY))
@@ -169,17 +169,29 @@ class GradientViewPointPicker: NSView {
         return KeyPoint(x: x, y: y)
     }
     
-    func setFromTransitions(transitions: UnsafeMutablePointer<KeyTransition>, count: UInt8) {
+    func setFromKey(transitions: UnsafeMutablePointer<KeyTransition>, count: UInt8, radType: WaveRadControl, origin: KeyPoint) {
         let colorArr: [NSColor] = []
         for i in 0..<Int(count) {
             let transition = transitions[i]
             colorArray.append(transition.color.nsColor)
         }
+        
+        setOrigin(origin: origin)
         colorArray = colorArr
+        typeOfRad = radType;
     }
     
     func setDefaultView() {
         crosshairLocation = NSPoint(x: frame.width/2, y: frame.height/2)
         typeOfRad = XY
+    }
+    
+    private func setOrigin(origin: KeyPoint) {
+        let flipYAxis =  0x040d - origin.y
+        let x = KeysView.map(x: CGFloat(origin.x), in_min: 0, in_max: 0x10c5, out_min: 0, out_max: frame.width)
+        let y = KeysView.map(x: CGFloat(flipYAxis), in_min: 0, in_max: 0x040d, out_min: 0, out_max: frame.height)
+
+        crosshairLocation = calcBounds(point: NSPoint(x: x, y: y))
+        needsDisplay = true
     }
 }

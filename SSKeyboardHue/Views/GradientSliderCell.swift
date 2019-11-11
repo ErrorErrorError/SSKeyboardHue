@@ -13,7 +13,6 @@ class GradientSliderCell: NSSliderCell {
     
     var colorA = NSColor.white
     var colorB = NSColor.black
-    // private var barImage: CGImage?
     
     override func drawBar(inside rect: NSRect, flipped: Bool) {
         let t = NSBezierPath(roundedRect: rect, xRadius: 2.0, yRadius: 2.0)

@@ -67,11 +67,11 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
     }
     
     private func createNullKeys(isGS65: Bool) {
-        let nullKeys: KeyValuePairs<UInt8, String>!
+        var nullKeys: [UInt8:String] = KeyboardLayout.nullPerKeysAndGS65
         if (isGS65) {
-            nullKeys = KeyboardLayout.nullGS65Keys
+            nullKeys.merge(KeyboardLayout.nullGS65Keys) {(current,_) in current}
         } else {
-            nullKeys = KeyboardLayout.nullPerKey
+            nullKeys.merge(KeyboardLayout.nullPerKey) {(current,_) in current}
         }
         for keys in nullKeys {
             let region = getRegionKey(key: keys)

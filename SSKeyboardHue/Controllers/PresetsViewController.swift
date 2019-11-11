@@ -25,7 +25,6 @@ class PresetsViewController: NSViewController {
         }
     }
     
-    // private var directoryObserver: DirectoryObserver!
     private var directoryWatcher: FileWatcher!
     private var presetsDirectory: URL!
     var delegate: PresetsViewControllerDelegate!
@@ -36,7 +35,6 @@ class PresetsViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         createOrGetPresetsPath()
-        setupDefaultPresets()
         checkForCustomPresets()
         
         directoryWatcher = FileWatcher([presetsDirectory])
@@ -49,9 +47,31 @@ class PresetsViewController: NSViewController {
         
     }
     
-    private func setupDefaultPresets() {
-        
+    override func viewDidAppear() {
+        setupDefaultPresets()
     }
+    
+    private func setupDefaultPresets() {
+        let defaultPresetArray = presetsArray[0]
+        if (KeyboardManager.shared.keyboardManager.getKeyboardModel() == PerKeyGS65) {
+            let path = Bundle.main.resourceURL
+            let pathGS65 = path!.appendingPathComponent("default presets/gs65");
+            let contents: [URL] = try! FileManager.default.contentsOfDirectory(at: pathGS65, includingPropertiesForKeys: .none, options: .skipsHiddenFiles)
+            defaultPresetArray.presets = contents.map({ (oldVal) -> PresetItem in
+                return PresetItem(fileName: String(oldVal.lastPathComponent.dropLast(9)), url: oldVal, type: PresetsType.DefaultPresets)
+            })
+            outlineView.reloadData()
+        } else if (KeyboardManager.shared.keyboardManager.getKeyboardModel() == PerKey) {
+            let path = Bundle.main.resourceURL
+            let pathGS65 = path!.appendingPathComponent("default presets/perkey");
+            let contents: [URL] = try! FileManager.default.contentsOfDirectory(at: pathGS65, includingPropertiesForKeys: .none, options: .skipsHiddenFiles)
+            defaultPresetArray.presets = contents.map({ (oldVal) -> PresetItem in
+                return PresetItem(fileName: String(oldVal.lastPathComponent.dropLast(11)), url: oldVal, type: PresetsType.DefaultPresets)
+            })
+            outlineView.reloadData()
+        }
+    }
+    
     
     private func updateOutlineView(event: FileWatcherEvent.EventAndLocation) {
         switch event.eventType {
@@ -60,8 +80,8 @@ class PresetsViewController: NSViewController {
         default: break
         }
     }
-        
-    func checkForCustomPresets() {
+
+    private func checkForCustomPresets() {
         for i in presetsArray {
             if (i.type == .CustomPresets) {
                 i.presets = contentsOf().map({ (oldVal) -> PresetItem in
@@ -103,20 +123,29 @@ class PresetsViewController: NSViewController {
         
         if (KeyboardManager.shared.keyboardManager.getKeyboardModel() == PerKeyGS65 || KeyboardManager.shared.keyboardManager.getKeyboardModel() == PerKey) {
             var numKeys: Int
+            var nullKeys: [UInt8: String] = KeyboardLayout.nullPerKeysAndGS65
             if (KeyboardManager.shared.keyboardManager.getKeyboardModel() == PerKeyGS65) {
-                numKeys = KeyboardLayout.keysGS65.count + KeyboardLayout.nullGS65Keys.count
+                numKeys = KeyboardLayout.keysGS65.count + KeyboardLayout.nullGS65Keys.count + KeyboardLayout.nullPerKeysAndGS65.count
+                nullKeys.merge(KeyboardLayout.nullGS65Keys) {(current,_) in current}
             } else {
-                numKeys = KeyboardLayout.keysPerKey.count + KeyboardLayout.nullPerKey.count
+                numKeys = KeyboardLayout.keysPerKey.count + KeyboardLayout.nullPerKey.count + KeyboardLayout.nullPerKeysAndGS65.count
+                nullKeys.merge(KeyboardLayout.nullPerKey) {(current,_) in current}
             }
+
+            // Removes all effects since it will not use those effects
+            KeyboardManager.shared.effectsArray.removeAllObjects()
+            
+            // Remove all selected effects
+            KeyboardManager.shared.keyboardView.resetKeysSelected()
             
             // If there is any effects in the file, it will detect the effects and load them into the effects array.
             // Minimum effect size is 16 bytes
             if (array.count > (numKeys * 12)) {
                 var startIndexEffect = (array.count - (array.count - (numKeys * 12)))
-                var transitions: [KeyTransition] = []
                 while (startIndexEffect < array.count) {
                     let effectId = array[startIndexEffect]
                     let transitionSize = array[startIndexEffect + 1]
+                    var transitions: [KeyTransition] = []
                     for i in 0..<transitionSize {
                         let index: Int = (startIndexEffect + 2) + Int((i * 5))
                         let transitionColor = RGB(r: array[index], g: array[index + 1], b: array[index + 2])
@@ -134,17 +163,8 @@ class PresetsViewController: NSViewController {
                     let isWaveModeActive = array[startIndexEffect + 8]
                     
                     let keyEffect = KeyEffectWrapper(keyEffect: effectId, &transitions, transitionSize)
-                    
                     if (isWaveModeActive == 1) {
                         keyEffect?.setWaveMode(wavePoint, waveLength, WaveRadControl(rawValue: WaveRadControl.RawValue(waveRadControl)), WaveDirection(rawValue: WaveDirection.RawValue(waveDirection)))
-                    }
-                    
-                    let effectsArray = KeyboardManager.shared.effectsArray
-                    for effects in effectsArray {
-                        let effect = effects as! KeyEffectWrapper
-                        if (effect.getEffectId() == effectId) {
-                            effectsArray.remove(effect)
-                        }
                     }
                     
                     KeyboardManager.shared.effectsArray.add(keyEffect!)
@@ -158,33 +178,45 @@ class PresetsViewController: NSViewController {
                 let currentIndex  = i * 12
                 let region = array[currentIndex]
                 let keycode = array[currentIndex + 1]
-                let colorMain = RGB(r: array[currentIndex + 2], g: array[currentIndex + 3], b: array[currentIndex + 4])
-                let colorActive = RGB(r: array[currentIndex + 5], g: array[currentIndex + 6], b: array[currentIndex + 7])
-                let duration = UInt16(array[currentIndex + 9]) << 8 | UInt16(array[currentIndex + 8])
-                let effectId = array[currentIndex + 10]
-                let mode: PerKeyModes = PerKeyModes(rawValue: PerKeyModes.RawValue(array[currentIndex + 11]))
-                let foundKeyArray = keyViewArray.filter {(findKey) -> Bool in
-                    let castKey = findKey as! KeysView
-                    return castKey.keyModel.getRegion() == region && castKey.keyModel.getKeyCode() == keycode
-                }
+                let isANullKey = nullKeys.index(forKey: keycode)
                 
-                let keyFound = foundKeyArray[0] as! KeysView
-                if (mode == Steady) {
-                    keyFound.setSteady(newColor: colorMain.nsColor)
-                } else if (mode == Reactive) {
-                    keyFound.setReactive(active: colorActive.nsColor, rest: colorMain.nsColor, speed: duration)
-                } else if (mode == ColorShift || mode == Breathing) {
-                    let foundColor = KeyboardManager.shared.effectsArray.filter { (effect) -> Bool in
-                        let keyEffect = effect as! KeyEffectWrapper
-                        if (keyEffect.getEffectId() == effectId) {
-                            return true
-                        } else {
-                            return false
-                        }
+                /// Checks if it's a null key
+                if (isANullKey == nil) {
+                    let colorMain = RGB(r: array[currentIndex + 2], g: array[currentIndex + 3], b: array[currentIndex + 4])
+                    let colorActive = RGB(r: array[currentIndex + 5], g: array[currentIndex + 6], b: array[currentIndex + 7])
+                    let duration = UInt16(array[currentIndex + 9]) << 8 | UInt16(array[currentIndex + 8])
+                    let effectId = array[currentIndex + 10]
+                    let mode: PerKeyModes = PerKeyModes(rawValue: UInt32(array[currentIndex + 11]))
+                    let foundKeyArray = keyViewArray.filter {(findKey) -> Bool in
+                        let castKey = findKey as! KeysView
+                        return castKey.keyModel.getRegion() == region && castKey.keyModel.getKeyCode() == keycode
                     }
-                    keyFound.setEffectKey(_id: effectId, mode: mode, color: (foundColor[0] as! KeyEffectWrapper).getStartColor().nsColor)
-                } else {
-                    keyFound.setDisabled()
+                    
+                    let keyFound = foundKeyArray[0] as! KeysView
+                    if (mode == Steady) {
+                        keyFound.setSteady(newColor: colorMain.nsColor)
+                    } else if (mode == Reactive) {
+                        keyFound.setReactive(active: colorActive.nsColor, rest: colorMain.nsColor, speed: duration)
+                    } else if (mode == ColorShift || mode == Breathing) {
+                        let foundEffect = KeyboardManager.shared.effectsArray.filter { (effect) -> Bool in
+                            let keyEffect = effect as! KeyEffectWrapper
+                            if (keyEffect.getEffectId() == effectId) {
+                                return true
+                            } else {
+                                return false
+                            }
+                        }
+                        var foundColor: RGB
+                        if (foundEffect.count == 1) {
+                            foundColor = (foundEffect[0] as! KeyEffectWrapper).getStartColor()
+                        } else {
+                            foundColor = RGB(r: 0, g: 0, b: 0)
+                        }
+                        
+                        keyFound.setEffectKey(_id: effectId, mode: mode, color: foundColor.nsColor)
+                    } else {
+                        keyFound.setDisabled()
+                    }
                 }
             }
             
@@ -192,7 +224,7 @@ class PresetsViewController: NSViewController {
             /// TODO - Implement ThreeRegion
         }
         
-        KeyboardManager.shared.keyboardView.updateKeys(forceRefresh: true)
+        KeyboardManager.shared.keyboardView.updateKeys(forceRefresh: true, updateEffectKeys: true)
     }
     
     private func createOrGetPresetsPath() {
@@ -261,8 +293,8 @@ class PresetsViewController: NSViewController {
     @IBAction func clickedDelete(_ sender: Any) {
         guard let item = outlineView.item(atRow: outlineView.clickedRow) as? PresetItem else { return }
         let parentItem = outlineView.parent(forItem: item) as! Preset
-        let actuaIndexInOutline = outlineView.clickedRow - (presetsArray[defaultPresetsIndex].presets.count + presetsArray.count)
-        let indexSet = NSIndexSet(index: actuaIndexInOutline)
+        let indexOfItem = outlineView.childIndex(forItem: item);
+        let indexSet = NSIndexSet(index: indexOfItem)
         outlineView.removeItems(at: indexSet as IndexSet, inParent: parentItem, withAnimation: .effectFade)
         do {
             try FileManager.default.removeItem(at: item.urlLocation)

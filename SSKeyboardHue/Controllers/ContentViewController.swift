@@ -17,7 +17,6 @@ class ContentViewController: NSViewController {
     }
     
     @IBAction func clickedSave(_ sender: NSButton) {
-        
         let keysModifiers = KeyboardManager.shared.keyboardView.getKeysArray(region: regions.0)
         let arrayModifiers = createPacket(keysArray: keysModifiers)
         let keysAlpha = KeyboardManager.shared.keyboardView.getKeysArray(region: regions.1)
@@ -54,7 +53,7 @@ class ContentViewController: NSViewController {
             arrayPacket.append(effect.getEffectId())
             arrayPacket.append(effect.getTransitionSize())
             for i in 0..<effect.getTransitionSize() {
-                let transition = effect.getTransitions()![Int(i)]
+                let transition: KeyTransition = effect.getTransitions()[Int(i)]
                 arrayPacket.append(transition.color.r)
                 arrayPacket.append(transition.color.g)
                 arrayPacket.append(transition.color.b)
@@ -70,7 +69,9 @@ class ContentViewController: NSViewController {
             arrayPacket.append(UInt8((effect.getWaveOrigin().x & 0xff00) >> 8))
             arrayPacket.append(UInt8(effect.getWaveOrigin().y & 0x00ff))
             arrayPacket.append(UInt8((effect.getWaveOrigin().y & 0xff00) >> 8))
+            
             arrayPacket.append(UInt8(effect.getWaveRadControl().rawValue))
+            
             arrayPacket.append(effect.isWaveModeActive() ? 1 : 0)
         }
         /// TODO - Needs implementation
@@ -110,6 +111,5 @@ class ContentViewController: NSViewController {
         let presetsFolder = sskeyboardDirectory.appendingPathComponent("presets")
         let newPreset = presetsFolder.appendingPathComponent(key + ".bin")
         return newPreset
-        
     }
 }

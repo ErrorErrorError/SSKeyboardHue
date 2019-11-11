@@ -57,6 +57,7 @@ extension CustomSplitViewController: PresetsViewControllerDelegate {
         if (shouldHidePreset) {
             shouldShowPresets()
         }
+        
         keyboardVC.stringFile = presetName
     }
 }

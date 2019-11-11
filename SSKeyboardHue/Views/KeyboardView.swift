@@ -24,9 +24,65 @@ class KeyboardView: NSView {
         super.init(frame: frameRect)
         KeyboardManager.shared.keyboardView = self
     }
+    
+    override func mouseEntered(with event: NSEvent) {
+        let currentCursor = ColorController.shared.colorPicker.currentCursor!
+        if (currentCursor.selectedSegment == 1) {
+            NSCursor.init(image: currentCursor.image(forSegment: 1)!, hotSpot: NSPoint(x: 0.5, y: 0.5)).set()
+        } else {
+            NSCursor.init(image: currentCursor.image(forSegment: 0)!, hotSpot: NSPoint(x: 0.5, y: 0.5)).set()
+        }
+    }
+    
+    override func mouseExited(with event: NSEvent) {
+        let currentCursor = ColorController.shared.colorPicker.currentCursor!
+        NSCursor.init(image: currentCursor.image(forSegment: 0)!, hotSpot: NSPoint(x: 0.5, y: 0.5)).set()
+    }
+    
+    override func updateTrackingAreas() {
+        for trackingArea in self.trackingAreas {
+            self.removeTrackingArea(trackingArea)
+        }
 
+        let options: NSTrackingArea.Options = [.mouseEnteredAndExited, .activeAlways]
+        let trackingArea = NSTrackingArea(rect: self.bounds, options: options, owner: self, userInfo: nil)
+        self.addTrackingArea(trackingArea)
+    }
+
+    
     override func mouseDown(with event: NSEvent) {
-        super.mouseDown(with: event)
+        if (ColorController.shared.colorPicker.currentCursor.selectedSegment == 1) {
+            resetKeysSelected()
+            let currentPoint = convert(event.locationInWindow, from: nil)
+            var keySelected: KeysView?
+            for views in subviews.filter({ (filterView) -> Bool in
+                guard let iskey = filterView as? KeysView else { return false }
+                return (!iskey.isHidden)
+            }) {
+                if (NSPointInRect(currentPoint, views.frame)) {
+                    keySelected = (views as! KeysView)
+                    ColorController.shared.setKey(key: keySelected!.keyModel)
+                    break
+                }
+            }
+            
+            if (keySelected == nil) {
+                return
+            }
+            
+            for i in subviews.filter({ (filterView) -> Bool in
+                guard let iskey = filterView as? KeysView else { return false }
+                return (!iskey.isHidden)
+            }) {
+                let key = i as! KeysView
+                if (!key.isEqual(keySelected) && (keySelected!.keyModel.isEqual(key.keyModel))) {
+                    key.setSelected(selected: true, fromGroupSelection: true)
+                }
+            }
+            
+            return
+        }
+        
         startPoint = convert(event.locationInWindow, from: nil)
         var resetKeys = true
         for i in subviews {
@@ -38,6 +94,8 @@ class KeyboardView: NSView {
         
         if (resetKeys) {
             resetKeysSelected()
+            // This passes the mouse down event to the key
+            super.mouseDown(with: event)
         }
         
         shapeLayer = CAShapeLayer(layer: layer!)
@@ -48,6 +106,10 @@ class KeyboardView: NSView {
     }
     
     override func mouseDragged(with event: NSEvent) {
+        if (ColorController.shared.colorPicker.currentCursor.selectedSegment == 1) {
+            return
+        }
+        
         super.mouseDragged(with: event)
         let point: NSPoint = convert(event.locationInWindow, from: nil)
         let path: CGMutablePath = CGMutablePath()
@@ -96,18 +158,18 @@ class KeyboardView: NSView {
             }
         }
     }
-    
-    func resetKeysSelected() {
-        for i in subviews {
-            (i as! KeysView).setSelected(selected: false, fromGroupSelection: true)
-        }
-    }
-    
+        
     override func mouseUp(with event: NSEvent) {
         super.mouseUp(with: event)
         if (shapeLayer != nil) {
             shapeLayer.removeFromSuperlayer()
             shapeLayer = nil
+        }
+    }
+    
+    func resetKeysSelected() {
+        for i in subviews {
+            (i as! KeysView).setSelected(selected: false, fromGroupSelection: true)
         }
     }
     
@@ -170,7 +232,6 @@ class KeyboardView: NSView {
             keyboardArray.append(regionKey)
             let modifierKeys = UnsafeRawBufferPointer(start: &modifiers, count: Int(kModifiersSize))
             for i in modifierKeys {
-                
                 keyboardArray.append(findAndGetKey(isRegionKey: false, keyToFind: i)!)
             }
             
@@ -210,10 +271,11 @@ class KeyboardView: NSView {
         return keyboardArray
     }
     
+    
     /**
      This method allows to refresh PerKey and GS65 keyboard if therewas any changes
     **/
-    public func updateKeys(forceRefresh: Bool = false) {
+    public func updateKeys(forceRefresh: Bool = false, updateEffectKeys: Bool = false) {
         let modifiersKeys       = regions.0
         let alphaNumsKeys       = regions.1
         let enterKeys           = regions.2
@@ -224,14 +286,14 @@ class KeyboardView: NSView {
         var refreshEnter: Bool
         var refreshSpecial: Bool
         
-        if (KeyboardManager.shared.effectsArray.count > 0)  {
+        if (updateEffectKeys) {
             updateEffects()
         }
         
         if (forceRefresh) {
             refreshModifiers = true
-            refreshEnter = true
-            refreshSpecial = true
+            refreshEnter     = true
+            refreshSpecial   = true
             refreshAlphanums = true
         } else {
             refreshModifiers = regionNeedsRefresh(regionToSearch: modifiersKeys)
@@ -309,12 +371,9 @@ class KeyboardView: NSView {
     
     private func updateEffects() {
         let effectArray = KeyboardManager.shared.effectsArray
-        serialQueue.async {
-            for i in 0..<effectArray.count {
-                let effect = effectArray[i] as! KeyEffectWrapper
-                
-                // let sendUpdateCommand = (!((i + 1) < effectArray.count))
-                let retVal = KeyboardManager.shared.keyboardManager.sendEffect(effect, false)
+        for effect in effectArray {
+            serialQueue.async {
+                let retVal = KeyboardManager.shared.keyboardManager.sendEffect((effect as! KeyEffectWrapper), false)
                 if (retVal != kIOReturnSuccess) {
                     print("could not send package", retVal)
                 }
@@ -337,11 +396,13 @@ class KeyboardView: NSView {
         return needRefresh
     }
     
+    
     public func getUsedEffectId() -> [UInt8] {
         var effectIds: [UInt8] = []
-        for keySubview in subviews {
+        for keySubview in subviews.filter({ (view) -> Bool in return !view.isHidden}) {
             let keys = keySubview as! KeysView
-            if (!effectIds.contains(keys.keyModel.getEffectId()) && keys.keyModel.getEffectId() != 0) {
+            let doesItContainId = effectIds.contains(keys.keyModel.getEffectId())
+            if (!doesItContainId && (keys.keyModel.getMode() == ColorShift || keys.keyModel.getMode() == Breathing)) {
                 effectIds.append(keys.keyModel.getEffectId())
             }
         }

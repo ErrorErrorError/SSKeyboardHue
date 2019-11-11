@@ -50,6 +50,7 @@
 -(void)setTransitions:(struct KeyTransition *) keyTransition : (uint8_t) size {
     if (_transitions) {
         delete [] _transitions;
+        _transitions = nullptr;
         _transitions = new KeyTransition[size];
         for (uint8_t i = 0; i < size; i++) {
             _transitions[i] = keyTransition[i];
@@ -89,7 +90,7 @@
     return _keyEffect.getWaveDirection();
 }
 
--(void *)getEffect{
+-(void *)getEffect {
     return &_keyEffect;
 }
 

@@ -278,6 +278,6 @@ class MultiGradientSlider: NSView {
     
     private func adjustSpeedValues(numOfSliders: Int) {
         ColorController.shared.colorPicker.speedSlider.minValue = Double(Int(numOfSliders/4 * 100) + 100)
-        ColorController.shared.colorPicker.setSpeed(ColorController.shared.colorPicker.speedSlider)
+        ColorController.shared.colorPicker.updateSpeedSliderValue()
     }
 }

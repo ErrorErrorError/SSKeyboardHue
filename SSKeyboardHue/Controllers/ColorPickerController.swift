@@ -28,6 +28,7 @@ class ColorPickerController: NSViewController {
     @IBOutlet weak var speedBox: NSTextField!
     @IBOutlet weak var pulseText: NSTextField!
     @IBOutlet weak var pulseDurationLabel: NSTextField!
+    @IBOutlet weak var currentCursor: NSSegmentedControl!
     
     weak var delegate: ColorPickerControllerDelegate?
         
@@ -53,7 +54,8 @@ class ColorPickerController: NSViewController {
         currentKeyMode.menu?.item(at: 5)?.isHidden = true   // Mixed
         
         setUpReactiveViews()
-        setupWaveViews()        
+        setupWaveViews()
+        setupCursor()
     }
     
     override func viewDidAppear() {
@@ -72,7 +74,15 @@ class ColorPickerController: NSViewController {
         view.layer?.backgroundColor = DarkMode.subviews.cgColor
         ColorController.shared.setColor(NSColor.white.usingColorSpace(.genericRGB)!)
     }
-
+    
+    private func setupCursor() {
+        let path = Bundle.main.resourceURL
+        let selectableCursorPath = path!.appendingPathComponent("images/selectable-cursor.png");
+        currentCursor.setImage(NSImage(byReferencing: selectableCursorPath), forSegment: 0)
+        
+        let selectAllCursor = path!.appendingPathComponent("images/select-all-cursor.png");
+        currentCursor.setImage(NSImage(byReferencing: selectAllCursor), forSegment: 1)
+    }
     
     private func setUpReactiveViews() {
         
@@ -176,7 +186,7 @@ class ColorPickerController: NSViewController {
         }
     }
     
-    private func updateSpeedSliderValue() {
+    func updateSpeedSliderValue() {
         var trimmed = speedSlider.intValue.description
         trimmed.removeLast(2)
         speedBox.stringValue = trimmed + "s"
@@ -277,12 +287,15 @@ class ColorPickerController: NSViewController {
     }
     
     @IBAction func setWaveSpeed(_ sender: NSSlider) {
+        updateWaveSpeedLabel()
+        let shouldSendKeyCommand = (NSApplication.shared.currentEvent?.type == NSEvent.EventType.leftMouseUp) ? true : false
+        updateKeys(shouldUpdateKeys: shouldSendKeyCommand)
+    }
+        
+    func updateWaveSpeedLabel(){
         var trimmed = waveLengthSlider.intValue.description
         trimmed.removeLast(1)
         pulseDurationLabel.stringValue = trimmed
-
-        let shouldSendKeyCommand = (NSApplication.shared.currentEvent?.type == NSEvent.EventType.leftMouseUp) ? true : false
-        updateKeys(shouldUpdateKeys: shouldSendKeyCommand)
     }
     
     @IBAction func presetsButtonPressed(_ sender: NSButton) {
@@ -327,6 +340,10 @@ class ColorPickerController: NSViewController {
                     (key as! KeysView).setSteady(newColor: ColorController.shared.selectedColor)
                     isThereChange = true
                 }
+                
+                if (isThereChange) {
+                    removeUnusedEffects()
+                }
             } else if (currentKeyMode.titleOfSelectedItem == "Reactive") {
                 for selected in ColorController.shared.reactionBoxColors {
                     (selected as! CustomColorWell).color = ColorController.shared.selectedColor
@@ -337,6 +354,9 @@ class ColorPickerController: NSViewController {
                     isThereChange = true
                 }
                 
+                if (isThereChange) {
+                    removeUnusedEffects()
+                }
             } else if (currentKeyMode.titleOfSelectedItem == "ColorShift"){
                 // Sets Transition color if was changed
                 for transition in ColorController.shared.transitionThumbColors {
@@ -360,10 +380,17 @@ class ColorPickerController: NSViewController {
                 if (shouldUpdateKeys) {
                     let keyEffect = getKeyEffect(isColorShift: true)
                     for key in KeyboardManager.shared.keysSelected {
-                        if ((key as! KeysView).keyModel.getEffectId() != keyEffect.getEffectId()) {
+                        // if ((key as! KeysView).keyModel.getEffectId() != keyEffect.getEffectId() || keyEffect.getEffectId() == 0) {
                             (key as! KeysView).setEffectKey(_id: keyEffect.getEffectId(), mode: ColorShift, color: keyEffect.getStartColor().nsColor)
                             isThereChange = true
-                        }
+                        //}
+                    }
+                    
+                    if (isThereChange) {
+                        KeyboardManager.shared.effectsArray.add(keyEffect)
+                        
+                        /// Removes unused effects
+                        removeUnusedEffects()
                     }
                 }
                 
@@ -380,10 +407,17 @@ class ColorPickerController: NSViewController {
                 if (shouldUpdateKeys) {
                     let keyEffect = getKeyEffect(isColorShift: false)
                     for key in KeyboardManager.shared.keysSelected {
-                        if ((key as! KeysView).keyModel.getEffectId() != keyEffect.getEffectId()) {
+                        // if ((key as! KeysView).keyModel.getEffectId() != keyEffect.getEffectId() || keyEffect.getEffectId() == 0) {
                             (key as! KeysView).setEffectKey(_id: keyEffect.getEffectId(), mode: Breathing, color: keyEffect.getStartColor().nsColor)
                             isThereChange = true
-                        }
+                        // }
+                    }
+                    
+                    if (isThereChange) {
+                        KeyboardManager.shared.effectsArray.add(keyEffect)
+
+                        /// Removes unused effects
+                        removeUnusedEffects()
                     }
                 }
             } else if (currentKeyMode.titleOfSelectedItem == "Disabled") {
@@ -391,21 +425,24 @@ class ColorPickerController: NSViewController {
                     (key as! KeysView).setDisabled()
                     isThereChange = true
                 }
+                
+                if (isThereChange) {
+                    removeUnusedEffects()
+                }
             }
             
-            /// Removes unused effects
-            removeUnusedEffects()
         } else {
             // TODO - Three Region Keyboard
         }
         
         // Will only set color when the mouse is up
-        if (shouldUpdateKeys && isThereChange) {
+        if (shouldUpdateKeys) {
             // Will notify for keyboard GS65 and other PerKey to update the keys once mouse is up
-            KeyboardManager.shared.keyboardView.updateKeys()
+            KeyboardManager.shared.keyboardView.updateKeys(updateEffectKeys: isThereChange)
         }
     }
     
+    /// This function checks if the current state of the ColorPicker has the same values as the key
     func isCurrentModeEqual(key: KeysWrapper) -> Bool {
         var isModeEqual = false
         isModeEqual = currentKeyMode.indexOfSelectedItem == key.getMode().rawValue
@@ -447,7 +484,11 @@ class ColorPickerController: NSViewController {
                 
                 if (isModeEqual) {
                     if (key.getMode() == ColorShift && effect.isWaveModeActive()) {
-                        isModeEqual = effect.getWaveRadControl().rawValue == waveRadType.selectedSegment && effect.getWaveLength() == waveLengthSlider.integerValue && effect.getWaveDirection().rawValue == waveDirectionSegment.integerValue && effect.getWaveOrigin().x == ColorController.shared.gradientViewPoint.getCalculatedOrigin().x && effect.getWaveOrigin().y == ColorController.shared.gradientViewPoint.getCalculatedOrigin().y
+                        let waveRadControlEqual = effect.getWaveRadControl().rawValue == waveRadType.selectedSegment
+                        let waveLengthEqual = effect.getWaveLength() == waveLengthSlider.integerValue
+                        let waveDirectionEqual = effect.getWaveDirection().rawValue == waveDirectionSegment.integerValue
+                        let waveOriginEqual = effect.getWaveOrigin().x == ColorController.shared.gradientViewPoint.getCalculatedOrigin().x && effect.getWaveOrigin().y == ColorController.shared.gradientViewPoint.getCalculatedOrigin().y
+                        isModeEqual = waveRadControlEqual && waveLengthEqual && waveDirectionEqual && waveOriginEqual
                     } else {
                         isModeEqual = true
                     }
@@ -469,7 +510,7 @@ class ColorPickerController: NSViewController {
         }
     }
     
-    private func removeUnusedEffects() {
+    func removeUnusedEffects() {
         let usedEffectId = KeyboardManager.shared.keyboardView.getUsedEffectId()
         
         for effects in KeyboardManager.shared.effectsArray {
@@ -477,6 +518,8 @@ class ColorPickerController: NSViewController {
             let contains = usedEffectId.contains(effect.getEffectId())
             if (!contains) {
                 KeyboardManager.shared.effectsArray.remove(effect)
+                removeUnusedEffects()
+                break
             }
         }
     }
@@ -492,9 +535,9 @@ class ColorPickerController: NSViewController {
     }
     
     private func getKeyEffect(isColorShift: Bool) -> KeyEffectWrapper {
-        var id: UInt8 = 1
+        var id: UInt8 = 0
         let usedEffectId = KeyboardManager.shared.keyboardView.getUsedEffectId()
-        for i in 1...255 {
+        for i in 0...255 {
             let containsId = usedEffectId.contains(UInt8(i))
             if (!containsId) {
                 id = UInt8(i)
@@ -511,11 +554,13 @@ class ColorPickerController: NSViewController {
         
         let keyEffect = KeyEffectWrapper(keyEffect: id, &transitions, UInt8(transitions.count))
         
-        if (waveModeCheckBox.state == .on) {
-            let keypoint = ColorController.shared.gradientViewPoint.getCalculatedOrigin()
-            keyEffect?.setWaveMode(keypoint, UInt16(waveLengthSlider.integerValue), WaveRadControl(rawValue: UInt32(waveRadType!.selectedSegment)), WaveDirection(rawValue: UInt32(waveDirectionSegment!.selectedSegment)))
-        } else {
-            keyEffect?.disableWavemode()
+        if (isColorShift) {
+            if (waveModeCheckBox.state == .on) {
+                let keypoint = ColorController.shared.gradientViewPoint.getCalculatedOrigin()
+                keyEffect?.setWaveMode(keypoint, UInt16(waveLengthSlider.integerValue), WaveRadControl(rawValue: UInt32(waveRadType!.selectedSegment)), WaveDirection(rawValue: UInt32(waveDirectionSegment!.selectedSegment)))
+            } else {
+                keyEffect?.disableWavemode()
+            }
         }
         
         for effects in KeyboardManager.shared.effectsArray {
@@ -526,8 +571,6 @@ class ColorPickerController: NSViewController {
         }
         
         /// Will add new effect to array if there was no same effects found
-        KeyboardManager.shared.effectsArray.add(keyEffect!)
-        
         return keyEffect!
     }
 }

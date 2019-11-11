@@ -710,13 +710,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="200" height="722"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <subviews>
-                            <scrollView misplaced="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="22" horizontalPageScroll="10" verticalLineScroll="22" verticalPageScroll="10" usesPredominantAxisScrolling="NO" scrollerKnobStyle="dark" translatesAutoresizingMaskIntoConstraints="NO" id="gst-kW-X9T">
+                            <scrollView misplaced="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="17" horizontalPageScroll="10" verticalLineScroll="17" verticalPageScroll="10" usesPredominantAxisScrolling="NO" scrollerKnobStyle="dark" translatesAutoresizingMaskIntoConstraints="NO" id="gst-kW-X9T">
                                 <rect key="frame" x="0.0" y="2" width="200" height="682"/>
                                 <clipView key="contentView" drawsBackground="NO" id="ZDq-CI-Caz">
                                     <rect key="frame" x="0.0" y="0.0" width="200" height="682"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <outlineView verticalHuggingPriority="750" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="22" rowSizeStyle="automatic" viewBased="YES" floatsGroupRows="NO" indentationPerLevel="14" outlineTableColumn="x6O-sd-dLN" id="tlP-aA-9ua" customClass="PresetsOutlineView" customModule="SSKeyboardHue" customModuleProvider="target">
+                                        <outlineView verticalHuggingPriority="750" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" floatsGroupRows="NO" indentationPerLevel="14" outlineTableColumn="x6O-sd-dLN" id="tlP-aA-9ua" customClass="PresetsOutlineView" customModule="SSKeyboardHue" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="0.0" width="200" height="682"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="3" height="0.0"/>
@@ -725,7 +725,7 @@
                                             <tableColumns>
                                                 <tableColumn width="197" minWidth="16" maxWidth="1000" id="x6O-sd-dLN">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
-                                                        <font key="font" metaFont="controlContent" size="11"/>
+                                                        <font key="font" metaFont="menu" size="11"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                     </tableHeaderCell>
@@ -887,7 +887,7 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="optionClicked:" target="tEf-gk-sDm" id="cGC-qp-X1q"/>
+                                    <action selector="optionClicked:" target="tEf-gk-sDm" id="gcw-Ws-VaY"/>
                                 </connections>
                             </button>
                             <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dBU-1I-gO8" customClass="KeyboardView" customModule="SSKeyboardHue" customModuleProvider="target">
@@ -947,7 +947,7 @@
                                     <constraint firstAttribute="height" constant="22" id="zEQ-My-RzY"/>
                                 </constraints>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" refusesFirstResponder="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" borderStyle="bezel" focusRingType="none" alignment="center" bezelStyle="round" id="QjB-dp-FkI" customClass="CenterTextFieldCell" customModule="SSKeyboardHue" customModuleProvider="target">
-                                    <font key="font" metaFont="controlContent" size="11"/>
+                                    <font key="font" metaFont="menu" size="11"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" red="0.20392156862745098" green="0.20392156862745098" blue="0.20392156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </textFieldCell>
@@ -995,7 +995,7 @@
                                 </connections>
                             </segmentedControl>
                             <slider hidden="YES" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Exx-C8-raK">
-                                <rect key="frame" x="25" y="163" width="152" height="19"/>
+                                <rect key="frame" x="25" y="163" width="158" height="19"/>
                                 <sliderCell key="cell" continuous="YES" state="on" alignment="left" minValue="30" maxValue="1000" doubleValue="30" tickMarkPosition="above" sliderType="linear" id="rMi-AV-QzX"/>
                                 <connections>
                                     <action selector="setWaveSpeed:" target="6ZD-9K-ovb" id="xXq-Dz-fCL"/>
@@ -1072,19 +1072,32 @@
                             </textField>
                             <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pzF-EH-lWt">
                                 <rect key="frame" x="188" y="276" width="37" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="r30-gf-qWq">
+                                <textFieldCell key="cell" title="Label" id="r30-gf-qWq">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                             <slider hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7lN-w3-h7j">
-                                <rect key="frame" x="26" y="274" width="160" height="19"/>
+                                <rect key="frame" x="26" y="274" width="166" height="19"/>
                                 <sliderCell key="cell" continuous="YES" state="on" alignment="left" maxValue="100" doubleValue="100" tickMarkPosition="above" sliderType="linear" id="Dau-WO-UpN"/>
                                 <connections>
                                     <action selector="setSpeed:" target="6ZD-9K-ovb" id="CcZ-GA-jJI"/>
                                 </connections>
                             </slider>
+                            <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="P7f-KW-nnU">
+                                <rect key="frame" x="190" y="649" width="41" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="Dgd-eQ-PYI">
+                                    <font key="font" metaFont="system"/>
+                                    <segments>
+                                        <segment width="18" selected="YES"/>
+                                        <segment width="16">
+                                            <nil key="label"/>
+                                        </segment>
+                                    </segments>
+                                </segmentedCell>
+                            </segmentedControl>
                         </subviews>
                         <constraints>
                             <constraint firstItem="FIQ-V5-C7S" firstAttribute="top" secondItem="HIA-f2-uCu" secondAttribute="bottom" constant="8" symbolic="YES" id="0dQ-Qt-XS2"/>
@@ -1105,7 +1118,7 @@
                             <constraint firstItem="a4p-2Y-eiy" firstAttribute="top" secondItem="q7k-Uc-Ufd" secondAttribute="top" constant="47" id="NWn-ul-LOh"/>
                             <constraint firstItem="XEu-6z-blp" firstAttribute="trailing" secondItem="pzF-EH-lWt" secondAttribute="trailing" id="O5Y-8S-fXE"/>
                             <constraint firstItem="Exx-C8-raK" firstAttribute="top" secondItem="FIQ-V5-C7S" secondAttribute="bottom" constant="8" symbolic="YES" id="PKr-dn-8s5"/>
-                            <constraint firstItem="pzF-EH-lWt" firstAttribute="leading" secondItem="7lN-w3-h7j" secondAttribute="trailing" constant="6" id="Pyl-Zs-yJf"/>
+                            <constraint firstItem="pzF-EH-lWt" firstAttribute="leading" secondItem="7lN-w3-h7j" secondAttribute="trailing" placeholder="YES" id="Pyl-Zs-yJf"/>
                             <constraint firstItem="7lN-w3-h7j" firstAttribute="baseline" secondItem="pzF-EH-lWt" secondAttribute="baseline" id="SJg-1c-qL1"/>
                             <constraint firstItem="beH-jB-9mK" firstAttribute="leading" secondItem="Su3-Oa-S5u" secondAttribute="trailing" constant="13" id="UlW-J0-26Q"/>
                             <constraint firstItem="AkJ-7Y-TaM" firstAttribute="top" secondItem="NSa-f5-hRg" secondAttribute="bottom" constant="3" id="Vq1-oX-dvm"/>
@@ -1121,7 +1134,7 @@
                             <constraint firstItem="NSa-f5-hRg" firstAttribute="top" secondItem="P9a-gY-twH" secondAttribute="bottom" constant="8" id="eOX-eM-d3x"/>
                             <constraint firstItem="XEu-6z-blp" firstAttribute="leading" secondItem="P9a-gY-twH" secondAttribute="leading" id="eqJ-y3-TlA"/>
                             <constraint firstItem="P9a-gY-twH" firstAttribute="leading" secondItem="aPB-8D-SFj" secondAttribute="leading" id="fD3-Zp-FaR"/>
-                            <constraint firstItem="y4d-v4-BDf" firstAttribute="leading" secondItem="Exx-C8-raK" secondAttribute="trailing" constant="14" id="h16-xY-dYd"/>
+                            <constraint firstItem="y4d-v4-BDf" firstAttribute="leading" secondItem="Exx-C8-raK" secondAttribute="trailing" constant="8" placeholder="YES" id="h16-xY-dYd"/>
                             <constraint firstItem="uSM-dC-n0v" firstAttribute="baseline" secondItem="aPB-8D-SFj" secondAttribute="baseline" id="i1s-bl-fmE"/>
                             <constraint firstItem="HIA-f2-uCu" firstAttribute="top" secondItem="aPB-8D-SFj" secondAttribute="bottom" constant="16" id="jwi-2c-kGY"/>
                             <constraint firstItem="9RK-Vm-QKk" firstAttribute="leading" secondItem="s1o-qQ-2cn" secondAttribute="leading" id="kht-EV-bCN"/>
@@ -1143,6 +1156,7 @@
                         <outlet property="brightnessSlider" destination="XEu-6z-blp" id="uuj-hB-Ij4"/>
                         <outlet property="colorLabel" destination="a4p-2Y-eiy" id="nTg-sK-qac"/>
                         <outlet property="colorWheelView" destination="9RK-Vm-QKk" id="nlv-Xe-PbY"/>
+                        <outlet property="currentCursor" destination="P7f-KW-nnU" id="snj-oW-osL"/>
                         <outlet property="currentKeyMode" destination="1Pd-I8-mdU" id="Qtr-id-rMz"/>
                         <outlet property="multiGradientSlider" destination="NSa-f5-hRg" id="0aH-zU-i2g"/>
                         <outlet property="pulseDurationLabel" destination="y4d-v4-BDf" id="yJU-SZ-xGI"/>

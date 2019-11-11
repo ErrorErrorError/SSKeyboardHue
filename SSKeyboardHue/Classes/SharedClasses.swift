@@ -70,15 +70,24 @@ class ColorController {
             }
             
             let findEffectId = key.getEffectId()
-            var keyEffect: KeyEffectWrapper = KeyEffectWrapper()
+            let keyEffect: KeyEffectWrapper = KeyboardManager.shared.effectsArray.filter { (theEffect) -> Bool in
+                let effect = theEffect as! KeyEffectWrapper
+                return effect.getEffectId() == findEffectId
+                }[0] as! KeyEffectWrapper
+            /*
             for effects in KeyboardManager.shared.effectsArray {
                 let effect = effects as! KeyEffectWrapper
                 if (effect.getEffectId() == findEffectId) {
-                    keyEffect = effect
+                    foundEffect = effect
                     break
                 }
             }
+            if (foundEffect == nil) {
+                return
+            }
             
+            let keyEffect = foundEffect
+            */
             var totalDuration: Int32 = 0
             let transitions = UnsafeMutablePointer<KeyTransition>(keyEffect.getTransitions())!
             for i in 0..<keyEffect.getTransitionSize() {
@@ -95,9 +104,8 @@ class ColorController {
                 colorPicker.waveDirectionSegment.selectedSegment = Int(keyEffect.getWaveDirection().rawValue)
                 colorPicker.waveRadType.selectedSegment = Int(keyEffect.getWaveRadControl().rawValue)
                 colorPicker.waveLengthSlider.intValue = Int32(keyEffect.getWaveLength())
-                colorPicker.setWaveSpeed(colorPicker.waveLengthSlider!)
-                gradientViewPoint.typeOfRad = keyEffect.getWaveRadControl()
-                gradientViewPoint.setFromTransitions(transitions: transitions, count: keyEffect.getTransitionSize())
+                colorPicker.updateWaveSpeedLabel()
+                gradientViewPoint.setFromKey(transitions: transitions, count: keyEffect.getTransitionSize(), radType: keyEffect.getWaveRadControl(), origin: keyEffect.getWaveOrigin())
             }
             colorPicker.setMode(mode: key.getMode(), fromKey: true)
         } else if (key.getMode() == Disabled) {

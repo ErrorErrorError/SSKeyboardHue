@@ -19,9 +19,8 @@ class PresetsOutlineView: NSOutlineView {
         let row = self.row(at: point)
         let item = self.item(atRow: row)
         
-        guard (item as? PresetItem) != nil else { return nil }
-        
-        return super.menu(for: event)
+        guard let pItem = item as? PresetItem else { return nil }
+        return (pItem.presetType == PresetsType.CustomPresets) ? super.menu(for: event) : nil
     }
     
     override func mouseDown(with event: NSEvent) {
