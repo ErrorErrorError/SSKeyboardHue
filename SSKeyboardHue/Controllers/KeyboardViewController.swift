@@ -24,20 +24,11 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
         return popover
     }()
     
-    
-    override func viewWillAppear() {
-        view.layer?.backgroundColor = DarkMode.background.cgColor
-        keyboardView.layer?.backgroundColor = DarkMode.subviews.cgColor
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.wantsLayer = true
         ColorController.shared.colorPicker.delegate = self
         keyboardView.roundCorners(cornerRadius: 15.0)
-        KeyboardManager.shared.keyboardManager = SSKeyboardWrapper()
         detectKeyboard()
-
         setupGradientOriginPicker()
     }
     
@@ -45,7 +36,6 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
         gradientOriginView.frame = keyboardView.frame
         gradientOriginView.isHidden = true
     }
-
     
     private func detectKeyboard() {
         
@@ -58,11 +48,32 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
             createPerKeyKeyboard()
             createNullKeys(isGS65: false)
         case ThreeRegion:
-            print("ThreeRegion")
+            showAlert(code: kIOReturnUnsupported)
         case UnknownModel:
-            print("UnknownModel")
+            showAlert(code: kIOReturnNotFound)
         default:
             print("default")
+        }
+    }
+    
+    func showAlert(code: IOReturn) {
+        let newAlert = NSAlert()
+        if (code == kIOReturnNotFound) {
+            newAlert.messageText = "No Device Found"
+            newAlert.informativeText = "Make sure your keyboard is not disabled if you have a supported keyboard."
+            newAlert.alertStyle = .critical
+            newAlert.addButton(withTitle: "OK")
+            newAlert.showsHelp = true
+        } else if (code == kIOReturnUnsupported) {
+            newAlert.messageText = "Device not Supported"
+            newAlert.informativeText = "Currently, this keyboard is not supported. It is being worked on and will be released in future releases."
+            newAlert.alertStyle = .critical
+            newAlert.addButton(withTitle: "OK")
+            newAlert.showsHelp = true
+        }
+        let response = newAlert.runModal()
+        if (response == .alertFirstButtonReturn)   {
+            NSApplication.shared.terminate(self)
         }
     }
     
@@ -320,7 +331,7 @@ class KeyboardViewController: NSViewController, NSPopoverDelegate {
     }
     
     private func getRegionKey(key: (key:UInt8, value:String)) -> UInt8 {
-        let keyboardManager = KeyboardManager.shared.keyboardManager!
+        let keyboardManager = KeyboardManager.shared.keyboardManager
         if (keyboardManager.getKeyboardModel() != ThreeRegion) {
             
             if (key.value == "ESC") {

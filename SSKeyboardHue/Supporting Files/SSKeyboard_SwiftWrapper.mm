@@ -21,7 +21,7 @@
     return self;
 }
 
--(IOReturn) sendColorKeys: (NSArray<KeysWrapper *> *) keyArray : (bool) updateKeys
+-(IOReturn)sendColorKeys:(NSArray<KeysWrapper *> *) keyArray : (bool) updateKeys
 {
     Keys keys[keyArray.count];
     for (uint8_t i = 0; i < keyArray.count; i++) {
@@ -44,7 +44,10 @@
 
 -(IOReturn)sendEffect:(KeyEffectWrapper *) keyEffect : (bool) updateCommand {
     KeyEffect *effect = (KeyEffect *)keyEffect.getEffect;
-    return _keyboard.sendEffectKeys(effect, updateCommand);
+    return _keyboard.sendEffect(effect, updateCommand);
+}
+-(IOReturn)exit {
+    return _keyboard.exit();
 }
 @end
 

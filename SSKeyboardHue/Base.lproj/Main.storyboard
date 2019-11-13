@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15400"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -689,7 +690,7 @@
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="349" y="86" width="480" height="380"/>
-                        <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1057"/>
                         <connections>
                             <outlet property="delegate" destination="B8D-0N-5wS" id="98r-iN-zZc"/>
                         </connections>
@@ -710,9 +711,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="200" height="722"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <subviews>
-                            <scrollView misplaced="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="17" horizontalPageScroll="10" verticalLineScroll="17" verticalPageScroll="10" usesPredominantAxisScrolling="NO" scrollerKnobStyle="dark" translatesAutoresizingMaskIntoConstraints="NO" id="gst-kW-X9T">
+                            <scrollView misplaced="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="17" horizontalPageScroll="10" verticalLineScroll="17" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gst-kW-X9T">
                                 <rect key="frame" x="0.0" y="2" width="200" height="682"/>
-                                <clipView key="contentView" drawsBackground="NO" id="ZDq-CI-Caz">
+                                <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="ZDq-CI-Caz">
                                     <rect key="frame" x="0.0" y="0.0" width="200" height="682"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -725,7 +726,7 @@
                                             <tableColumns>
                                                 <tableColumn width="197" minWidth="16" maxWidth="1000" id="x6O-sd-dLN">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
-                                                        <font key="font" metaFont="menu" size="11"/>
+                                                        <font key="font" metaFont="controlContent" size="11"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                     </tableHeaderCell>
@@ -893,12 +894,22 @@
                             <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dBU-1I-gO8" customClass="KeyboardView" customModule="SSKeyboardHue" customModuleProvider="target">
                                 <rect key="frame" x="90" y="185" width="825" height="350"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
+                                        <color key="value" name="customSubviewsBackground"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </customView>
-                            <customView id="WF3-QT-02p" customClass="GradientViewPointPicker" customModule="SSKeyboardHue" customModuleProvider="target">
-                                <rect key="frame" x="102" y="185" width="825" height="350"/>
+                            <customView hidden="YES" id="WF3-QT-02p" customClass="GradientViewPointPicker" customModule="SSKeyboardHue" customModuleProvider="target">
+                                <rect key="frame" x="91" y="185" width="825" height="350"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             </customView>
                         </subviews>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
+                                <color key="value" name="customBackgroundColor"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
                     </view>
                     <connections>
                         <outlet property="gradientOriginView" destination="WF3-QT-02p" id="WRc-y3-ERb"/>
@@ -943,13 +954,13 @@
                                 <rect key="frame" x="25" y="651" width="82" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="82" id="R7T-Xe-Nge"/>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="82" id="bSg-Wg-blv"/>
+                                    <constraint firstAttribute="width" constant="82" id="bSg-Wg-blv"/>
                                     <constraint firstAttribute="height" constant="22" id="zEQ-My-RzY"/>
                                 </constraints>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" refusesFirstResponder="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" borderStyle="bezel" focusRingType="none" alignment="center" bezelStyle="round" id="QjB-dp-FkI" customClass="CenterTextFieldCell" customModule="SSKeyboardHue" customModuleProvider="target">
-                                    <font key="font" metaFont="menu" size="11"/>
+                                <textFieldCell key="cell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" refusesFirstResponder="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" focusRingType="none" alignment="center" title="Testinggggg" drawsBackground="YES" usesSingleLineMode="YES" id="QjB-dp-FkI">
+                                    <font key="font" size="11" name="HelveticaNeue"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" red="0.20392156862745098" green="0.20392156862745098" blue="0.20392156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="backgroundColor" name="customTextViewBackground"/>
                                 </textFieldCell>
                                 <connections>
                                     <action selector="setColor:" target="6ZD-9K-ovb" id="m1p-Dw-XGS"/>
@@ -1149,6 +1160,11 @@
                             <constraint firstItem="AkJ-7Y-TaM" firstAttribute="top" secondItem="s1o-qQ-2cn" secondAttribute="bottom" constant="8" symbolic="YES" id="zlq-6q-p7L"/>
                             <constraint firstAttribute="trailing" secondItem="YlE-GL-uHf" secondAttribute="trailing" constant="35" id="zqq-yb-vcy"/>
                         </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
+                                <color key="value" name="customSideViewColor"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
                     </view>
                     <connections>
                         <outlet property="activeColor" destination="s1o-qQ-2cn" id="vuR-J0-sdL"/>
@@ -1178,4 +1194,18 @@
             <point key="canvasLocation" x="-105" y="1810"/>
         </scene>
     </scenes>
+    <resources>
+        <namedColor name="customBackgroundColor">
+            <color red="0.086274509803921567" green="0.086274509803921567" blue="0.086274509803921567" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="customSideViewColor">
+            <color red="0.11764705882352941" green="0.11764705882352941" blue="0.11764705882352941" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="customSubviewsBackground">
+            <color red="0.10588235294117647" green="0.10588235294117647" blue="0.10588235294117647" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="customTextViewBackground">
+            <color red="0.20392156862745098" green="0.20392156862745098" blue="0.20392156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>

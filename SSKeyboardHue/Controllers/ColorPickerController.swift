@@ -34,7 +34,6 @@ class ColorPickerController: NSViewController {
         
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.wantsLayer = true
         
         // Delegates
         colorWheelView.delegate = self
@@ -42,7 +41,6 @@ class ColorPickerController: NSViewController {
         ColorController.shared.colorPicker = self
         
         colorLabel.roundCorners(cornerRadius: 10.0)
-        colorLabel.layer?.backgroundColor = DarkMode.textViewBackground.cgColor
         colorLabel.isBezeled = false
         
         currentKeyMode.addItem(withTitle: "Steady")
@@ -53,6 +51,8 @@ class ColorPickerController: NSViewController {
         currentKeyMode.addItem(withTitle: "Mixed")
         currentKeyMode.menu?.item(at: 5)?.isHidden = true   // Mixed
         
+        ColorController.shared.setColor(NSColor.white.usingColorSpace(.genericRGB)!)
+        
         setUpReactiveViews()
         setupWaveViews()
         setupCursor()
@@ -61,20 +61,13 @@ class ColorPickerController: NSViewController {
     override func viewDidAppear() {
         super.viewDidAppear()
         ColorController.shared.gradientViewPoint.delegate = self
-
     }
     
     private func setupWaveViews() {
         waveDirectionSegment.selectedSegment = 1
         waveRadType.selectedSegment = 0
     }
-    
-    override func viewWillAppear() {
-        view.wantsLayer = true
-        view.layer?.backgroundColor = DarkMode.subviews.cgColor
-        ColorController.shared.setColor(NSColor.white.usingColorSpace(.genericRGB)!)
-    }
-    
+        
     private func setupCursor() {
         let path = Bundle.main.resourceURL
         let selectableCursorPath = path!.appendingPathComponent("images/selectable.png");
@@ -317,7 +310,6 @@ class ColorPickerController: NSViewController {
     }
     
     func updateLabel() {
-        colorLabel.backgroundColor = ColorController.shared.selectedColor
         colorLabel.stringValue = "#"+ColorController.shared.selectedColor.rgbHexString
     }
     

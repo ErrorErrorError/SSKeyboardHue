@@ -17,10 +17,10 @@ protocol ColorWheelViewDelegate: class {
 class ColorWheelView: NSView {
     weak var delegate: ColorWheelViewDelegate?
     private var colorWheelImage: CGImage!
-    private var blackImage: CGImage!
+    private var blackImage: NSBezierPath!
     private var brightness: CGFloat = 1.0
     private var pickerLocation: CGPoint!
-    private(set) var selectedColor = NSColor(red: 0x0, green: 0x0, blue: 0x0, alpha: 1.0)
+    private(set) var selectedColor = NSColor(red: 0xff, green: 0xff, blue: 0xff, alpha: 1.0)
     private var mouseUp = false
     private var isClampedOutside = false
     var isEnabled = true {
@@ -39,25 +39,27 @@ class ColorWheelView: NSView {
     }
     
     func setup() {
-        blackImage      = blackImage(rect: frame)
-        colorWheelImage = colorWheelImage(rect: bounds)
+        blackImage      = createBlackImage()
+        colorWheelImage = createColorWheelImage()
         pickerLocation  = point(for: selectedColor, center: CGPoint(x: frame.width/2, y: frame.height/2))
     }
 
     override func draw(_ dirtyRect: NSRect) {
         guard let context = NSGraphicsContext.current?.cgContext else { return }
-        // Draws colorWheel
-        context.addEllipse(in: dirtyRect)
-        context.clip()
-        context.draw(blackImage, in: dirtyRect)
-        if (isEnabled) {
-            context.setAlpha(brightness)
-        } else {
-            context.setAlpha(0.5)
-        }
+
+        /// Draw ColotWheel
         context.draw(colorWheelImage, in: dirtyRect)
         context.setAlpha(1.0)
         
+        /// Draw black filter
+        if (isEnabled) {
+            NSColor.black.withAlphaComponent(1.0 - brightness).setFill()
+        } else {
+            NSColor.black.withAlphaComponent(0.5).setFill()
+        }
+        blackImage.fill()
+
+        /// Draw Crosshair
         if brightness < 0.5 {
             context.setStrokeColor(CGColor.white)
         } else {
@@ -80,42 +82,31 @@ class ColorWheelView: NSView {
         needsDisplay = true
     }
     
-    private func colorWheelImage(rect: NSRect) -> CGImage {
-        let width = Int(rect.width), height = Int(rect.height)
-        var imageBytes = [RGB]()
-        for j in stride(from: height, to: 0, by: -1) {
-            for i in 0..<width {
-                let color = NSColor(coord: (i, j), center: (width/2, height/2), brightness: 1.0)
-                imageBytes.append(RGB(r: UInt8(color.redComponent*255),
-                                      g: UInt8(color.greenComponent*255),
-                                      b: UInt8(color.blueComponent*255)))
-            }
+    private func createColorWheelImage() -> CGImage {
+        let filter = CIFilter(name: "CIHueSaturationValueGradient", parameters: [
+            "inputColorSpace": CGColorSpaceCreateDeviceRGB(),
+            "inputDither": 0,
+            "inputRadius": bounds.width,
+            "inputSoftness": 0,
+            "inputValue": 1
+        ])!
+        
+        let ciimage = filter.outputImage!.oriented(.rightMirrored)
+        return convertCIImageToCGImage(inputImage: ciimage)!
+    }
+    
+    private func convertCIImageToCGImage(inputImage: CIImage) -> CGImage? {
+        let context = CIContext(options: nil)
+        if let cgImage = context.createCGImage(inputImage, from: inputImage.extent) {
+            return cgImage
         }
-        return cgImage(bytes: &imageBytes, width: width, height: height)
+        return nil
     }
     
-    private func blackImage(rect: NSRect) -> CGImage {
-        let width = Int(rect.width), height = Int(rect.height)
-        var imageBytes = [RGB](repeating: RGB(r: 0, g: 0, b: 0), count: width * height)
-        return cgImage(bytes: &imageBytes, width: width, height: height)
+    private func createBlackImage() -> NSBezierPath {
+        return NSBezierPath(ovalIn: NSRect(x: 0, y: 0, width: frame.width, height: frame.height))
     }
-    
-    private func cgImage(bytes: inout [RGB], width: Int, height: Int) -> CGImage {
-        return CGImage(width: width,
-                       height: height,
-                       bitsPerComponent: 8,
-                       bitsPerPixel: 24,
-                       bytesPerRow: width * MemoryLayout<RGB>.size,
-                       space: CGColorSpaceCreateDeviceRGB(),
-                       bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.none.rawValue),
-                       provider: CGDataProvider(data: NSData(bytes: &bytes,
-                                                             length: bytes.count *
-                                                                MemoryLayout<RGB>.size))!,
-                       decode: nil,
-                       shouldInterpolate: false,
-                       intent: .defaultIntent)!
-    }
-    
+        
     private func point(for color: NSColor, center: CGPoint) -> CGPoint? {
         let h = color.hueComponent
         let s = color.saturationComponent
@@ -171,7 +162,7 @@ class ColorWheelView: NSView {
     }
     
     override func mouseDragged(with event: NSEvent) {
-        super.mouseDown(with: event)
+        super.mouseDragged(with: event)
         if (isEnabled) {
             mouseUp = false
             if (!isClampedOutside) {

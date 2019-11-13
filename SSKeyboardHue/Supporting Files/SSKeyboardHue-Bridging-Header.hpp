@@ -55,4 +55,5 @@
 -(void)setSleepInMillis:(uint16_t) millis;
 -(uint8_t)findRegionOfKey:(uint8_t) findThisKey;
 -(IOReturn)sendEffect:(KeyEffectWrapper *) keyEffect : (bool) updateCommand;
+-(IOReturn)exit;
 @end

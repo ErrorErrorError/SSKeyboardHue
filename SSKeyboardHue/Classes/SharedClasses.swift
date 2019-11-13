@@ -10,7 +10,7 @@ import Cocoa
 
 class KeyboardManager {
     static var shared = KeyboardManager()
-    var keyboardManager: SSKeyboardWrapper!
+    var keyboardManager: SSKeyboardWrapper = SSKeyboardWrapper()
     weak var keyboardView: KeyboardView!
     var keysSelected: NSMutableArray = NSMutableArray()
     var effectsArray: NSMutableArray = NSMutableArray()

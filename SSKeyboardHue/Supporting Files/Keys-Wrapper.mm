@@ -30,11 +30,11 @@
     return self;
 }
 
--(void) setReactiveMode:(struct RGB) active : (struct RGB) rest : (uint16_t) duration {
+-(void)setReactiveMode:(struct RGB) active : (struct RGB) rest : (uint16_t) duration {
     _keys.setReactiveKey(active, rest, duration);
 }
 
--(void) setSteadyMode: (struct RGB) steadyColor {
+-(void)setSteadyMode:(struct RGB) steadyColor {
     _keys.setSteadyKey(steadyColor);
 }
 
@@ -42,18 +42,18 @@
     _keys.setEffectKey(_id, breathOrShift);
 }
 
--(struct RGB) getMainColor {
+-(struct RGB)getMainColor {
     return _keys.getMainColor();
 }
--(struct RGB) getActiveColor {
+-(struct RGB)getActiveColor {
     return _keys.getActiveColor();
 }
--(uint8_t) getRegion {
-    return _keys.region;
+-(uint8_t)getRegion {
+    return _keys.getRegion();
 }
 
 -(uint8_t)getKeyCode {
-    return _keys.keycode;
+    return _keys.getKeycode();
 }
 
 -(void *)key{
@@ -65,7 +65,7 @@
 }
 
 -(uint16_t)getSpeed{
-    return _keys.duration;
+    return _keys.getDuration();
 }
 
 -(void)setDisabled{
@@ -73,7 +73,7 @@
 }
 
 -(uint8_t)getEffectId {
-    return _keys.effect_id;
+    return _keys.getEffectId();
 }
 
 -(BOOL)isEqual:(id) object {
